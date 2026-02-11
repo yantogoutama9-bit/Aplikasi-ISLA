@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>HP Sehat Lite</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#22c55e">
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      background: #0f172a;
+      color: #e5e7eb;
+      padding: 16px;
+    }
+    h1 { font-size: 22px; margin-bottom: 8px }
+    h2 { font-size: 18px; margin-top: 16px }
+    .card {
+      background: #1e293b;
+      padding: 14px;
+      border-radius: 14px;
+      margin-bottom: 14px;
+    }
+    button {
+      width: 100%;
+      padding: 14px;
+      margin-top: 10px;
+      font-size: 16px;
+      border-radius: 12px;
+      border: none;
+      background: #22c55e;
+      color: #022c22;
+      font-weight: bold;
+    }
+    ul, ol { padding-left: 18px }
+    .danger { color: #f87171 }
+    .ok { color: #4ade80 }
+  </style>
+</head>
+<body>
+
+<h1>📱 HP Sehat Lite</h1>
+<p>Fokus: <b>legain memori HP lo</b> (realistis & aman).</p>
+
+<div class="card">
+  <h2>🎯 Target 5GB Kosong</h2>
+  <ol>
+    <li>Bersihin <b>Video WhatsApp</b></li>
+    <li>Hapus <b>Download lama</b></li>
+    <li>Clear <b>cache aplikasi besar</b></li>
+  </ol>
+</div>
+
+<div class="card">
+  <h2>📂 Scanner WhatsApp (WAJIB)</h2>
+  <p>Masuk File Manager ke:</p>
+  <ul>
+    <li>Android/media/com.whatsapp/WhatsApp <span class="danger">Video</span></li>
+    <li>Android/media/com.whatsapp/WhatsApp Images</li>
+    <li>Android/media/com.whatsapp/WhatsApp Documents</li>
+  </ul>
+  <p class="ok">Fokus hapus video > 50MB & file grup.</p>
+  <button onclick="alert('Hapus video WA ukuran besar & lama. Ini penyebab utama memori penuh.')">
+    Buka Panduan WA
+  </button>
+</div>
+
+<div class="card">
+  <h2>🧹 Cache Aman (Cepat Lega)</h2>
+  <ul>
+    <li>Chrome</li>
+    <li>Facebook / Instagram</li>
+    <li>TikTok (kalau ada)</li>
+  </ul>
+  <p class="danger">❌ Jangan hapus DATA WhatsApp</p>
+  <button onclick="alert('Pengaturan > Aplikasi > pilih aplikasi > Penyimpanan > Hapus Cache')">
+    Cara Clear Cache
+  </button>
+</div>
+
+<div class="card">
+  <h2>🚀 Mode HP Spek Rendah</h2>
+  <ul>
+    <li>Matikan animasi sistem</li>
+    <li>Batasi aplikasi background</li>
+    <li>Uninstall app jarang dipakai</li>
+  </ul>
+  <button onclick="alert('Opsi Pengembang > Skala Animasi = 0x')">
+    Aktifkan Mode Ngebut
+  </button>
+</div>
+
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js');
+}
+</script>
+
+</body>
+</html>
