@@ -1,100 +1,1285 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <title>HP Sehat Lite</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#22c55e">
-  <style>
-    body {
-      font-family: system-ui, sans-serif;
-      background: #0f172a;
-      color: #e5e7eb;
-      padding: 16px;
-    }
-    h1 { font-size: 22px; margin-bottom: 8px }
-    h2 { font-size: 18px; margin-top: 16px }
-    .card {
-      background: #1e293b;
-      padding: 14px;
-      border-radius: 14px;
-      margin-bottom: 14px;
-    }
-    button {
-      width: 100%;
-      padding: 14px;
-      margin-top: 10px;
-      font-size: 16px;
-      border-radius: 12px;
-      border: none;
-      background: #22c55e;
-      color: #022c22;
-      font-weight: bold;
-    }
-    ul, ol { padding-left: 18px }
-    .danger { color: #f87171 }
-    .ok { color: #4ade80 }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ISLA - Integrated Strategic Leadership Architecture</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #92400e;
+            --accent: #d97706;
+            --success: #059669;
+            --warning: #d97706;
+            --danger: #dc2626;
+            --glass: rgba(255, 255, 255, 0.7);
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 50%, #fcd34d 100%);
+            color: #78350f;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+        
+        .font-display {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            box-shadow: 0 8px 32px 0 rgba(217, 119, 6, 0.15);
+        }
+        
+        .neumorphic {
+            background: linear-gradient(145deg, #ffffff, #fef3c7);
+            box-shadow: 5px 5px 10px #fde68a, -5px -5px 10px #ffffff;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #92400e 0%, #d97706 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .pulse-ring {
+            animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+        }
+        
+        @keyframes pulse-ring {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(217, 119, 6, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 20px rgba(217, 119, 6, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(217, 119, 6, 0); }
+        }
+        
+        .slide-in {
+            animation: slideIn 0.5s ease-out forwards;
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .metric-card {
+            transition: all 0.3s ease;
+        }
+        
+        .metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(217, 119, 6, 0.2);
+        }
+        
+        .progress-bar {
+            transition: width 1s ease-in-out;
+        }
+        
+        .tab-active {
+            background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%);
+            color: white;
+        }
+        
+        .floating-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.3;
+            animation: float 20s infinite ease-in-out;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -50px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+        }
+        
+        .typing-effect::after {
+            content: '|';
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+        
+        .grid-bg {
+            background-image: 
+                linear-gradient(rgba(217, 119, 6, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(217, 119, 6, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #fef3c7;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #f59e0b;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #d97706;
+        }
+
+        .nav-btn {
+            color: #92400e;
+        }
+        .nav-btn:hover {
+            color: #d97706;
+        }
+
+        .score-btn:hover {
+            background: rgba(217, 119, 6, 0.2);
+            border-color: rgba(217, 119, 6, 0.5);
+        }
+        .score-btn.bg-amber-500 {
+            background: #d97706 !important;
+            border-color: #d97706 !important;
+            color: white !important;
+        }
+    </style>
 </head>
-<body>
+<body class="min-h-screen relative">
+    <!-- Background Effects -->
+    <div class="fixed inset-0 grid-bg pointer-events-none z-0"></div>
+    <div class="floating-orb w-96 h-96 bg-yellow-400 top-0 left-0"></div>
+    <div class="floating-orb w-80 h-80 bg-orange-400 bottom-0 right-0 animation-delay-2000"></div>
+    <div class="floating-orb w-64 h-64 bg-amber-300 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 animation-delay-4000"></div>
 
-<h1>📱 HP Sehat Lite</h1>
-<p>Fokus: <b>legain memori HP lo</b> (realistis & aman).</p>
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 glass-panel border-b border-amber-200/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-3">
+                    <!-- LOGO ISLA - GANTI DI SINI -->
+                    <!-- Cara ganti logo: 
+                         1. Upload gambar logo Anda ke imgbb.com atau postimg.cc
+                         2. Copy link direct image (harus berakhiran .jpg/.png/.svg)
+                         3. Ganti src di bawah ini dengan link tersebut
+                         4. Hapus class "hidden" di img dan tambahkan class "hidden" di div icon di bawahnya -->
+                    
+                    <!-- PILIHAN A: Logo Gambar (aktifkan dengan hapus hidden) -->
+                    <img src="https://i.ibb.co/placeholder-isla.png" 
+                         alt="ISLA Logo" 
+                         class="hidden w-10 h-10 rounded-xl object-cover shadow-lg border-2 border-amber-400"
+                         id="logo-image">
+                    
+                    <!-- PILIHAN B: Icon Default (ganti hidden jika pakai logo gambar) -->
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center pulse-ring shadow-lg" id="logo-icon">
+                        <i class="fas fa-network-wired text-white text-lg"></i>
+                    </div>
+                    
+                    <!-- PILIHAN C: Text Logo Only - ganti div di bawah jika ingin text saja -->
+                    <div>
+                        <h1 class="font-display font-bold text-xl tracking-tight text-amber-900">ISLA</h1>
+                        <p class="text-xs text-amber-700">Integrated Strategic Leadership Architecture</p>
+                    </div>
+                </div>
+                <div class="hidden md:flex items-center gap-6">
+                    <button onclick="showSection('dashboard')" class="nav-btn text-sm font-medium transition-colors">Dashboard</button>
+                    <button onclick="showSection('diagnosis')" class="nav-btn text-sm font-medium transition-colors">Diagnosis</button>
+                    <button onclick="showSection('leadership')" class="nav-btn text-sm font-medium transition-colors">Leadership Model</button>
+                    <button onclick="showSection('ai-assistant')" class="nav-btn text-sm font-medium transition-colors">AI Assistant</button>
+                    <div class="flex items-center gap-2 px-4 py-2 rounded-full bg-green-100 border border-green-300">
+                        <div class="w-2 h-2 rounded-full bg-green-600 animate-pulse"></div>
+                        <span class="text-xs text-green-800 font-medium">System Active</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
 
-<div class="card">
-  <h2>🎯 Target 5GB Kosong</h2>
-  <ol>
-    <li>Bersihin <b>Video WhatsApp</b></li>
-    <li>Hapus <b>Download lama</b></li>
-    <li>Clear <b>cache aplikasi besar</b></li>
-  </ol>
-</div>
+    <!-- Main Content -->
+    <main class="pt-24 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative z-10">
+        
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="section-content">
+            <div class="mb-8">
+                <h2 class="font-display text-4xl font-bold mb-2 text-amber-900">Executive Dashboard</h2>
+                <p class="text-amber-700">Real-time organizational health monitoring</p>
+            </div>
 
-<div class="card">
-  <h2>📂 Scanner WhatsApp (WAJIB)</h2>
-  <p>Masuk File Manager ke:</p>
-  <ul>
-    <li>Android/media/com.whatsapp/WhatsApp <span class="danger">Video</span></li>
-    <li>Android/media/com.whatsapp/WhatsApp Images</li>
-    <li>Android/media/com.whatsapp/WhatsApp Documents</li>
-  </ul>
-  <p class="ok">Fokus hapus video > 50MB & file grup.</p>
-  <button onclick="alert('Hapus video WA ukuran besar & lama. Ini penyebab utama memori penuh.')">
-    Buka Panduan WA
-  </button>
-</div>
+            <!-- KPI Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <div class="glass-panel rounded-2xl p-6 metric-card border-l-4 border-amber-500">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <p class="text-amber-700 text-sm mb-1">Organizational Health</p>
+                            <h3 class="text-3xl font-bold font-display text-amber-900" id="health-score">78%</h3>
+                        </div>
+                        <div class="w-12 h-12 rounded-xl bg-amber-100 flex items-center justify-center">
+                            <i class="fas fa-heartbeat text-amber-600 text-xl"></i>
+                        </div>
+                    </div>
+                    <div class="w-full bg-amber-200 rounded-full h-2">
+                        <div class="bg-amber-500 h-2 rounded-full progress-bar" style="width: 78%"></div>
+                    </div>
+                    <p class="text-xs text-amber-700 mt-2">+5% from last quarter</p>
+                </div>
 
-<div class="card">
-  <h2>🧹 Cache Aman (Cepat Lega)</h2>
-  <ul>
-    <li>Chrome</li>
-    <li>Facebook / Instagram</li>
-    <li>TikTok (kalau ada)</li>
-  </ul>
-  <p class="danger">❌ Jangan hapus DATA WhatsApp</p>
-  <button onclick="alert('Pengaturan > Aplikasi > pilih aplikasi > Penyimpanan > Hapus Cache')">
-    Cara Clear Cache
-  </button>
-</div>
+                <div class="glass-panel rounded-2xl p-6 metric-card border-l-4 border-orange-500">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <p class="text-amber-700 text-sm mb-1">SOP Compliance</p>
+                            <h3 class="text-3xl font-bold font-display text-amber-900" id="sop-score">85%</h3>
+                        </div>
+                        <div class="w-12 h-12 rounded-xl bg-orange-100 flex items-center justify-center">
+                            <i class="fas fa-clipboard-check text-orange-600 text-xl"></i>
+                        </div>
+                    </div>
+                    <div class="w-full bg-orange-200 rounded-full h-2">
+                        <div class="bg-orange-500 h-2 rounded-full progress-bar" style="width: 85%"></div>
+                    </div>
+                    <p class="text-xs text-amber-700 mt-2">12 procedures need review</p>
+                </div>
 
-<div class="card">
-  <h2>🚀 Mode HP Spek Rendah</h2>
-  <ul>
-    <li>Matikan animasi sistem</li>
-    <li>Batasi aplikasi background</li>
-    <li>Uninstall app jarang dipakai</li>
-  </ul>
-  <button onclick="alert('Opsi Pengembang > Skala Animasi = 0x')">
-    Aktifkan Mode Ngebut
-  </button>
-</div>
+                <div class="glass-panel rounded-2xl p-6 metric-card border-l-4 border-green-500">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <p class="text-amber-700 text-sm mb-1">KPI Achievement</p>
+                            <h3 class="text-3xl font-bold font-display text-amber-900" id="kpi-score">92%</h3>
+                        </div>
+                        <div class="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center">
+                            <i class="fas fa-chart-line text-green-600 text-xl"></i>
+                        </div>
+                    </div>
+                    <div class="w-full bg-green-200 rounded-full h-2">
+                        <div class="bg-green-500 h-2 rounded-full progress-bar" style="width: 92%"></div>
+                    </div>
+                    <p class="text-xs text-amber-700 mt-2">3 targets exceeded</p>
+                </div>
 
-<script>
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js');
-}
-</script>
+                <div class="glass-panel rounded-2xl p-6 metric-card border-l-4 border-yellow-500">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <p class="text-amber-700 text-sm mb-1">Leadership Index</p>
+                            <h3 class="text-3xl font-bold font-display text-amber-900" id="leadership-score">74%</h3>
+                        </div>
+                        <div class="w-12 h-12 rounded-xl bg-yellow-100 flex items-center justify-center">
+                            <i class="fas fa-users-cog text-yellow-600 text-xl"></i>
+                        </div>
+                    </div>
+                    <div class="w-full bg-yellow-200 rounded-full h-2">
+                        <div class="bg-yellow-500 h-2 rounded-full progress-bar" style="width: 74%"></div>
+                    </div>
+                    <p class="text-xs text-amber-700 mt-2">Development needed</p>
+                </div>
+            </div>
 
+            <!-- Charts Section -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                <div class="glass-panel rounded-2xl p-6">
+                    <h3 class="font-display font-bold text-lg mb-4 text-amber-900">Organizational Dimensions</h3>
+                    <canvas id="radarChart" width="400" height="300"></canvas>
+                </div>
+                <div class="glass-panel rounded-2xl p-6">
+                    <h3 class="font-display font-bold text-lg mb-4 text-amber-900">Trend Analysis</h3>
+                    <canvas id="lineChart" width="400" height="300"></canvas>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="glass-panel rounded-2xl p-6">
+                <h3 class="font-display font-bold text-lg mb-4 text-amber-900">Quick Actions</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <button onclick="startQuickDiagnosis()" class="p-4 rounded-xl bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 transition-all text-left group text-white shadow-lg hover:shadow-xl">
+                        <i class="fas fa-stethoscope text-2xl mb-2 group-hover:scale-110 transition-transform"></i>
+                        <h4 class="font-semibold">Quick Diagnosis</h4>
+                        <p class="text-sm text-amber-100">5-minute health check</p>
+                    </button>
+                    <button onclick="generateReport()" class="p-4 rounded-xl bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-400 hover:to-red-500 transition-all text-left group text-white shadow-lg hover:shadow-xl">
+                        <i class="fas fa-file-alt text-2xl mb-2 group-hover:scale-110 transition-transform"></i>
+                        <h4 class="font-semibold">Generate Report</h4>
+                        <p class="text-sm text-orange-100">Executive summary PDF</p>
+                    </button>
+                    <button onclick="showSection('ai-assistant')" class="p-4 rounded-xl bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-400 hover:to-emerald-500 transition-all text-left group text-white shadow-lg hover:shadow-xl">
+                        <i class="fas fa-robot text-2xl mb-2 group-hover:scale-110 transition-transform"></i>
+                        <h4 class="font-semibold">AI Consultation</h4>
+                        <p class="text-sm text-green-100">Strategic recommendations</p>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Diagnosis Section -->
+        <section id="diagnosis" class="section-content hidden">
+            <div class="mb-8">
+                <h2 class="font-display text-4xl font-bold mb-2 text-amber-900">Organizational Diagnosis</h2>
+                <p class="text-amber-700">Comprehensive assessment across 5 critical dimensions</p>
+            </div>
+
+            <!-- Assessment Tabs -->
+            <div class="glass-panel rounded-2xl p-2 mb-6 flex flex-wrap gap-2">
+                <button onclick="switchTab('sop')" class="tab-btn tab-active px-6 py-3 rounded-xl text-sm font-medium transition-all" data-tab="sop">
+                    <i class="fas fa-book mr-2"></i>SOP & Procedures
+                </button>
+                <button onclick="switchTab('regulation')" class="tab-btn px-6 py-3 rounded-xl text-sm font-medium transition-all hover:bg-amber-100 text-amber-900" data-tab="regulation">
+                    <i class="fas fa-gavel mr-2"></i>Regulations
+                </button>
+                <button onclick="switchTab('kpi')" class="tab-btn px-6 py-3 rounded-xl text-sm font-medium transition-all hover:bg-amber-100 text-amber-900" data-tab="kpi">
+                    <i class="fas fa-bullseye mr-2"></i>KPI Management
+                </button>
+                <button onclick="switchTab('culture')" class="tab-btn px-6 py-3 rounded-xl text-sm font-medium transition-all hover:bg-amber-100 text-amber-900" data-tab="culture">
+                    <i class="fas fa-users mr-2"></i>Culture & People
+                </button>
+                <button onclick="switchTab('strategy')" class="tab-btn px-6 py-3 rounded-xl text-sm font-medium transition-all hover:bg-amber-100 text-amber-900" data-tab="strategy">
+                    <i class="fas fa-chess mr-2"></i>Strategy
+                </button>
+            </div>
+
+            <!-- SOP Assessment -->
+            <div id="sop-panel" class="assessment-panel">
+                <div class="glass-panel rounded-2xl p-8 mb-6">
+                    <h3 class="font-display text-2xl font-bold mb-6 flex items-center gap-3 text-amber-900">
+                        <span class="w-10 h-10 rounded-lg bg-amber-100 flex items-center justify-center text-amber-600">
+                            <i class="fas fa-book"></i>
+                        </span>
+                        Standard Operating Procedures Assessment
+                    </h3>
+                    
+                    <div class="space-y-6" id="sop-questions">
+                        <!-- Questions generated by JS -->
+                    </div>
+
+                    <div class="mt-8 flex justify-between items-center">
+                        <div class="text-sm text-amber-700">
+                            Progress: <span id="sop-progress">0</span>/10 questions
+                        </div>
+                        <button onclick="calculateDimensionScore('sop')" class="px-8 py-3 bg-amber-600 hover:bg-amber-500 rounded-xl font-semibold transition-all transform hover:scale-105 text-white shadow-lg">
+                            Analyze SOP Dimension
+                        </button>
+                    </div>
+                </div>
+
+                <div id="sop-results" class="hidden glass-panel rounded-2xl p-8 border-l-4 border-amber-500">
+                    <h4 class="font-bold text-xl mb-4 text-amber-900">SOP Analysis Results</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                        <div class="text-center">
+                            <div class="text-4xl font-bold font-display text-amber-600 mb-2" id="sop-final-score">0%</div>
+                            <p class="text-sm text-amber-700">Compliance Score</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-4xl font-bold font-display text-orange-600 mb-2" id="sop-maturity">0</div>
+                            <p class="text-sm text-amber-700">Maturity Level</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-4xl font-bold font-display text-red-600 mb-2" id="sop-gaps">0</div>
+                            <p class="text-sm text-amber-700">Critical Gaps</p>
+                        </div>
+                    </div>
+                    <div id="sop-recommendations" class="space-y-3"></div>
+                </div>
+            </div>
+
+            <!-- Regulation Panel -->
+            <div id="regulation-panel" class="assessment-panel hidden">
+                <div class="glass-panel rounded-2xl p-8">
+                    <h3 class="font-display text-2xl font-bold mb-6 text-amber-900">Regulatory Compliance Assessment</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="regulation-questions"></div>
+                    <button onclick="calculateDimensionScore('regulation')" class="mt-6 px-8 py-3 bg-orange-600 hover:bg-orange-500 rounded-xl font-semibold transition-all text-white shadow-lg">
+                        Analyze Compliance
+                    </button>
+                </div>
+            </div>
+
+            <!-- KPI Panel -->
+            <div id="kpi-panel" class="assessment-panel hidden">
+                <div class="glass-panel rounded-2xl p-8">
+                    <h3 class="font-display text-2xl font-bold mb-6 text-amber-900">Key Performance Indicators Assessment</h3>
+                    <div id="kpi-questions" class="space-y-4"></div>
+                    <button onclick="calculateDimensionScore('kpi')" class="mt-6 px-8 py-3 bg-green-600 hover:bg-green-500 rounded-xl font-semibold transition-all text-white shadow-lg">
+                        Analyze KPI System
+                    </button>
+                </div>
+            </div>
+
+            <!-- Culture Panel -->
+            <div id="culture-panel" class="assessment-panel hidden">
+                <div class="glass-panel rounded-2xl p-8">
+                    <h3 class="font-display text-2xl font-bold mb-6 text-amber-900">Organizational Culture Assessment</h3>
+                    <div id="culture-questions" class="space-y-4"></div>
+                    <button onclick="calculateDimensionScore('culture')" class="mt-6 px-8 py-3 bg-yellow-600 hover:bg-yellow-500 rounded-xl font-semibold transition-all text-white shadow-lg">
+                        Analyze Culture
+                    </button>
+                </div>
+            </div>
+
+            <!-- Strategy Panel -->
+            <div id="strategy-panel" class="assessment-panel hidden">
+                <div class="glass-panel rounded-2xl p-8">
+                    <h3 class="font-display text-2xl font-bold mb-6 text-amber-900">Strategic Alignment Assessment</h3>
+                    <div id="strategy-questions" class="space-y-4"></div>
+                    <button onclick="calculateDimensionScore('strategy')" class="mt-6 px-8 py-3 bg-red-600 hover:bg-red-500 rounded-xl font-semibold transition-all text-white shadow-lg">
+                        Analyze Strategy
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Leadership Model Section -->
+        <section id="leadership" class="section-content hidden">
+            <div class="mb-8">
+                <h2 class="font-display text-4xl font-bold mb-2 text-amber-900">Adaptive Leadership Model</h2>
+                <p class="text-amber-700">ISLA's integrated leadership framework</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                <!-- Leadership Styles -->
+                <div class="glass-panel rounded-2xl p-6 hover:border-amber-500/50 transition-all cursor-pointer border border-transparent" onclick="showLeadershipDetail('transformational')">
+                    <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-amber-500 to-orange-400 flex items-center justify-center mb-4 shadow-lg">
+                        <i class="fas fa-rocket text-2xl text-white"></i>
+                    </div>
+                    <h3 class="font-bold text-xl mb-2 text-amber-900">Transformational</h3>
+                    <p class="text-amber-700 text-sm mb-4">Inspiring innovation and organizational change through vision and motivation.</p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs bg-amber-100 text-amber-800 px-3 py-1 rounded-full border border-amber-200">High Growth</span>
+                        <i class="fas fa-arrow-right text-amber-600"></i>
+                    </div>
+                </div>
+
+                <div class="glass-panel rounded-2xl p-6 hover:border-orange-500/50 transition-all cursor-pointer border border-transparent" onclick="showLeadershipDetail('transactional')">
+                    <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-orange-500 to-red-400 flex items-center justify-center mb-4 shadow-lg">
+                        <i class="fas fa-exchange-alt text-2xl text-white"></i>
+                    </div>
+                    <h3 class="font-bold text-xl mb-2 text-amber-900">Transactional</h3>
+                    <p class="text-amber-700 text-sm mb-4">Clear structure, rewards, and consequences for performance management.</p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs bg-orange-100 text-orange-800 px-3 py-1 rounded-full border border-orange-200">Stability</span>
+                        <i class="fas fa-arrow-right text-orange-600"></i>
+                    </div>
+                </div>
+
+                <div class="glass-panel rounded-2xl p-6 hover:border-green-500/50 transition-all cursor-pointer border border-transparent" onclick="showLeadershipDetail('servant')">
+                    <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-green-500 to-emerald-400 flex items-center justify-center mb-4 shadow-lg">
+                        <i class="fas fa-hands-helping text-2xl text-white"></i>
+                    </div>
+                    <h3 class="font-bold text-xl mb-2 text-amber-900">Servant Leadership</h3>
+                    <p class="text-amber-700 text-sm mb-4">Prioritizing team growth, well-being, and empowerment over authority.</p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs bg-green-100 text-green-800 px-3 py-1 rounded-full border border-green-200">Team Focus</span>
+                        <i class="fas fa-arrow-right text-green-600"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Leadership Matrix -->
+            <div class="glass-panel rounded-2xl p-8 mb-8">
+                <h3 class="font-display text-2xl font-bold mb-6 text-amber-900">Leadership-Organizational Fit Matrix</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead>
+                            <tr class="border-b border-amber-200">
+                                <th class="pb-4 text-amber-800 font-medium">Organizational State</th>
+                                <th class="pb-4 text-amber-800 font-medium">Recommended Style</th>
+                                <th class="pb-4 text-amber-800 font-medium">Key Actions</th>
+                                <th class="pb-4 text-amber-800 font-medium">AI Modification</th>
+                            </tr>
+                        </thead>
+                        <tbody class="space-y-4">
+                            <tr class="border-b border-amber-100">
+                                <td class="py-4">
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-2 h-2 rounded-full bg-red-500"></div>
+                                        <span class="font-medium text-amber-900">Crisis/Turnaround</span>
+                                    </div>
+                                </td>
+                                <td class="py-4 text-amber-700 font-medium">Autocratic + Transformational</td>
+                                <td class="py-4 text-sm text-amber-600">Rapid decision making, clear direction</td>
+                                <td class="py-4"><span class="px-3 py-1 rounded-full bg-red-100 text-red-700 text-xs border border-red-200">Crisis Mode AI</span></td>
+                            </tr>
+                            <tr class="border-b border-amber-100">
+                                <td class="py-4">
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-2 h-2 rounded-full bg-yellow-500"></div>
+                                        <span class="font-medium text-amber-900">Growth Phase</span>
+                                    </div>
+                                </td>
+                                <td class="py-4 text-amber-700 font-medium">Transformational + Democratic</td>
+                                <td class="py-4 text-sm text-amber-600">Innovation, team involvement</td>
+                                <td class="py-4"><span class="px-3 py-1 rounded-full bg-yellow-100 text-yellow-700 text-xs border border-yellow-200">Growth AI</span></td>
+                            </tr>
+                            <tr class="border-b border-amber-100">
+                                <td class="py-4">
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-2 h-2 rounded-full bg-green-500"></div>
+                                        <span class="font-medium text-amber-900">Maturity/Stability</span>
+                                    </div>
+                                </td>
+                                <td class="py-4 text-amber-700 font-medium">Servant + Transactional</td>
+                                <td class="py-4 text-sm text-amber-600">Process optimization, mentoring</td>
+                                <td class="py-4"><span class="px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs border border-green-200">Optimization AI</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- AI Leadership Coach -->
+            <div class="glass-panel rounded-2xl p-8 border border-amber-300 bg-gradient-to-br from-white to-amber-50">
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="w-16 h-16 rounded-full bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center animate-pulse shadow-lg">
+                        <i class="fas fa-brain text-2xl text-white"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-2xl text-amber-900">AI Leadership Architect</h3>
+                        <p class="text-amber-700">Personalized leadership development recommendations</p>
+                    </div>
+                </div>
+                <div id="leadership-recommendations" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="p-4 rounded-xl bg-white border border-amber-200 shadow-sm">
+                        <h4 class="font-semibold text-amber-900 mb-2"><i class="fas fa-star text-amber-500 mr-2"></i>Strength Areas</h4>
+                        <p class="text-sm text-amber-700">Vision communication and strategic thinking</p>
+                    </div>
+                    <div class="p-4 rounded-xl bg-white border border-amber-200 shadow-sm">
+                        <h4 class="font-semibold text-amber-900 mb-2"><i class="fas fa-arrow-up text-green-500 mr-2"></i>Development Needed</h4>
+                        <p class="text-sm text-amber-700">Delegation and empowerment practices</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- AI Assistant Section -->
+        <section id="ai-assistant" class="section-content hidden">
+            <div class="mb-8">
+                <h2 class="font-display text-4xl font-bold mb-2 text-amber-900">ISLA AI Strategic Assistant</h2>
+                <p class="text-amber-700">Advanced AI modifications for organizational development</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 h-[600px]">
+                <!-- Chat Interface -->
+                <div class="lg:col-span-2 glass-panel rounded-2xl flex flex-col border border-amber-200">
+                    <div class="p-4 border-b border-amber-200 flex items-center justify-between bg-amber-50 rounded-t-2xl">
+                        <div class="flex items-center gap-3">
+                            <div class="w-3 h-3 rounded-full bg-green-500 animate-pulse"></div>
+                            <span class="font-semibold text-amber-900">ISLA AI Consultant</span>
+                        </div>
+                        <button onclick="clearChat()" class="text-sm text-amber-600 hover:text-amber-800 transition-colors">
+                            <i class="fas fa-trash-alt mr-1"></i> Clear
+                        </button>
+                    </div>
+                    
+                    <div id="chat-messages" class="flex-1 overflow-y-auto p-4 space-y-4 bg-white/50">
+                        <div class="flex gap-3">
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center flex-shrink-0 shadow-md">
+                                <i class="fas fa-robot text-white"></i>
+                            </div>
+                            <div class="glass-panel rounded-2xl rounded-tl-none p-4 max-w-[80%] bg-white border border-amber-200">
+                                <p class="text-sm leading-relaxed text-amber-900">Selamat datang di ISLA AI Assistant. Saya dapat membantu Anda dengan:</p>
+                                <ul class="text-sm mt-2 space-y-1 text-amber-700">
+                                    <li>• Analisis kebutuhan kepemimpinan</li>
+                                    <li>• Diagnosa masalah organisasi</li>
+                                    <li>• Rekomendasi perbaikan SOP</li>
+                                    <li>• Perancangan KPI yang efektif</li>
+                                    <li>• Simulasi perubahan strategis</li>
+                                </ul>
+                                <p class="text-sm mt-3 text-amber-600 font-medium">Bagaimana saya bisa membantu organisasi Anda hari ini?</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-4 border-t border-amber-200 bg-amber-50 rounded-b-2xl">
+                        <div class="flex gap-2">
+                            <input type="text" id="chat-input" placeholder="Ketik pertanyaan Anda..." 
+                                class="flex-1 bg-white border border-amber-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-amber-500 transition-colors text-amber-900 placeholder-amber-400"
+                                onkeypress="if(event.key==='Enter') sendMessage()">
+                            <button onclick="sendMessage()" class="px-6 py-3 bg-amber-600 hover:bg-amber-500 rounded-xl transition-all text-white shadow-md">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                        <div class="flex gap-2 mt-3 overflow-x-auto pb-2">
+                            <button onclick="quickAsk('Bagaimana meningkatkan compliance SOP?')" class="px-3 py-1 rounded-full bg-white border border-amber-300 text-xs hover:bg-amber-100 transition-colors whitespace-nowrap text-amber-700">
+                                Tingkatkan SOP
+                            </button>
+                            <button onclick="quickAsk('Analisis leadership style untuk startup')" class="px-3 py-1 rounded-full bg-white border border-amber-300 text-xs hover:bg-amber-100 transition-colors whitespace-nowrap text-amber-700">
+                                Leadership Startup
+                            </button>
+                            <button onclick="quickAsk('Buatkan KPI untuk tim marketing')" class="px-3 py-1 rounded-full bg-white border border-amber-300 text-xs hover:bg-amber-100 transition-colors whitespace-nowrap text-amber-700">
+                                KPI Marketing
+                            </button>
+                            <button onclick="quickAsk('Strategi change management')" class="px-3 py-1 rounded-full bg-white border border-amber-300 text-xs hover:bg-amber-100 transition-colors whitespace-nowrap text-amber-700">
+                                Change Management
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI Tools Sidebar -->
+                <div class="space-y-4">
+                    <div class="glass-panel rounded-2xl p-6 border border-amber-200">
+                        <h4 class="font-bold mb-4 flex items-center gap-2 text-amber-900">
+                            <i class="fas fa-magic text-amber-600"></i>
+                            AI Modification Tools
+                        </h4>
+                        <div class="space-y-3">
+                            <button onclick="activateAIMode('analyzer')" class="w-full p-3 rounded-xl bg-white hover:bg-amber-50 transition-all text-left flex items-center gap-3 group border border-amber-200 hover:border-amber-400">
+                                <div class="w-10 h-10 rounded-lg bg-amber-100 flex items-center justify-center group-hover:scale-110 transition-transform">
+                                    <i class="fas fa-search-plus text-amber-600"></i>
+                                </div>
+                                <div>
+                                    <p class="font-medium text-sm text-amber-900">Deep Analyzer</p>
+                                    <p class="text-xs text-amber-600">Root cause analysis</p>
+                                </div>
+                            </button>
+                            
+                            <button onclick="activateAIMode('predictor')" class="w-full p-3 rounded-xl bg-white hover:bg-amber-50 transition-all text-left flex items-center gap-3 group border border-amber-200 hover:border-amber-400">
+                                <div class="w-10 h-10 rounded-lg bg-orange-100 flex items-center justify-center group-hover:scale-110 transition-transform">
+                                    <i class="fas fa-chart-line text-orange-600"></i>
+                                </div>
+                                <div>
+                                    <p class="font-medium text-sm text-amber-900">Trend Predictor</p>
+                                    <p class="text-xs text-amber-600">Forecast organizational health</p>
+                                </div>
+                            </button>
+                            
+                            <button onclick="activateAIMode('generator')" class="w-full p-3 rounded-xl bg-white hover:bg-amber-50 transition-all text-left flex items-center gap-3 group border border-amber-200 hover:border-amber-400">
+                                <div class="w-10 h-10 rounded-lg bg-green-100 flex items-center justify-center group-hover:scale-110 transition-transform">
+                                    <i class="fas fa-file-signature text-green-600"></i>
+                                </div>
+                                <div>
+                                    <p class="font-medium text-sm text-amber-900">Policy Generator</p>
+                                    <p class="text-xs text-amber-600">Auto-generate SOP drafts</p>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="glass-panel rounded-2xl p-6 border border-amber-200">
+                        <h4 class="font-bold mb-4 flex items-center gap-2 text-amber-900">
+                            <i class="fas fa-history text-amber-600"></i>
+                            Recent Analysis
+                        </h4>
+                        <div class="space-y-3 text-sm">
+                            <div class="p-3 rounded-lg bg-white border-l-2 border-amber-500 shadow-sm">
+                                <p class="font-medium text-amber-900">SOP Compliance Review</p>
+                                <p class="text-xs text-amber-600">2 hours ago • 85% score</p>
+                            </div>
+                            <div class="p-3 rounded-lg bg-white border-l-2 border-orange-500 shadow-sm">
+                                <p class="font-medium text-amber-900">Leadership Assessment</p>
+                                <p class="text-xs text-amber-600">Yesterday • Transformational recommended</p>
+                            </div>
+                            <div class="p-3 rounded-lg bg-white border-l-2 border-green-500 shadow-sm">
+                                <p class="font-medium text-amber-900">KPI Optimization</p>
+                                <p class="text-xs text-amber-600">3 days ago • 12 indicators updated</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-12 py-6 text-center text-amber-700 text-sm relative z-10">
+        <p>&copy; 2024 ISLA Platform. Integrated Strategic Leadership Architecture.</p>
+    </footer>
+
+    <script>
+        // Application State
+        const state = {
+            currentSection: 'dashboard',
+            assessmentData: {
+                sop: [],
+                regulation: [],
+                kpi: [],
+                culture: [],
+                strategy: []
+            },
+            chatHistory: [],
+            aiMode: 'standard'
+        };
+
+        // Initialize Charts
+        let radarChart, lineChart;
+
+        function initCharts() {
+            // Radar Chart
+            const radarCtx = document.getElementById('radarChart').getContext('2d');
+            radarChart = new Chart(radarCtx, {
+                type: 'radar',
+                data: {
+                    labels: ['SOP', 'Regulations', 'KPI', 'Culture', 'Strategy', 'Leadership'],
+                    datasets: [{
+                        label: 'Current State',
+                        data: [85, 72, 92, 68, 78, 74],
+                        backgroundColor: 'rgba(217, 119, 6, 0.2)',
+                        borderColor: '#d97706',
+                        pointBackgroundColor: '#d97706',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: '#d97706'
+                    }, {
+                        label: 'Target State',
+                        data: [95, 90, 95, 90, 95, 90],
+                        backgroundColor: 'rgba(249, 115, 22, 0.2)',
+                        borderColor: '#f97316',
+                        pointBackgroundColor: '#f97316',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: '#f97316',
+                        borderDash: [5, 5]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: {
+                                color: '#92400e',
+                                backdropColor: 'transparent'
+                            },
+                            grid: {
+                                color: 'rgba(146, 64, 14, 0.1)'
+                            },
+                            pointLabels: {
+                                color: '#78350f',
+                                font: {
+                                    size: 12,
+                                    family: 'Inter'
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#78350f'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Line Chart
+            const lineCtx = document.getElementById('lineChart').getContext('2d');
+            lineChart = new Chart(lineCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    datasets: [{
+                        label: 'Organizational Health',
+                        data: [65, 68, 72, 75, 78, 78],
+                        borderColor: '#059669',
+                        backgroundColor: 'rgba(5, 150, 105, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }, {
+                        label: 'Leadership Effectiveness',
+                        data: [60, 62, 65, 70, 72, 74],
+                        borderColor: '#d97706',
+                        backgroundColor: 'rgba(217, 119, 6, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            grid: {
+                                color: 'rgba(146, 64, 14, 0.1)'
+                            },
+                            ticks: {
+                                color: '#92400e'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                color: 'rgba(146, 64, 14, 0.1)'
+                            },
+                            ticks: {
+                                color: '#92400e'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#78350f'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Navigation
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.section-content').forEach(section => {
+                section.classList.add('hidden');
+            });
+            
+            // Show target section
+            document.getElementById(sectionId).classList.remove('hidden');
+            document.getElementById(sectionId).classList.add('slide-in');
+            
+            state.currentSection = sectionId;
+            
+            // Initialize charts if dashboard
+            if (sectionId === 'dashboard' && !radarChart) {
+                setTimeout(initCharts, 100);
+            }
+        }
+
+        // Tab Switching
+        function switchTab(tabName) {
+            // Update buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('tab-active');
+                btn.classList.add('hover:bg-amber-100', 'text-amber-900');
+            });
+            event.target.closest('.tab-btn').classList.add('tab-active');
+            event.target.closest('.tab-btn').classList.remove('hover:bg-amber-100', 'text-amber-900');
+            
+            // Show panel
+            document.querySelectorAll('.assessment-panel').forEach(panel => {
+                panel.classList.add('hidden');
+            });
+            document.getElementById(tabName + '-panel').classList.remove('hidden');
+            
+            // Load questions if not loaded
+            if (state.assessmentData[tabName].length === 0) {
+                loadQuestions(tabName);
+            }
+        }
+
+        // Load Assessment Questions
+        function loadQuestions(dimension) {
+            const questions = {
+                sop: [
+                    { id: 1, text: "Apakah seluruh SOP terdokumentasi dengan baik dan mudah diakses?", category: "Documentation" },
+                    { id: 2, text: "Seberapa sering SOP di-review dan diperbarui?", category: "Maintenance" },
+                    { id: 3, text: "Apakah ada pelatihan reguler terkait SOP untuk karyawan?", category: "Training" },
+                    { id: 4, text: "Seberapa tinggi tingkat kepatuhan terhadap SOP yang ada?", category: "Compliance" },
+                    { id: 5, text: "Apakah SOP terintegrasi dengan sistem digital/perangkat lunak?", category: "Technology" },
+                    { id: 6, text: "Apakah ada mekanisme feedback untuk perbaikan SOP?", category: "Improvement" },
+                    { id: 7, text: "Seberapa jelas alur approval dalam SOP?", category: "Governance" },
+                    { id: 8, text: "Apakah SOP mencakup risk management?", category: "Risk" },
+                    { id: 9, text: "Apakah ada SOP khusus untuk crisis management?", category: "Crisis" },
+                    { id: 10, text: "Seberapa konsisten implementasi SOP antar departemen?", category: "Consistency" }
+                ],
+                regulation: [
+                    { id: 1, text: "Apakah perusahaan memiliki legal compliance officer?", category: "Governance" },
+                    { id: 2, text: "Seberapa update peraturan perusahaan dengan regulasi pemerintah?", category: "Updates" },
+                    { id: 3, text: "Apakah ada audit compliance reguler?", category: "Audit" },
+                    { id: 4, text: "Seberapa baik sistem pelaporan pelanggaran (whistleblowing)?", category: "Reporting" }
+                ],
+                kpi: [
+                    { id: 1, text: "Apakah KPI terukur dan spesifik?", category: "Specificity" },
+                    { id: 2, text: "Seberapa sering KPI direview?", category: "Review" },
+                    { id: 3, text: "Apakah KPI teralign dengan strategi perusahaan?", category: "Alignment" },
+                    { id: 4, text: "Apakah ada dashboard KPI real-time?", category: "Visibility" }
+                ],
+                culture: [
+                    { id: 1, text: "Seberapa tinggi employee engagement score?", category: "Engagement" },
+                    { id: 2, text: "Apakah nilai perusahaan tercermin dalam perilaku sehari-hari?", category: "Values" },
+                    { id: 3, text: "Seberapa baik komunikasi antar level organisasi?", category: "Communication" },
+                    { id: 4, text: "Apakah ada program pengembangan karyawan yang jelas?", category: "Development" }
+                ],
+                strategy: [
+                    { id: 1, text: "Apakah visi dan misi jelas dan dikomunikasikan?", category: "Vision" },
+                    { id: 2, text: "Seberapa aligned departemen dengan strategi korporat?", category: "Alignment" },
+                    { id: 3, text: "Apakah ada strategic planning process yang terstruktur?", category: "Planning" },
+                    { id: 4, text: "Seberapa agile perusahaan dalam merespons perubahan pasar?", category: "Agility" }
+                ]
+            };
+
+            const container = document.getElementById(dimension + '-questions');
+            if (!container) return;
+
+            let html = '';
+            questions[dimension].forEach((q, idx) => {
+                html += `
+                    <div class="glass-panel rounded-xl p-4 border border-amber-200 hover:border-amber-400 transition-all bg-white">
+                        <div class="flex justify-between items-start mb-3">
+                            <div class="flex-1">
+                                <span class="text-xs text-amber-600 font-medium mb-1 block">${q.category}</span>
+                                <p class="text-sm font-medium text-amber-900">${q.text}</p>
+                            </div>
+                            <span class="text-xs text-amber-500 ml-4">#${q.id}</span>
+                        </div>
+                        <div class="flex gap-2 mt-3">
+                            ${[1, 2, 3, 4, 5].map(score => `
+                                <button onclick="setScore('${dimension}', ${q.id}, ${score})" 
+                                    class="score-btn w-10 h-10 rounded-lg bg-amber-50 hover:bg-amber-200 border border-amber-300 transition-all text-sm font-medium text-amber-900"
+                                    data-dimension="${dimension}" data-question="${q.id}" data-score="${score}">
+                                    ${score}
+                                </button>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        function setScore(dimension, questionId, score) {
+            // Update UI
+            const buttons = document.querySelectorAll(`[data-dimension="${dimension}"][data-question="${questionId}"]`);
+            buttons.forEach(btn => {
+                btn.classList.remove('bg-amber-500', 'border-amber-500', 'text-white');
+                btn.classList.add('bg-amber-50', 'border-amber-300', 'text-amber-900');
+                if (parseInt(btn.dataset.score) === score) {
+                    btn.classList.remove('bg-amber-50', 'border-amber-300', 'text-amber-900');
+                    btn.classList.add('bg-amber-500', 'border-amber-500', 'text-white');
+                }
+            });
+
+            // Save data
+            const existing = state.assessmentData[dimension].find(q => q.id === questionId);
+            if (existing) {
+                existing.score = score;
+            } else {
+                state.assessmentData[dimension].push({ id: questionId, score });
+            }
+
+            // Update progress
+            const progress = state.assessmentData[dimension].length;
+            const progressEl = document.getElementById(dimension + '-progress');
+            if (progressEl) progressEl.textContent = progress;
+        }
+
+        function calculateDimensionScore(dimension) {
+            const data = state.assessmentData[dimension];
+            if (data.length === 0) {
+                alert('Silakan jawab pertanyaan terlebih dahulu');
+                return;
+            }
+
+            const totalScore = data.reduce((sum, item) => sum + item.score, 0);
+            const maxScore = data.length * 5;
+            const percentage = Math.round((totalScore / maxScore) * 100);
+            
+            let maturity = 'Initial';
+            if (percentage >= 80) maturity = 'Optimized';
+            else if (percentage >= 60) maturity = 'Defined';
+            else if (percentage >= 40) maturity = 'Managed';
+            else if (percentage >= 20) maturity = 'Developing';
+
+            const gaps = data.filter(item => item.score <= 2).length;
+
+            // Show results
+            const resultsPanel = document.getElementById(dimension + '-results');
+            if (resultsPanel) {
+                resultsPanel.classList.remove('hidden');
+                document.getElementById(dimension + '-final-score').textContent = percentage + '%';
+                document.getElementById(dimension + '-maturity').textContent = maturity;
+                document.getElementById(dimension + '-gaps').textContent = gaps;
+
+                // Generate recommendations
+                const recs = generateRecommendations(dimension, percentage, gaps);
+                document.getElementById(dimension + '-recommendations').innerHTML = recs;
+            }
+
+            // Update radar chart if exists
+            if (radarChart) {
+                const dimensionMap = {
+                    'sop': 0,
+                    'regulation': 1,
+                    'kpi': 2,
+                    'culture': 3,
+                    'strategy': 4,
+                    'leadership': 5
+                };
+                const idx = dimensionMap[dimension];
+                if (idx !== undefined) {
+                    radarChart.data.datasets[0].data[idx] = percentage;
+                    radarChart.update();
+                }
+            }
+        }
+
+        function generateRecommendations(dimension, score, gaps) {
+            const recommendations = {
+                sop: [
+                    "Implementasikan SOP Management System berbasis digital untuk akses mudah",
+                    "Jadwalkan review SOP quarterly dengan melibatkan end users",
+                    "Buat SOP one-page visual untuk proses kritis dan decision tree",
+                    "Integrasikan SOP dengan system workflow otomatis dan notifikasi",
+                    "Setup SOP training program dengan sertifikasi untuk karyawan baru"
+                ],
+                regulation: [
+                    "Assign dedicated compliance officer dengan mandate yang jelas",
+                    "Setup regulatory update alert system dan newsletter bulanan",
+                    "Conduct quarterly compliance audit dengan external reviewer",
+                    "Create compliance dashboard real-time untuk monitoring",
+                    "Implement whistleblowing system yang aman dan terjamin"
+                ],
+                kpi: [
+                    "Implement balanced scorecard framework dengan 4 perspektif",
+                    "Setup automated KPI tracking dashboard dengan visualisasi",
+                    "Align KPI dengan OKR perusahaan secara cascading",
+                    "Review KPI monthly dengan tim terkait dan adjust jika perlu",
+                    "Tambahkan leading indicators bukan hanya lagging indicators"
+                ],
+                culture: [
+                    "Conduct employee engagement survey quarterly dengan follow-up",
+                    "Implement values-based recognition dan reward system",
+                    "Create mentorship program untuk knowledge transfer",
+                    "Setup cross-functional projects untuk membangun kolaborasi",
+                    "Develop internal communication platform yang interaktif"
+                ],
+                strategy: [
+                    "Conduct strategic planning workshop tahunan dengan seluruh leadership",
+                    "Implement strategy execution framework seperti OKR atau Hoshin Kanri",
+                    "Setup strategy review meeting monthly untuk tracking progress",
+                    "Develop scenario planning untuk antisipasi disruption",
+                    "Create strategic initiative portfolio management"
+                ]
+            };
+
+            const recs = recommendations[dimension] || recommendations.sop;
+            return recs.slice(0, 3).map((rec, idx) => `
+                <div class="flex items-start gap-3 p-3 rounded-lg bg-amber-50 border border-amber-200">
+                    <div class="w-6 h-6 rounded-full bg-amber-500 flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <span class="text-xs text-white font-bold">${idx + 1}</span>
+                    </div>
+                    <p class="text-sm text-amber-800">${rec}</p>
+                </div>
+            `).join('');
+        }
+
+        // AI Chat Functions
+        function sendMessage() {
+            const input = document.getElementById('chat-input');
+            const message = input.value.trim();
+            if (!message) return;
+
+            // Add user message
+            addMessage(message, 'user');
+            input.value = '';
+
+            // Generate AI response
+            setTimeout(() => {
+                const response = generateAIResponse(message);
+                typeWriterEffect(response);
+            }, 500);
+        }
+
+        function addMessage(text, sender) {
+            const container = document.getElementById('chat-messages');
+            const div = document.createElement('div');
+            div.className = 'flex gap-3 ' + (sender === 'user' ? 'flex-row-reverse' : '');
+            
+            const avatar = sender === 'user' 
+                ? '<div class="w-10 h-10 rounded-full bg-amber-600 flex items-center justify-center flex-shrink-0"><i class="fas fa-user text-white"></i></div>'
+                : '<div class="w-10 h-10 rounded-full bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center flex-shrink-0"><i class="fas fa-robot text-white"></i></div>';
+            
+            const bubbleClass = sender === 'user' 
+                ? 'bg-amber-600 rounded-tr-none text-white' 
+                : 'glass-panel rounded-tl-none bg-white border border-amber-200';
+            
+            const textColor = sender === 'user' ? 'text-white' : 'text-amber-900';
+            
+            div.innerHTML = `
+                ${avatar}
+                <div class="${bubbleClass} rounded-2xl p-4 max-w-[80%]">
+                    <p class="text-sm leading-relaxed ${textColor}">${text}</p>
+                </div>
+            `;
+            
+            container.appendChild(div);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function typeWriterEffect(text) {
+            const container = document.getElementById('chat-messages');
+            const div = document.createElement('div');
+            div.className = 'flex gap-3';
+            div.innerHTML = `
+                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-robot text-white"></i>
+                </div>
+                <div class="glass-panel rounded-2xl rounded-tl-none p-4 max-w-[80%] bg-white border border-amber-200">
+                    <p class="text-sm leading-relaxed text-amber-900 typing-effect" id="typing-text"></p>
+                </div>
+            `;
+            container.appendChild(div);
+            container.scrollTop = container.scrollHeight;
+
+            let i = 0;
+            const element = document.getElementById('typing-text');
+            element.classList.add('typing-effect');
+            
+            const interval = setInterval(() => {
+                if (i < text.length) {
+                    element.textContent += text.charAt(i);
+                    i++;
+                    container.scrollTop = container.scrollHeight;
+                } else {
+                    clearInterval(interval);
+                    element.classList.remove('typing-effect');
+                }
+            }, 20);
+        }
+
+        function generateAIResponse(input) {
+            const lowerInput = input.toLowerCase();
+            
+            const responses = [
+                { 
+                    keywords: ['sop', 'prosedur', 'prosedur'], 
+                    response: "Berdasarkan analisis ISLA Framework, untuk meningkatkan SOP compliance (saat ini 85%), saya merekomendasikan strategi 4P:\n\n1. **Platform**: Implementasi digital SOP management dengan mobile access\n2. **People**: SOP Champion di setiap departemen + gamifikasi compliance\n3. **Process**: SOP Visual one-page dan decision tree untuk proses kritis\n4. **Performance**: Integration dengan KPI individual\n\nTerdapat 12 prosedur yang perlu direview berdasarkan gap analysis. Apakah Anda ingin saya generate SOP template untuk departemen tertentu?" 
+                },
+                { 
+                    keywords: ['leadership', 'kepemimpinan', 'pemimpin'], 
+                    response: "Analisis ISLA menunjukkan Leadership Index 74% - berada di level 'Developing to Defined'. Model yang paling cocok untuk organisasi Anda saat ini adalah **Adaptive Transformational Leadership** dengan komposisi:\n\n• 40% Transformational (vision & inspiration)\n• 30% Servant (team development)\n• 20% Transactional (performance management)\n• 10% Situational (crisis handling)\n\n**Priority Development Areas**:\n1. Delegation & empowerment practices\n2. Coaching conversation skills\n3. Strategic storytelling\n\nRekomendasi: Implementasi Leadership Development Program 90 hari dengan mentoring circle." 
+                },
+                { 
+                    keywords: ['kpi', 'target', 'indikator'], 
+                    response: "Untuk KPI yang efektif, gunakan ISLA Performance Framework:\n\n**Cascading Structure**:\n• Corporate KPI (Strategic Goals) → \n• Department KPI (Tactical Objectives) → \n• Individual KPI (Operational Targets)\n\n**Balanced Metrics** (jangan hanya financial):\n• Financial (30%): Revenue, Profit, ROI\n• Customer (25%): NPS, Retention, Acquisition\n• Process (25%): Efficiency, Quality, Speed\n• People (20%): Engagement, Competency, Retention\n\n**Best Practices**:\n✓ Review weekly (quick), monthly (deep), quarterly (strategic)\n✓ Automated dashboard dengan traffic light system\n✓ Leading indicators > Lagging indicators\n\nDepartemen mana yang ingin Anda rancang KPI-nya?" 
+                },
+                { 
+                    keywords: ['strategi', 'strategy', 'strategis'], 
+                    response: "Berdasarkan Organizational Health Score 78%, perusahaan Anda berada di fase **'Managed Growth'** menuju 'Optimized'. Strategi yang direkomendasikan:\n\n**Strategic Pillars**:\n1. **Market Penetration** (40% fokus) - Deepen existing markets\n2. **Product Development** (30%) - Innovation pipeline\n3. **Operational Excellence** (20%) - Efficiency & quality\n4. **Talent Development** (10%) - Leadership pipeline\n\n**Critical Success Factors**:\n• Alignment antara strategy-structure-culture (saat ini 78%)\n• Agile execution capability\n• Strategic resource allocation\n\n**AI Modification Recommendation**: Aktifkan 'Growth Mode AI' untuk forecasting dan scenario planning. Apakah Anda ingin saya bantu buat strategic roadmap Q1-Q4?" 
+                },
+                {
+                    keywords: ['culture', 'budaya', 'organisasi'],
+                    response: "Culture Assessment menunjukkan area yang perlu perhatian:\n\n**Current State**:\n• Communication Flow: Perlu improvement antar level\n• Values Alignment: 68% (tercermin dalam perilaku)\n• Engagement: Perlu program recognition yang lebih kuat\n\n**Intervention Recommendations**:\n1. **Values in Action**: Storytelling program untuk karyawan yang exemplify company values\n2. **Cross-functional Collaboration**: Rotational assignment program\n3. **Transparency**: Monthly town hall dengan Q&A terbuka\n4. **Recognition**: Peer-to-peer recognition platform\n\n**Quick Win**: Implement 'Kudos Friday' - setiap Jumat tim memberikan apresiasi ke rekan kerja. Ini bisa meningkatkan engagement score 10-15% dalam 3 bulan.\n\nIngin saya design culture transformation roadmap?" 
+                }
+            ];
+
+            const match = responses.find(r => r.keywords.some(k => lowerInput.includes(k)));
+            
+            if (match) return match.response;
+            
+            return "Terima kasih atas pertanyaan Anda. Saya adalah ISLA AI Assistant yang terintegrasi dengan framework Strategic Leadership Architecture.\n\nUntuk memberikan rekomendasi yang paling akurat, bisa tolong berikan informasi:\n• Ukuran organisasi (startup/SME/corporate)\n• Industri/sektor bisnis\n• Current challenge utama yang dihadapi\n• Target growth dalam 1-2 tahun ke depan\n\nAtau Anda bisa pilih quick actions di bawah untuk topik spesifik (SOP, KPI, Leadership, Strategy).";
+        }
+
+        function quickAsk(question) {
+            document.getElementById('chat-input').value = question;
+            sendMessage();
+        }
+
+        function clearChat() {
+            document.getElementById('chat-messages').innerHTML = `
+                <div class="flex gap-3">
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-robot text-white"></i>
+                    </div>
+                    <div class="glass-panel rounded-2xl rounded-tl-none p-4 max-w-[80%] bg-white border border-amber-200">
+                        <p class="text-sm leading-relaxed text-amber-900">Chat history cleared. How can I help you today?</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function activateAIMode(mode) {
+            state.aiMode = mode;
+            const modeNames = {
+                analyzer: "🧠 Deep Analysis Mode activated. Saya akan memberikan root cause analysis yang mendalam dengan fishbone diagram dan 5 Whys methodology.",
+                predictor: "📈 Predictive Mode activated. Saya akan menganalisis trend dan membuat forecasting organizational health untuk 6 bulan ke depan dengan scenario planning.",
+                generator: "📝 Policy Generator Mode activated. Saya dapat generate draft SOP, kebijakan perusahaan, dan KPI framework yang customized untuk industri Anda."
+            };
+            
+            addMessage(modeNames[mode], 'ai');
+            
+            // Visual feedback
+            document.querySelectorAll('[onclick^="activateAIMode"]').forEach(btn => {
+                btn.classList.remove('border-amber-500', 'bg-amber-50');
+            });
+            event.currentTarget.classList.add('border-amber-500', 'bg-amber-50');
+        }
+
+        function showLeadershipDetail(style) {
+            const details = {
+                transformational: {
+                    title: "Transformational Leadership",
+                    desc: "Fokus pada inspirasi, inovasi, dan perubahan organisasional. Cocok untuk fase growth dan transformasi.",
+                    traits: ["Visionary thinking", "Inspirational motivation", "Intellectual stimulation", "Individualized consideration"],
+                    bestFor: "Organisasi dalam fase growth, transformasi digital, startup scaling, atau turnaround situation",
+                    islaTip: "💡 ISLA Tip: Kombinasikan dengan Servant Leadership untuk sustainable growth"
+                },
+                transactional: {
+                    title: "Transactional Leadership",
+                    desc: "Berdasarkan sistem reward dan punishment yang jelas. Efektif untuk operasional dan compliance.",
+                    traits: ["Clear expectations", "Performance monitoring", "Contingent rewards", "Active management by exception"],
+                    bestFor: "Operasional stabil, manufacturing, retail, situasi krisis jangka pendek, atau tim yang membutuhkan struktur jelas",
+                    islaTip: "💡 ISLA Tip: Gunakan 70% transactional + 30% transformational untuk balance"
+                },
+                servant: {
+                    title: "Servant Leadership",
+                    desc: "Mem prioritaskan pertumbuhan dan well-being tim. Membangun trust dan long-term loyalty.",
+                    traits: ["Listening", "Empathy", "Healing", "Awareness", "Persuasion", "Conceptualization"],
+                    bestFor: "Organisasi knowledge-based, creative industries, professional services, atau team yang sudah matang (high maturity)",
+                    islaTip: "💡 ISLA Tip: Paling efektif ketika dikombinasikan dengan clear performance framework"
+                }
+            };
+
+            const d = details[style];
+            alert(`${d.title}\n\n${d.desc}\n\nKey Traits:\n${d.traits.map(t => `• ${t}`).join('\n')}\n\nBest for: ${d.bestFor}\n\n${d.islaTip}`);
+        }
+
+        function startQuickDiagnosis() {
+            showSection('diagnosis');
+            setTimeout(() => switchTab('sop'), 100);
+        }
+
+        function generateReport() {
+            const reportContent = `
+ISLA EXECUTIVE REPORT
+Generated: ${new Date().toLocaleDateString('id-ID')}
+
+ORGANIZATIONAL HEALTH SCORE: 78/100
+Status: Managed Growth Phase
+
+DIMENSION ANALYSIS:
+• SOP Compliance: 85% (Good - 12 procedures need review)
+• Regulatory: 72% (Developing - compliance officer needed)
+• KPI Management: 92% (Excellent - 3 targets exceeded)
+• Culture & People: 68% (Developing - engagement program needed)
+• Strategy: 78% (Good - alignment could be improved)
+• Leadership: 74% (Developing - delegation skills priority)
+
+TOP 3 PRIORITIES:
+1. Implement digital SOP management system
+2. Launch leadership development program (delegation focus)
+3. Setup employee engagement initiative
+
+RECOMMENDED LEADERSHIP STYLE:
+Adaptive Transformational (40%) + Servant (30%) + Transactional (20%)
+
+90-DAY ACTION PLAN:
+Month 1: SOP digitization + Leadership assessment
+Month 2: Engagement program launch + Compliance audit
+Month 3: Strategy review + KPI optimization
+
+---
+Generated by ISLA Platform
+Integrated Strategic Leadership Architecture
+            `;
+            
+            alert('Executive Report Generated!\n\n' + reportContent + '\n\n📄 Download akan dimulai otomatis (simulasi)');
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            initCharts();
+            loadQuestions('sop');
+        });
+
+        // Auto-save assessment data
+        setInterval(() => {
+            localStorage.setItem('isla_assessment', JSON.stringify(state.assessmentData));
+        }, 30000);
+    </script>
 </body>
 </html>
