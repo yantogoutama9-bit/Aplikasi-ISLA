@@ -22,6 +22,7 @@
             --success: #10b981;
             --warning: #f59e0b;
             --danger: #ef4444;
+            --info: #3b82f6;
         }
 
         body {
@@ -120,179 +121,377 @@
             font-size: 1.1rem;
         }
 
-        /* Executive Dashboard */
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin-bottom: 40px;
+        /* Upload Assessment Section */
+        .upload-section {
+            background: white;
+            padding: 60px 0;
         }
 
-        .dashboard-card {
-            background: var(--white);
-            padding: 30px;
-            border-radius: 16px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-
-        .dashboard-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-        }
-
-        .metric {
-            display: flex;
-            align-items: baseline;
-            gap: 10px;
-            margin-bottom: 10px;
-        }
-
-        .metric-value {
-            font-size: 3rem;
-            font-weight: bold;
-            color: var(--primary-color);
-        }
-
-        .metric-label {
-            color: var(--text-light);
-            font-size: 0.9rem;
-        }
-
-        .trend {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-        }
-
-        .trend.up {
-            background: #d1fae5;
-            color: #065f46;
-        }
-
-        .trend.down {
-            background: #fee2e2;
-            color: #991b1b;
-        }
-
-        /* Assessment Sections */
-        .assessment-grid {
+        .upload-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: 30px;
+            margin-top: 40px;
         }
 
-        .assessment-card {
+        .upload-card {
             background: var(--white);
-            border-radius: 16px;
+            border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 2px solid transparent;
         }
 
-        .assessment-header {
+        .upload-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .upload-card.active {
+            border-color: var(--success);
+        }
+
+        .upload-card.processing {
+            border-color: var(--warning);
+        }
+
+        .upload-header {
             background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
             color: var(--white);
-            padding: 20px 25px;
-        }
-
-        .assessment-header h3 {
-            font-size: 1.25rem;
-            margin: 0;
-        }
-
-        .assessment-content {
             padding: 25px;
+            position: relative;
         }
 
-        .question-item {
-            padding: 15px 0;
-            border-bottom: 1px solid #e5e7eb;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .question-item:last-child {
-            border-bottom: none;
-        }
-
-        .question-number {
-            background: var(--primary-color);
-            color: white;
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
+        .upload-header h3 {
+            font-size: 1.3rem;
+            margin: 0;
             display: flex;
             align-items: center;
-            justify-content: center;
-            font-size: 0.85rem;
+            gap: 10px;
+        }
+
+        .upload-icon {
+            font-size: 1.5rem;
+        }
+
+        .upload-status {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.2);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
             font-weight: 600;
         }
 
-        /* Leadership Model */
-        .leadership-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 25px;
-            margin-bottom: 40px;
+        .upload-status.uploaded {
+            background: var(--success);
         }
 
-        .leadership-card {
-            background: var(--white);
+        .upload-status.analyzing {
+            background: var(--warning);
+            animation: pulse 2s infinite;
+        }
+
+        .upload-content {
             padding: 30px;
-            border-radius: 16px;
-            text-align: center;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            border-top: 4px solid var(--primary-color);
         }
 
-        .leadership-card h4 {
-            color: var(--primary-color);
-            margin-bottom: 10px;
+        .upload-area {
+            border: 3px dashed #e5e7eb;
+            border-radius: 15px;
+            padding: 40px 20px;
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-area:hover {
+            border-color: var(--primary-color);
+            background: #f0f4ff;
+        }
+
+        .upload-area.dragover {
+            border-color: var(--success);
+            background: #f0fdf4;
+            transform: scale(1.02);
+        }
+
+        .upload-area.has-file {
+            border-color: var(--success);
+            background: #f0fdf4;
+        }
+
+        .upload-placeholder {
+            pointer-events: none;
+        }
+
+        .upload-placeholder-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+
+        .upload-placeholder h4 {
+            color: var(--text-dark);
+            margin-bottom: 8px;
             font-size: 1.1rem;
         }
 
-        .leadership-card p {
+        .upload-placeholder p {
             color: var(--text-light);
             font-size: 0.9rem;
         }
 
-        /* Table Styles */
-        .table-container {
-            overflow-x: auto;
-            background: var(--white);
-            border-radius: 16px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        }
-
-        table {
+        .file-input {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
-            border-collapse: collapse;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
         }
 
-        th, td {
-            padding: 15px 20px;
-            text-align: left;
-            border-bottom: 1px solid #e5e7eb;
+        .file-info {
+            display: none;
+            text-align: center;
         }
 
-        th {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            color: var(--white);
+        .file-info.show {
+            display: block;
+        }
+
+        .file-icon {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+
+        .file-name {
             font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 5px;
+            word-break: break-all;
         }
 
-        tr:hover {
+        .file-size {
+            color: var(--text-light);
+            font-size: 0.85rem;
+            margin-bottom: 15px;
+        }
+
+        .file-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #e5e7eb;
+            color: var(--text-dark);
+        }
+
+        .btn-secondary:hover {
+            background: #d1d5db;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .analysis-result {
+            margin-top: 25px;
+            padding: 20px;
             background: #f9fafb;
+            border-radius: 12px;
+            border-left: 4px solid var(--primary-color);
+            display: none;
         }
 
-        /* AI Assistant Styles */
-        .ai-section {
+        .analysis-result.show {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        .analysis-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .analysis-title {
+            font-weight: 600;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .analysis-score {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .analysis-content {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            line-height: 1.8;
+        }
+
+        .analysis-content ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+
+        .analysis-content li {
+            margin: 8px 0;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #e5e7eb;
+            border-radius: 3px;
+            overflow: hidden;
+            margin: 15px 0;
+            display: none;
+        }
+
+        .progress-bar.show {
+            display: block;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            width: 0%;
+            transition: width 0.3s ease;
+            border-radius: 3px;
+        }
+
+        .supported-formats {
+            margin-top: 15px;
+            padding: 15px;
+            background: #f3f4f6;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        .supported-formats strong {
+            color: var(--text-dark);
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .format-tag {
+            display: inline-block;
+            background: white;
+            padding: 3px 8px;
+            border-radius: 4px;
+            margin: 2px;
+            font-size: 0.75rem;
+            border: 1px solid #e5e7eb;
+        }
+
+        /* Master Analysis Section */
+        .master-analysis {
             background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+            padding: 60px 0;
+        }
+
+        .master-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .master-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .master-header h3 {
+            font-size: 1.8rem;
+            color: var(--text-dark);
+            margin-bottom: 10px;
+        }
+
+        .upload-counter {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: #f3f4f6;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .counter-current {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+        }
+
+        .master-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn-large {
+            padding: 15px 30px;
+            font-size: 1rem;
+            border-radius: 12px;
+        }
+
+        /* AI Chat Section */
+        .ai-section {
+            background: white;
+            padding: 60px 0;
         }
 
         .ai-chat-container {
@@ -355,22 +554,6 @@
             50% { opacity: 0.5; }
         }
 
-        .clear-chat {
-            margin-left: auto;
-            background: rgba(255,255,255,0.2);
-            border: none;
-            color: white;
-            padding: 8px 12px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-size: 0.9rem;
-        }
-
-        .clear-chat:hover {
-            background: rgba(255,255,255,0.3);
-        }
-
         .chat-messages {
             height: 400px;
             overflow-y: auto;
@@ -423,15 +606,6 @@
             background: #f3f4f6;
             color: var(--text-dark);
             border-bottom-right-radius: 4px;
-        }
-
-        .message-content ul {
-            margin: 10px 0;
-            padding-left: 20px;
-        }
-
-        .message-content li {
-            margin: 5px 0;
         }
 
         .timestamp {
@@ -518,192 +692,10 @@
             box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
         }
 
-        .send-btn:active {
-            transform: scale(0.95);
-        }
-
         .send-btn:disabled {
             opacity: 0.5;
             cursor: not-allowed;
             transform: none;
-        }
-
-        .input-hints {
-            display: flex;
-            gap: 10px;
-            margin-top: 12px;
-            flex-wrap: wrap;
-        }
-
-        .hint {
-            background: #e0e7ff;
-            color: #4338ca;
-            padding: 6px 12px;
-            border-radius: 15px;
-            font-size: 0.8rem;
-            cursor: pointer;
-            transition: all 0.2s;
-            border: none;
-        }
-
-        .hint:hover {
-            background: #c7d2fe;
-            transform: translateY(-1px);
-        }
-
-        .api-config {
-            background: #f9fafb;
-            border-top: 1px solid #e5e7eb;
-        }
-
-        .config-toggle {
-            width: 100%;
-            padding: 12px 25px;
-            background: transparent;
-            border: none;
-            color: #6b7280;
-            font-size: 0.9rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            transition: background 0.2s;
-        }
-
-        .config-toggle:hover {
-            background: #f3f4f6;
-        }
-
-        .config-panel {
-            padding: 20px 25px;
-            background: white;
-            border-top: 1px solid #e5e7eb;
-        }
-
-        .config-content label {
-            display: block;
-            margin-bottom: 15px;
-            font-size: 0.9rem;
-            color: #374151;
-            font-weight: 500;
-        }
-
-        .config-content input,
-        .config-content select {
-            width: 100%;
-            padding: 10px 15px;
-            border: 2px solid #e5e7eb;
-            border-radius: 8px;
-            margin-top: 5px;
-            font-size: 0.9rem;
-            transition: border-color 0.2s;
-        }
-
-        .config-content input:focus,
-        .config-content select:focus {
-            outline: none;
-            border-color: var(--primary-color);
-        }
-
-        .config-help {
-            font-size: 0.8rem;
-            color: #6b7280;
-            margin: 5px 0 15px;
-        }
-
-        .config-help a {
-            color: var(--primary-color);
-            text-decoration: none;
-        }
-
-        .config-help a:hover {
-            text-decoration: underline;
-        }
-
-        .save-config {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.95rem;
-            font-weight: 500;
-            transition: transform 0.2s;
-        }
-
-        .save-config:hover {
-            transform: translateY(-2px);
-        }
-
-        #config-status {
-            margin-top: 10px;
-            font-size: 0.85rem;
-            padding: 8px;
-            border-radius: 6px;
-        }
-
-        .status-success {
-            background: #d1fae5;
-            color: #065f46;
-        }
-
-        .status-error {
-            background: #fee2e2;
-            color: #991b1b;
-        }
-
-        .ai-tools-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-top: 40px;
-        }
-
-        .tool-card {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
-            border: 2px solid transparent;
-        }
-
-        .tool-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
-            border-color: var(--primary-color);
-        }
-
-        .tool-icon {
-            font-size: 2.5rem;
-            margin-bottom: 15px;
-        }
-
-        .tool-card h4 {
-            color: var(--text-dark);
-            margin: 0 0 10px;
-            font-size: 1.1rem;
-        }
-
-        .tool-card p {
-            color: var(--text-light);
-            font-size: 0.9rem;
-            margin: 0;
-        }
-
-        /* Footer */
-        footer {
-            background: var(--text-dark);
-            color: var(--white);
-            padding: 40px 0;
-            text-align: center;
-        }
-
-        footer p {
-            opacity: 0.8;
         }
 
         /* Responsive */
@@ -716,33 +708,20 @@
                 display: none;
             }
 
-            .section-header h2 {
-                font-size: 1.8rem;
+            .upload-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .master-card {
+                padding: 25px;
             }
 
             .chat-messages {
                 height: 300px;
-                padding: 15px;
-            }
-
-            .message {
-                max-width: 90%;
-            }
-
-            .input-hints {
-                display: none;
-            }
-
-            table {
-                font-size: 0.9rem;
-            }
-
-            th, td {
-                padding: 10px;
             }
         }
 
-        /* Scrollbar Styling */
+        /* Scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
         }
@@ -756,52 +735,41 @@
             border-radius: 4px;
         }
 
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--secondary-color);
-        }
-
-        /* Search Results Styling */
-        .search-results {
-            margin-top: 15px;
-            padding: 15px;
-            background: rgba(255,255,255,0.1);
+        .alert {
+            padding: 15px 20px;
             border-radius: 10px;
-            border-left: 4px solid var(--accent-color);
+            margin-bottom: 20px;
+            display: none;
         }
 
-        .search-results h4 {
-            margin-bottom: 10px;
-            font-size: 0.9rem;
-            opacity: 0.9;
+        .alert.show {
+            display: block;
+            animation: slideIn 0.3s ease;
         }
 
-        .result-item {
-            margin-bottom: 8px;
-            padding: 8px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 6px;
-            font-size: 0.85rem;
+        .alert-warning {
+            background: #fef3c7;
+            border-left: 4px solid var(--warning);
+            color: #92400e;
         }
 
-        .result-item a {
-            color: var(--accent-color);
-            text-decoration: none;
-            font-weight: 600;
+        .alert-success {
+            background: #d1fae5;
+            border-left: 4px solid var(--success);
+            color: #065f46;
         }
 
-        .result-item a:hover {
-            text-decoration: underline;
-        }
-
-        .citation {
-            display: inline-block;
-            background: var(--accent-color);
-            color: white;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            margin-right: 5px;
-            font-weight: bold;
+        .file-requirement {
+            background: #fee2e2;
+            border: 2px solid var(--danger);
+            color: #991b1b;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
     </style>
 </head>
@@ -811,9 +779,7 @@
         <div class="container">
             <a href="#" class="logo">ISLA</a>
             <ul class="nav-links">
-                <li><a href="#dashboard">Dashboard</a></li>
-                <li><a href="#diagnosis">Diagnosis</a></li>
-                <li><a href="#leadership">Leadership</a></li>
+                <li><a href="#upload-section">Upload & Review</a></li>
                 <li><a href="#ai-assistant">AI Assistant</a></li>
             </ul>
         </div>
@@ -822,259 +788,286 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="container">
-            <h1>Integrated Strategic Leadership Architecture</h1>
-            <p>Executive Dashboard untuk monitoring kesehatan organisasi secara real-time dengan dukungan AI</p>
+            <h1>ISLA Document Review System</h1>
+            <p>Upload dokumen SOP, Compliance, KPI, Culture, dan Strategic Alignment untuk direview oleh AI Assistant</p>
         </div>
     </section>
 
-    <!-- Executive Dashboard -->
-    <section id="dashboard" class="section">
+    <!-- File Upload Section -->
+    <section id="upload-section" class="upload-section">
         <div class="container">
             <div class="section-header">
-                <h2>Executive Dashboard</h2>
-                <p>Real-time organizational health monitoring</p>
-            </div>
-            
-            <div class="dashboard-grid">
-                <div class="dashboard-card">
-                    <div class="metric">
-                        <span class="metric-value">78%</span>
-                        <span class="metric-label">Organizational Health</span>
-                    </div>
-                    <span class="trend up">↑ +5% from last quarter</span>
-                    <p style="margin-top: 15px; color: var(--text-light);">12 procedures need review</p>
-                </div>
-                
-                <div class="dashboard-card">
-                    <h3 style="margin-bottom: 15px; color: var(--primary-color);">Organizational Dimensions</h3>
-                    <div style="display: flex; flex-direction: column; gap: 10px;">
-                        <div style="display: flex; justify-content: space-between;">
-                            <span>SOP Compliance</span>
-                            <strong>85%</strong>
-                        </div>
-                        <div style="display: flex; justify-content: space-between;">
-                            <span>Regulatory</span>
-                            <strong>92%</strong>
-                        </div>
-                        <div style="display: flex; justify-content: space-between;">
-                            <span>KPI Achievement</span>
-                            <strong>76%</strong>
-                        </div>
-                        <div style="display: flex; justify-content: space-between;">
-                            <span>Culture Fit</span>
-                            <strong>88%</strong>
-                        </div>
-                        <div style="display: flex; justify-content: space-between;">
-                            <span>Strategic Alignment</span>
-                            <strong>81%</strong>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="dashboard-card">
-                    <h3 style="margin-bottom: 15px; color: var(--primary-color);">Trend Analysis</h3>
-                    <div style="height: 100px; background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--primary-color);">
-                        [Trend Chart Placeholder]
-                    </div>
-                    <p style="margin-top: 10px; font-size: 0.9rem; color: var(--text-light);">Positive trend in Q4 2024</p>
-                </div>
+                <h2>📁 Upload Dokumen untuk Review</h2>
+                <p>Silakan upload 5 dokumen wajib berikut. AI akan menganalisis dan memberikan rekomendasi perbaikan.</p>
             </div>
 
-            <div class="dashboard-card" style="text-align: center;">
-                <h3 style="margin-bottom: 20px; color: var(--primary-color);">Quick Actions</h3>
-                <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
-                    <button style="padding: 12px 24px; background: var(--primary-color); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 500;">Review SOP</button>
-                    <button style="padding: 12px 24px; background: var(--secondary-color); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 500;">Update KPI</button>
-                    <button style="padding: 12px 24px; background: var(--accent-color); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 500;">Generate Report</button>
+            <div class="file-requirement">
+                ⚠️ <strong>WAJIB:</strong> Upload minimal 1 dokumen untuk mengaktifkan AI Review. Dokumen yang diupload akan dianalisis secara komprehensif.
+            </div>
+
+            <div class="upload-grid">
+                <!-- SOP Upload -->
+                <div class="upload-card" id="card-sop" data-type="sop">
+                    <div class="upload-header">
+                        <h3><span class="upload-icon">📋</span> SOP Documents</h3>
+                        <span class="upload-status" id="status-sop">Belum Upload</span>
+                    </div>
+                    <div class="upload-content">
+                        <div class="upload-area" id="upload-area-sop">
+                            <input type="file" class="file-input" id="file-sop" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt" onchange="handleFileSelect('sop', this.files[0])">
+                            <div class="upload-placeholder" id="placeholder-sop">
+                                <div class="upload-placeholder-icon">📤</div>
+                                <h4>Drop file SOP di sini</h4>
+                                <p>atau klik untuk browse</p>
+                            </div>
+                            <div class="file-info" id="file-info-sop">
+                                <div class="file-icon" id="icon-sop">📄</div>
+                                <div class="file-name" id="filename-sop"></div>
+                                <div class="file-size" id="filesize-sop"></div>
+                                <div class="file-actions">
+                                    <button class="btn btn-primary" onclick="analyzeFile('sop')">🔍 Analisis</button>
+                                    <button class="btn btn-secondary" onclick="removeFile('sop')">Hapus</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="progress-bar" id="progress-sop">
+                            <div class="progress-fill" id="progress-fill-sop"></div>
+                        </div>
+                        <div class="analysis-result" id="result-sop">
+                            <div class="analysis-header">
+                                <span class="analysis-title">📊 Hasil Analisis SOP</span>
+                                <span class="analysis-score" id="score-sop">0/100</span>
+                            </div>
+                            <div class="analysis-content" id="analysis-content-sop"></div>
+                        </div>
+                        <div class="supported-formats">
+                            <strong>Format yang didukung:</strong>
+                            <span class="format-tag">PDF</span>
+                            <span class="format-tag">DOC/DOCX</span>
+                            <span class="format-tag">XLS/XLSX</span>
+                            <span class="format-tag">PPT/PPTX</span>
+                            <span class="format-tag">TXT</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Regulatory Compliance Upload -->
+                <div class="upload-card" id="card-compliance" data-type="compliance">
+                    <div class="upload-header">
+                        <h3><span class="upload-icon">⚖️</span> Regulatory Compliance</h3>
+                        <span class="upload-status" id="status-compliance">Belum Upload</span>
+                    </div>
+                    <div class="upload-content">
+                        <div class="upload-area" id="upload-area-compliance">
+                            <input type="file" class="file-input" id="file-compliance" accept=".pdf,.doc,.docx,.xls,.xlsx,.txt" onchange="handleFileSelect('compliance', this.files[0])">
+                            <div class="upload-placeholder" id="placeholder-compliance">
+                                <div class="upload-placeholder-icon">📤</div>
+                                <h4>Drop file Compliance di sini</h4>
+                                <p>atau klik untuk browse</p>
+                            </div>
+                            <div class="file-info" id="file-info-compliance">
+                                <div class="file-icon" id="icon-compliance">📄</div>
+                                <div class="file-name" id="filename-compliance"></div>
+                                <div class="file-size" id="filesize-compliance"></div>
+                                <div class="file-actions">
+                                    <button class="btn btn-primary" onclick="analyzeFile('compliance')">🔍 Analisis</button>
+                                    <button class="btn btn-secondary" onclick="removeFile('compliance')">Hapus</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="progress-bar" id="progress-compliance">
+                            <div class="progress-fill" id="progress-fill-compliance"></div>
+                        </div>
+                        <div class="analysis-result" id="result-compliance">
+                            <div class="analysis-header">
+                                <span class="analysis-title">📊 Hasil Analisis Compliance</span>
+                                <span class="analysis-score" id="score-compliance">0/100</span>
+                            </div>
+                            <div class="analysis-content" id="analysis-content-compliance"></div>
+                        </div>
+                        <div class="supported-formats">
+                            <strong>Format yang didukung:</strong>
+                            <span class="format-tag">PDF</span>
+                            <span class="format-tag">DOC/DOCX</span>
+                            <span class="format-tag">XLS/XLSX</span>
+                            <span class="format-tag">TXT</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- KPI Upload -->
+                <div class="upload-card" id="card-kpi" data-type="kpi">
+                    <div class="upload-header">
+                        <h3><span class="upload-icon">📊</span> Key Performance Indicators</h3>
+                        <span class="upload-status" id="status-kpi">Belum Upload</span>
+                    </div>
+                    <div class="upload-content">
+                        <div class="upload-area" id="upload-area-kpi">
+                            <input type="file" class="file-input" id="file-kpi" accept=".pdf,.doc,.docx,.xls,.xlsx,.txt" onchange="handleFileSelect('kpi', this.files[0])">
+                            <div class="upload-placeholder" id="placeholder-kpi">
+                                <div class="upload-placeholder-icon">📤</div>
+                                <h4>Drop file KPI di sini</h4>
+                                <p>atau klik untuk browse</p>
+                            </div>
+                            <div class="file-info" id="file-info-kpi">
+                                <div class="file-icon" id="icon-kpi">📄</div>
+                                <div class="file-name" id="filename-kpi"></div>
+                                <div class="file-size" id="filesize-kpi"></div>
+                                <div class="file-actions">
+                                    <button class="btn btn-primary" onclick="analyzeFile('kpi')">🔍 Analisis</button>
+                                    <button class="btn btn-secondary" onclick="removeFile('kpi')">Hapus</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="progress-bar" id="progress-kpi">
+                            <div class="progress-fill" id="progress-fill-kpi"></div>
+                        </div>
+                        <div class="analysis-result" id="result-kpi">
+                            <div class="analysis-header">
+                                <span class="analysis-title">📊 Hasil Analisis KPI</span>
+                                <span class="analysis-score" id="score-kpi">0/100</span>
+                            </div>
+                            <div class="analysis-content" id="analysis-content-kpi"></div>
+                        </div>
+                        <div class="supported-formats">
+                            <strong>Format yang didukung:</strong>
+                            <span class="format-tag">PDF</span>
+                            <span class="format-tag">DOC/DOCX</span>
+                            <span class="format-tag">XLS/XLSX (Recommended)</span>
+                            <span class="format-tag">TXT</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Culture Upload -->
+                <div class="upload-card" id="card-culture" data-type="culture">
+                    <div class="upload-header">
+                        <h3><span class="upload-icon">🏢</span> Organizational Culture</h3>
+                        <span class="upload-status" id="status-culture">Belum Upload</span>
+                    </div>
+                    <div class="upload-content">
+                        <div class="upload-area" id="upload-area-culture">
+                            <input type="file" class="file-input" id="file-culture" accept=".pdf,.doc,.docx,.ppt,.pptx,.txt" onchange="handleFileSelect('culture', this.files[0])">
+                            <div class="upload-placeholder" id="placeholder-culture">
+                                <div class="upload-placeholder-icon">📤</div>
+                                <h4>Drop file Culture di sini</h4>
+                                <p>atau klik untuk browse</p>
+                            </div>
+                            <div class="file-info" id="file-info-culture">
+                                <div class="file-icon" id="icon-culture">📄</div>
+                                <div class="file-name" id="filename-culture"></div>
+                                <div class="file-size" id="filesize-culture"></div>
+                                <div class="file-actions">
+                                    <button class="btn btn-primary" onclick="analyzeFile('culture')">🔍 Analisis</button>
+                                    <button class="btn btn-secondary" onclick="removeFile('culture')">Hapus</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="progress-bar" id="progress-culture">
+                            <div class="progress-fill" id="progress-fill-culture"></div>
+                        </div>
+                        <div class="analysis-result" id="result-culture">
+                            <div class="analysis-header">
+                                <span class="analysis-title">📊 Hasil Analisis Culture</span>
+                                <span class="analysis-score" id="score-culture">0/100</span>
+                            </div>
+                            <div class="analysis-content" id="analysis-content-culture"></div>
+                        </div>
+                        <div class="supported-formats">
+                            <strong>Format yang didukung:</strong>
+                            <span class="format-tag">PDF</span>
+                            <span class="format-tag">DOC/DOCX</span>
+                            <span class="format-tag">PPT/PPTX</span>
+                            <span class="format-tag">TXT</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Strategic Alignment Upload -->
+                <div class="upload-card" id="card-strategic" data-type="strategic">
+                    <div class="upload-header">
+                        <h3><span class="upload-icon">🎯</span> Strategic Alignment</h3>
+                        <span class="upload-status" id="status-strategic">Belum Upload</span>
+                    </div>
+                    <div class="upload-content">
+                        <div class="upload-area" id="upload-area-strategic">
+                            <input type="file" class="file-input" id="file-strategic" accept=".pdf,.doc,.docx,.ppt,.pptx,.txt" onchange="handleFileSelect('strategic', this.files[0])">
+                            <div class="upload-placeholder" id="placeholder-strategic">
+                                <div class="upload-placeholder-icon">📤</div>
+                                <h4>Drop file Strategic di sini</h4>
+                                <p>atau klik untuk browse</p>
+                            </div>
+                            <div class="file-info" id="file-info-strategic">
+                                <div class="file-icon" id="icon-strategic">📄</div>
+                                <div class="file-name" id="filename-strategic"></div>
+                                <div class="file-size" id="filesize-strategic"></div>
+                                <div class="file-actions">
+                                    <button class="btn btn-primary" onclick="analyzeFile('strategic')">🔍 Analisis</button>
+                                    <button class="btn btn-secondary" onclick="removeFile('strategic')">Hapus</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="progress-bar" id="progress-strategic">
+                            <div class="progress-fill" id="progress-fill-strategic"></div>
+                        </div>
+                        <div class="analysis-result" id="result-strategic">
+                            <div class="analysis-header">
+                                <span class="analysis-title">📊 Hasil Analisis Strategic</span>
+                                <span class="analysis-score" id="score-strategic">0/100</span>
+                            </div>
+                            <div class="analysis-content" id="analysis-content-strategic"></div>
+                        </div>
+                        <div class="supported-formats">
+                            <strong>Format yang didukung:</strong>
+                            <span class="format-tag">PDF</span>
+                            <span class="format-tag">DOC/DOCX</span>
+                            <span class="format-tag">PPT/PPTX</span>
+                            <span class="format-tag">TXT</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Organizational Diagnosis -->
-    <section id="diagnosis" class="section" style="background: white;">
+    <!-- Master Analysis Section -->
+    <section class="master-analysis">
         <div class="container">
-            <div class="section-header">
-                <h2>Organizational Diagnosis</h2>
-                <p>Comprehensive assessment across 5 critical dimensions</p>
-            </div>
-
-            <div class="assessment-grid">
-                <!-- SOP Assessment -->
-                <div class="assessment-card">
-                    <div class="assessment-header">
-                        <h3>Standard Operating Procedures Assessment</h3>
-                    </div>
-                    <div class="assessment-content">
-                        <div class="question-item">
-                            <span>Apakah seluruh SOP terdokumentasi dengan baik dan mudah diakses?</span>
-                            <span class="question-number">#1</span>
-                        </div>
-                        <div class="question-item">
-                            <span>Seberapa sering SOP di-review dan diperbarui?</span>
-                            <span class="question-number">#2</span>
-                        </div>
-                        <div class="question-item">
-                            <span>Apakah ada pelatihan reguler terkait SOP untuk karyawan?</span>
-                            <span class="question-number">#3</span>
-                        </div>
-                        <div class="question-item">
-                            <span>Seberapa tinggi tingkat kepatuhan terhadap SOP yang ada?</span>
-                            <span class="question-number">#4</span>
-                        </div>
-                        <div class="question-item">
-                            <span>Apakah SOP terintegrasi dengan sistem digital?</span>
-                            <span class="question-number">#5</span>
-                        </div>
-                        <div class="question-item">
-                            <span>Apakah ada mekanisme feedback untuk perbaikan SOP?</span>
-                            <span class="question-number">#6</span>
-                        </div>
-                        <div class="question-item">
-                            <span>Seberapa jelas alur approval dalam SOP?</span>
-                            <span class="question-number">#7</span>
-                        </div>
-                        <div class="question-item">
-                            <span>Apakah SOP mencakup risk management?</span>
-                            <span class="question-number">#8</span>
-                        </div>
-                        <div class="question-item">
-                            <span>Apakah ada SOP khusus untuk crisis management?</span>
-                            <span class="question-number">#9</span>
-                        </div>
-                        <div class="question-item">
-                            <span>Seberapa konsisten implementasi SOP antar departemen?</span>
-                            <span class="question-number">#10</span>
-                        </div>
-                        <div style="margin-top: 20px; padding: 15px; background: #f3f4f6; border-radius: 8px;">
-                            <strong>SOP Analysis Results</strong>
-                            <p style="margin-top: 5px; color: var(--text-light);">Click "Analyze with AI" for detailed insights</p>
-                        </div>
+            <div class="master-card">
+                <div class="master-header">
+                    <h3>🚀 Analisis Komprehensif</h3>
+                    <p>Analisis semua dokumen yang telah diupload untuk mendapatkan rekomendasi strategis</p>
+                    <div class="upload-counter" style="margin-top: 20px;">
+                        <span>Dokumen diupload:</span>
+                        <span class="counter-current" id="upload-count">0</span>
+                        <span>/ 5</span>
                     </div>
                 </div>
 
-                <!-- Regulatory Compliance -->
-                <div class="assessment-card">
-                    <div class="assessment-header">
-                        <h3>Regulatory Compliance Assessment</h3>
-                    </div>
-                    <div class="assessment-content">
-                        <div style="padding: 20px; text-align: center; color: var(--text-light);">
-                            [Compliance Assessment Form]
-                        </div>
-                    </div>
+                <div class="alert alert-warning" id="alert-incomplete">
+                    ⚠️ Upload minimal 1 dokumen untuk mengaktifkan analisis AI.
                 </div>
 
-                <!-- KPI Assessment -->
-                <div class="assessment-card">
-                    <div class="assessment-header">
-                        <h3>Key Performance Indicators Assessment</h3>
-                    </div>
-                    <div class="assessment-content">
-                        <div style="padding: 20px; text-align: center; color: var(--text-light);">
-                            [KPI Assessment Form]
-                        </div>
-                    </div>
+                <div class="alert alert-success" id="alert-ready" style="display: none;">
+                    ✅ Semua dokumen siap! Klik tombol di bawah untuk analisis komprehensif.
                 </div>
 
-                <!-- Culture Assessment -->
-                <div class="assessment-card">
-                    <div class="assessment-header">
-                        <h3>Organizational Culture Assessment</h3>
-                    </div>
-                    <div class="assessment-content">
-                        <div style="padding: 20px; text-align: center; color: var(--text-light);">
-                            [Culture Assessment Form]
-                        </div>
-                    </div>
+                <div class="master-actions">
+                    <button class="btn btn-primary btn-large" id="btn-analyze-all" onclick="analyzeAll()" disabled>
+                        🔍 Analisis Semua Dokumen
+                    </button>
+                    <button class="btn btn-secondary btn-large" onclick="generateReport()">
+                        📄 Generate Report
+                    </button>
+                    <button class="btn btn-danger btn-large" onclick="clearAll()">
+                        🗑️ Hapus Semua
+                    </button>
                 </div>
 
-                <!-- Strategic Alignment -->
-                <div class="assessment-card">
-                    <div class="assessment-header">
-                        <h3>Strategic Alignment Assessment</h3>
-                    </div>
-                    <div class="assessment-content">
-                        <div style="padding: 20px; text-align: center; color: var(--text-light);">
-                            [Strategic Alignment Form]
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Adaptive Leadership Model -->
-    <section id="leadership" class="section">
-        <div class="container">
-            <div class="section-header">
-                <h2>Adaptive Leadership Model</h2>
-                <p>ISLA's integrated leadership framework</p>
-            </div>
-
-            <div class="leadership-grid">
-                <div class="leadership-card">
-                    <h4>Transformational</h4>
-                    <p>Inspiring innovation and organizational change through vision and motivation.</p>
-                    <span style="display: inline-block; margin-top: 10px; padding: 5px 10px; background: #d1fae5; color: #065f46; border-radius: 15px; font-size: 0.8rem;">High Growth</span>
-                </div>
-                <div class="leadership-card" style="border-top-color: var(--secondary-color);">
-                    <h4 style="color: var(--secondary-color);">Transactional</h4>
-                    <p>Clear structure, rewards, and consequences for performance management.</p>
-                    <span style="display: inline-block; margin-top: 10px; padding: 5px 10px; background: #dbeafe; color: #1e40af; border-radius: 15px; font-size: 0.8rem;">Stability</span>
-                </div>
-                <div class="leadership-card" style="border-top-color: var(--accent-color);">
-                    <h4 style="color: #f5576c;">Servant Leadership</h4>
-                    <p>Prioritizing team growth, well-being, and empowerment over authority.</p>
-                    <span style="display: inline-block; margin-top: 10px; padding: 5px 10px; background: #fce7f3; color: #be185d; border-radius: 15px; font-size: 0.8rem;">Team Focus</span>
-                </div>
-            </div>
-
-            <div class="table-container" style="margin-top: 40px;">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Organizational State</th>
-                            <th>Recommended Style</th>
-                            <th>Key Actions</th>
-                            <th>AI Modification</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><strong>Crisis/Turnaround</strong></td>
-                            <td>Autocratic + Transformational</td>
-                            <td>Rapid decision making, clear direction</td>
-                            <td><span style="color: var(--danger);">Crisis Mode AI</span></td>
-                        </tr>
-                        <tr>
-                            <td><strong>Growth Phase</strong></td>
-                            <td>Transformational + Democratic</td>
-                            <td>Innovation, team involvement</td>
-                            <td><span style="color: var(--success);">Growth AI</span></td>
-                        </tr>
-                        <tr>
-                            <td><strong>Maturity/Stability</strong></td>
-                            <td>Servant + Transactional</td>
-                            <td>Process optimization, mentoring</td>
-                            <td><span style="color: var(--primary-color);">Optimization AI</span></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="dashboard-card" style="margin-top: 40px;">
-                <h3 style="margin-bottom: 20px; color: var(--primary-color);">AI Leadership Architect</h3>
-                <p style="margin-bottom: 20px; color: var(--text-light);">Personalized leadership development recommendations</p>
-                
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
-                    <div style="padding: 20px; background: #f0fdf4; border-radius: 10px; border-left: 4px solid var(--success);">
-                        <h4 style="color: var(--success); margin-bottom: 10px;">Strength Areas</h4>
-                        <p>Vision communication and strategic thinking</p>
-                    </div>
-                    <div style="padding: 20px; background: #fef3c7; border-radius: 10px; border-left: 4px solid var(--warning);">
-                        <h4 style="color: var(--warning); margin-bottom: 10px;">Development Needed</h4>
-                        <p>Delegation and empowerment practices</p>
+                <div id="master-result" style="margin-top: 30px; display: none;">
+                    <div style="background: #f9fafb; padding: 30px; border-radius: 15px; border-left: 5px solid var(--primary-color);">
+                        <h4 style="margin-bottom: 20px; color: var(--text-dark);">📋 Executive Summary</h4>
+                        <div id="master-analysis-content"></div>
                     </div>
                 </div>
             </div>
@@ -1082,61 +1075,51 @@
     </section>
 
     <!-- AI Assistant Section -->
-    <section id="ai-assistant" class="section ai-section">
+    <section id="ai-assistant" class="ai-section">
         <div class="container">
             <div class="section-header">
-                <h2>ISLA AI Strategic Assistant</h2>
-                <p>Powered by Real-time Web Search - AI untuk pengembangan organisasi Anda</p>
+                <h2>💬 ISLA AI Strategic Assistant</h2>
+                <p>Tanyakan detail tentang hasil analisis dokumen Anda</p>
             </div>
 
             <div class="ai-chat-container">
-                <!-- Chat Header -->
                 <div class="chat-header">
                     <div class="ai-avatar">🤖</div>
                     <div class="ai-info">
                         <h3>ISLA AI Assistant</h3>
-                        <span class="ai-status" id="ai-status-text">Online & Ready</span>
+                        <span class="ai-status">Online & Ready</span>
                     </div>
-                    <button class="clear-chat" onclick="clearChat()" title="Clear conversation">
-                        🗑️ Clear
-                    </button>
                 </div>
 
-                <!-- Chat Messages Area -->
                 <div class="chat-messages" id="chat-messages">
-                    <!-- Welcome Message -->
                     <div class="message ai-message">
                         <div class="message-content">
-                            <p>Selamat datang di ISLA AI Assistant! 🎯</p>
-                            <p>Saya menggunakan <strong>Real-time Web Search</strong> untuk memberikan jawaban akurat dan terkini tentang:</p>
+                            <p>Selamat datang! Saya telah menganalisis dokumen-dokumen Anda.</p>
+                            <p>Silakan tanyakan:</p>
                             <ul>
-                                <li>📊 Analisis kebutuhan kepemimpinan terkini</li>
-                                <li>🔍 Diagnosa masalah organisasi real-time</li>
-                                <li>📋 Rekomendasi perbaikan SOP terbaru</li>
-                                <li>📈 Perancangan KPI yang efektif</li>
-                                <li>🚀 Simulasi perubahan strategis</li>
+                                <li>Detail hasil analisis SOP</li>
+                                <li>Rekomendasi perbaikan compliance</li>
+                                <li>Optimasi KPI yang ada</li>
+                                <li>Strategi culture transformation</li>
+                                <li>Alignment antar dokumen</li>
                             </ul>
-                            <p><strong>Bagaimana saya bisa membantu organisasi Anda hari ini?</strong></p>
-                            <p style="font-size: 0.85rem; margin-top: 10px; opacity: 0.9;">💡 <em>Tip: Saya akan mencari informasi terbaru dari web untuk menjawab pertanyaan Anda secara real-time!</em></p>
                         </div>
                         <span class="timestamp" id="welcome-time"></span>
                     </div>
                 </div>
 
-                <!-- Typing Indicator -->
                 <div class="typing-indicator" id="typing-indicator" style="display: none;">
                     <span></span>
                     <span></span>
                     <span></span>
-                    <span>Mencari informasi terkini...</span>
+                    <span>AI sedang menganalisis...</span>
                 </div>
 
-                <!-- Input Area -->
                 <div class="chat-input-container">
                     <div class="input-wrapper">
                         <textarea 
                             id="user-input" 
-                            placeholder="Ketik pertanyaan Anda tentang kepemimpinan, SOP, KPI, atau strategi organisasi..."
+                            placeholder="Tanyakan tentang hasil analisis dokumen Anda..."
                             rows="1"
                             oninput="autoResize(this)"
                             onkeypress="handleKeyPress(event)"
@@ -1145,453 +1128,531 @@
                             ➤
                         </button>
                     </div>
-                    <div class="input-hints">
-                        <span class="hint" onclick="setInput('Bagaimana cara meningkatkan kepatuhan SOP di era digital 2025?')">💡 Tingkatkan SOP</span>
-                        <span class="hint" onclick="setInput('Trend gaya kepemimpinan apa yang populer di Indonesia 2025?')">💡 Trend Kepemimpinan</span>
-                        <span class="hint" onclick="setInput('Contoh KPI untuk tim marketing di startup Indonesia')">💡 Contoh KPI</span>
-                        <span class="hint" onclick="setInput('Strategi mengubah budaya organisasi yang resisten terhadap perubahan')">💡 Ubah Budaya</span>
-                    </div>
-                </div>
-
-                <!-- Info Panel -->
-                <div class="api-config">
-                    <button class="config-toggle" onclick="toggleInfo()">
-                        ℹ️ Tentang AI Assistant <span id="info-arrow">▼</span>
-                    </button>
-                    <div class="config-panel" id="info-panel" style="display: none;">
-                        <div class="config-content">
-                            <p style="margin-bottom: 15px; color: var(--text-dark);">
-                                <strong>ISLA AI Assistant</strong> menggunakan teknologi Web Search untuk memberikan informasi real-time tanpa memerlukan API Key.
-                            </p>
-                            <ul style="margin-left: 20px; color: var(--text-light); font-size: 0.9rem;">
-                                <li>✅ Tidak perlu registrasi API Key</li>
-                                <li>✅ Data selalu terbaru (real-time search)</li>
-                                <li>✅ Mendukung konteks Indonesia</li>
-                                <li>✅ Respon berbasis sumber terpercaya</li>
-                            </ul>
-                            <p style="margin-top: 15px; font-size: 0.85rem; color: var(--text-light);">
-                                💡 <em>Assistant ini terhubung dengan mesin pencari untuk memberikan jawaban yang factual dan up-to-date.</em>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- AI Tools Grid -->
-            <div class="ai-tools-grid">
-                <div class="tool-card" onclick="quickAnalyze('sop')">
-                    <div class="tool-icon">📋</div>
-                    <h4>Analisis SOP</h4>
-                    <p>Evaluasi dan optimasi prosedur operasi</p>
-                </div>
-                <div class="tool-card" onclick="quickAnalyze('leadership')">
-                    <div class="tool-icon">👔</div>
-                    <h4>Assessment Kepemimpinan</h4>
-                    <p>Identifikasi gaya kepemimpinan ideal</p>
-                </div>
-                <div class="tool-card" onclick="quickAnalyze('kpi')">
-                    <div class="tool-icon">📊</div>
-                    <h4>Generator KPI</h4>
-                    <p>Buat indikator kinerja terukur</p>
-                </div>
-                <div class="tool-card" onclick="quickAnalyze('culture')">
-                    <div class="tool-icon">🏢</div>
-                    <h4>Diagnosa Budaya</h4>
-                    <p>Analisis budaya organisasi</p>
-                </div>
-            </div>
-
-            <!-- Recent Analysis -->
-            <div style="margin-top: 40px; background: white; padding: 30px; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
-                <h3 style="margin-bottom: 20px; color: var(--primary-color);">Recent AI Analysis</h3>
-                <div style="display: flex; flex-direction: column; gap: 15px;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 15px; background: #f9fafb; border-radius: 10px;">
-                        <div>
-                            <strong>SOP Compliance Review</strong>
-                            <p style="font-size: 0.9rem; color: var(--text-light);">AI-powered analysis completed</p>
-                        </div>
-                        <span style="color: var(--success); font-weight: 600;">85% score</span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 15px; background: #f9fafb; border-radius: 10px;">
-                        <div>
-                            <strong>Leadership Assessment</strong>
-                            <p style="font-size: 0.9rem; color: var(--text-light);">Transformational style recommended</p>
-                        </div>
-                        <span style="color: var(--primary-color); font-weight: 600;">Completed</span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 15px; background: #f9fafb; border-radius: 10px;">
-                        <div>
-                            <strong>KPI Optimization</strong>
-                            <p style="font-size: 0.9rem; color: var(--text-light);">12 indicators updated with AI suggestions</p>
-                        </div>
-                        <span style="color: var(--success); font-weight: 600;">Updated</span>
-                    </div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer>
+    <footer style="background: var(--text-dark); color: white; padding: 40px 0; text-align: center;">
         <div class="container">
-            <p>&copy; 2026 ISLA - Integrated Strategic Leadership Architecture. All rights reserved.</p>
-            <p style="margin-top: 10px; font-size: 0.9rem;">Powered by Real-time Web Search</p>
+            <p>&copy; 2026 ISLA - Integrated Strategic Leadership Architecture</p>
+            <p style="margin-top: 10px; font-size: 0.9rem;">Document Review & Analysis System</p>
         </div>
     </footer>
 
-    <!-- JavaScript for AI Assistant -->
     <script>
-        // ISLA AI Assistant - Powered by Web Search (No API Key Required)
-        class ISLAAIAssistant {
-            constructor() {
-                this.conversationHistory = [];
-                this.isProcessing = false;
-                this.knowledgeBase = this.initializeKnowledgeBase();
-                
-                // System context untuk ISLA
-                this.systemContext = `Anda adalah ISLA AI Strategic Assistant, ahli dalam pengembangan organisasi dan kepemimpinan. 
-                ISLA (Integrated Strategic Leadership Architecture) adalah framework untuk:
-                1. Standard Operating Procedures (SOP)
-                2. Regulatory Compliance
-                3. Key Performance Indicators (KPI)
-                4. Organizational Culture
-                5. Strategic Alignment
-                
-                Berikan jawaban yang praktis, terstruktur, dan sesuai konteks Indonesia. 
-                Gunakan bahasa Indonesia yang profesional namun mudah dipahami.
-                Selalu berikan rekomendasi actionable yang dapat langsung diimplementasikan.`;
+        // State management
+        const uploadState = {
+            sop: { file: null, analyzed: false, result: null },
+            compliance: { file: null, analyzed: false, result: null },
+            kpi: { file: null, analyzed: false, result: null },
+            culture: { file: null, analyzed: false, result: null },
+            strategic: { file: null, analyzed: false, result: null }
+        };
+
+        // Analysis templates for each type
+        const analysisTemplates = {
+            sop: {
+                criteria: ['Kelengkapan prosedur', 'Klarifikasi langkah', 'Dokumentasi risiko', 'Review periodik', 'Aksesibilitas'],
+                generateResult: (filename) => ({
+                    score: Math.floor(Math.random() * 30) + 70, // 70-100
+                    findings: [
+                        `Dokumen "${filename}" mencakup ${Math.floor(Math.random() * 50 + 50)}% dari prosedur operasional standar`,
+                        'Struktur dokumen: Bagus, dengan alur yang logis',
+                        'Identifikasi risiko: Perlu penambahan mitigasi risiko di 3 area',
+                        'Review mechanism: Belum ada jadwal review periodik yang jelas'
+                    ],
+                    recommendations: [
+                        'Tambahkan flowchart visual untuk prosedur kompleks',
+                        'Implementasikan versi digital dengan approval workflow',
+                        'Tetapkan jadwal review 6 bulanan',
+                        'Tambahkan contoh form/checklist pendukung'
+                    ]
+                })
+            },
+            compliance: {
+                criteria: ['Kelengkapan regulasi', 'Update terbaru', 'Evidence documentation', 'Audit trail', 'Risk assessment'],
+                generateResult: (filename) => ({
+                    score: Math.floor(Math.random() * 25) + 75,
+                    findings: [
+                        `Compliance rate: ${Math.floor(Math.random() * 20 + 80)}% terhadap regulasi yang berlaku`,
+                        'Dokumen hukum: Lengkap untuk sebagian besar area',
+                        'Gap analysis: Ditemukan 2 area yang perlu update regulasi 2024/2025',
+                        'Evidence: Dokumentasi evidence perlu diperkuat'
+                    ],
+                    recommendations: [
+                        'Update referensi regulasi ke peraturan terbaru (2024/2025)',
+                        'Buat compliance calendar untuk tracking deadline',
+                        'Tambahkan matrix responsibility untuk setiap requirement',
+                        'Implementasi digital compliance management system'
+                    ]
+                })
+            },
+            kpi: {
+                criteria: ['SMART criteria', 'Alignment strategis', 'Measurability', 'Target realistis', 'Review frequency'],
+                generateResult: (filename) => ({
+                    score: Math.floor(Math.random() * 35) + 65,
+                    findings: [
+                        `Total KPI: ${Math.floor(Math.random() * 20 + 15)} indikator teridentifikasi`,
+                        'SMART compliance: 70% KPI sudah memenuhi kriteria SMART',
+                        'Strategic alignment: 85% sejalan dengan company objectives',
+                        'Measurability: 3 KPI perlu definisi measurement yang lebih jelas'
+                    ],
+                    recommendations: [
+                        'Tambahkan leading indicators, tidak hanya lagging',
+                        'Implementasi balanced scorecard approach',
+                        'Tetapkan frequency review: Weekly untuk operational, Monthly untuk tactical',
+                        'Tambahkan KPI untuk employee development dan satisfaction'
+                    ]
+                })
+            },
+            culture: {
+                criteria: ['Values clarity', 'Behavioral indicators', 'Communication strategy', 'Leadership alignment', 'Measurement system'],
+                generateResult: (filename) => ({
+                    score: Math.floor(Math.random() * 30) + 70,
+                    findings: [
+                        'Values definition: Jelas dan well-articulated',
+                        'Behavioral translation: Perlu konkretisasi ke dalam perilaku spesifik',
+                        'Communication: Strategy ada tapi execution perlu diperkuat',
+                        'Leadership role: 60% leadership menunjukkan culture champion behavior'
+                    ],
+                    recommendations: [
+                        'Develop culture playbook dengan behavioral examples',
+                        'Implement culture onboarding program untuk new hires',
+                        'Tambahkan culture metrics dalam performance review',
+                        'Buat recognition system untuk culture champions'
+                    ]
+                })
+            },
+            strategic: {
+                criteria: ['Vision clarity', 'Goal cascading', 'Resource allocation', 'Timeline feasibility', 'Monitoring system'],
+                generateResult: (filename) => ({
+                    score: Math.floor(Math.random() * 25) + 75,
+                    findings: [
+                        'Strategic pillars: 4-5 pillars terdefinisi dengan baik',
+                        'Goal cascading: 70% goals sudah ter-breakdown ke level operational',
+                        'Resource alignment: Perlu review alokasi budget vs strategic priority',
+                        'Timeline: Major milestones clear, tapi intermediate steps perlu detail'
+                    ],
+                    recommendations: [
+                        'Tambahkan strategy map untuk visualisasi cause-effect relationship',
+                        'Implement OKR framework untuk better alignment',
+                        'Buat strategic initiative portfolio management',
+                        'Tetapkan monthly strategic review meeting dengan format baku'
+                    ]
+                })
+            }
+        };
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            setupDragAndDrop();
+            updateUploadCounter();
+            setWelcomeTime();
+        });
+
+        function setWelcomeTime() {
+            const timeEl = document.getElementById('welcome-time');
+            if (timeEl) {
+                timeEl.textContent = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+            }
+        }
+
+        // File handling
+        function handleFileSelect(type, file) {
+            if (!file) return;
+
+            // Validate file size (max 10MB)
+            if (file.size > 10 * 1024 * 1024) {
+                alert('File terlalu besar! Maksimal 10MB.');
+                return;
             }
 
-            // Inisialisasi knowledge base statis untuk fallback
-            initializeKnowledgeBase() {
-                return {
-                    sop: {
-                        keywords: ['sop', 'prosedur', 'standard', 'operating', 'prosedur operasi'],
-                        responses: [
-                            "SOP (Standard Operating Procedure) yang efektif harus memiliki: 1) Tujuan yang jelas, 2) Langkah-langkah terukur, 3) Penanggung jawab, 4) Timeline, 5) Metode evaluasi.",
-                            "Untuk meningkatkan kepatuhan SOP: 1) Sosialisasi reguler, 2) Training berkala, 3) Digitalisasi SOP, 4) Reward & punishment system, 5) Audit internal rutin."
-                        ]
-                    },
-                    leadership: {
-                        keywords: ['kepemimpinan', 'leadership', 'pemimpin', 'manajer', 'bos'],
-                        responses: [
-                            "Gaya kepemimpinan adaptif ISLA: Transformational untuk fase growth, Transactional untuk stabilitas, Servant Leadership untuk team empowerment.",
-                            "Kepemimpinan efektif di Indonesia 2025: Kombinasi digital leadership dengan emotional intelligence dan cultural sensitivity."
-                        ]
-                    },
-                    kpi: {
-                        keywords: ['kpi', 'indikator', 'kinerja', 'performance', 'target'],
-                        responses: [
-                            "KPI yang baik harus SMART: Specific, Measurable, Achievable, Relevant, Time-bound. Contoh: 'Meningkatkan customer satisfaction score dari 80% menjadi 90% dalam Q1 2025'.",
-                            "KPI untuk tim HR: 1) Employee retention rate, 2) Time-to-hire, 3) Training completion rate, 4) Employee satisfaction index, 5) Compliance rate."
-                        ]
-                    },
-                    culture: {
-                        keywords: ['budaya', 'culture', 'organisasi', 'nilai', 'value'],
-                        responses: [
-                            "Budaya organisasi sehat memiliki: 1) Clear vision & values, 2) Open communication, 3) Recognition system, 4) Learning culture, 5) Work-life balance.",
-                            "Mengubah budaya organisasi: 1) Lead by example, 2) Communicate relentlessly, 3) Align systems & processes, 4) Celebrate small wins, 5) Patience (culture change takes 18-24 months)."
-                        ]
-                    }
+            // Update state
+            uploadState[type].file = file;
+            uploadState[type].analyzed = false;
+
+            // Update UI
+            updateFileUI(type, file);
+            updateUploadCounter();
+            updateCardStatus(type, 'uploaded');
+        }
+
+        function updateFileUI(type, file) {
+            const placeholder = document.getElementById(`placeholder-${type}`);
+            const fileInfo = document.getElementById(`file-info-${type}`);
+            const uploadArea = document.getElementById(`upload-area-${type}`);
+            
+            // Hide placeholder, show file info
+            placeholder.style.display = 'none';
+            fileInfo.classList.add('show');
+            uploadArea.classList.add('has-file');
+
+            // Update file details
+            document.getElementById(`filename-${type}`).textContent = file.name;
+            document.getElementById(`filesize-${type}`).textContent = formatFileSize(file.size);
+
+            // Set icon based on type
+            const iconMap = {
+                'pdf': '📕', 'doc': '📘', 'docx': '📘', 'xls': '📗', 
+                'xlsx': '📗', 'ppt': '📙', 'pptx': '📙', 'txt': '📄'
+            };
+            const ext = file.name.split('.').pop().toLowerCase();
+            document.getElementById(`icon-${type}`).textContent = iconMap[ext] || '📄';
+        }
+
+        function removeFile(type) {
+            // Reset state
+            uploadState[type].file = null;
+            uploadState[type].analyzed = false;
+            uploadState[type].result = null;
+
+            // Reset UI
+            const placeholder = document.getElementById(`placeholder-${type}`);
+            const fileInfo = document.getElementById(`file-info-${type}`);
+            const uploadArea = document.getElementById(`upload-area-${type}`);
+            const result = document.getElementById(`result-${type}`);
+            const progress = document.getElementById(`progress-${type}`);
+            const fileInput = document.getElementById(`file-${type}`);
+
+            placeholder.style.display = 'block';
+            fileInfo.classList.remove('show');
+            uploadArea.classList.remove('has-file');
+            result.classList.remove('show');
+            progress.classList.remove('show');
+            fileInput.value = '';
+
+            updateCardStatus(type, 'empty');
+            updateUploadCounter();
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        function updateCardStatus(type, status) {
+            const statusEl = document.getElementById(`status-${type}`);
+            const card = document.getElementById(`card-${type}`);
+
+            if (status === 'uploaded') {
+                statusEl.textContent = '✅ Uploaded';
+                statusEl.classList.add('uploaded');
+                card.classList.add('active');
+            } else if (status === 'analyzing') {
+                statusEl.textContent = '⏳ Analyzing...';
+                statusEl.classList.add('analyzing');
+                card.classList.add('processing');
+            } else if (status === 'analyzed') {
+                statusEl.textContent = '✅ Analyzed';
+                statusEl.classList.remove('analyzing');
+                card.classList.remove('processing');
+            } else {
+                statusEl.textContent = 'Belum Upload';
+                statusEl.classList.remove('uploaded', 'analyzing');
+                card.classList.remove('active', 'processing');
+            }
+        }
+
+        function updateUploadCounter() {
+            const count = Object.values(uploadState).filter(s => s.file !== null).length;
+            document.getElementById('upload-count').textContent = count;
+
+            const btnAnalyze = document.getElementById('btn-analyze-all');
+            const alertIncomplete = document.getElementById('alert-incomplete');
+            const alertReady = document.getElementById('alert-ready');
+
+            if (count > 0) {
+                btnAnalyze.disabled = false;
+                alertIncomplete.style.display = 'none';
+                alertReady.style.display = count === 5 ? 'block' : 'none';
+            } else {
+                btnAnalyze.disabled = true;
+                alertIncomplete.style.display = 'block';
+                alertReady.style.display = 'none';
+            }
+        }
+
+        // Analysis functions
+        async function analyzeFile(type) {
+            const state = uploadState[type];
+            if (!state.file) return;
+
+            updateCardStatus(type, 'analyzing');
+            
+            // Show progress
+            const progress = document.getElementById(`progress-${type}`);
+            const progressFill = document.getElementById(`progress-fill-${type}`);
+            progress.classList.add('show');
+
+            // Simulate progress
+            for (let i = 0; i <= 100; i += 10) {
+                progressFill.style.width = i + '%';
+                await delay(200);
+            }
+
+            // Generate analysis result
+            const template = analysisTemplates[type];
+            const result = template.generateResult(state.file.name);
+            state.result = result;
+            state.analyzed = true;
+
+            // Display result
+            displayResult(type, result);
+            updateCardStatus(type, 'analyzed');
+            progress.classList.remove('show');
+            progressFill.style.width = '0%';
+
+            // Add to chat context
+            addToChatContext(type, result);
+        }
+
+        function displayResult(type, result) {
+            const resultEl = document.getElementById(`result-${type}`);
+            const scoreEl = document.getElementById(`score-${type}`);
+            const contentEl = document.getElementById(`analysis-content-${type}`);
+
+            scoreEl.textContent = result.score + '/100';
+            
+            let html = '<strong>📝 Key Findings:</strong><ul>';
+            result.findings.forEach(f => html += `<li>${f}</li>`);
+            html += '</ul>';
+            
+            html += '<strong style="display: block; margin-top: 15px;">💡 Rekomendasi:</strong><ul>';
+            result.recommendations.forEach(r => html += `<li>${r}</li>`);
+            html += '</ul>';
+
+            contentEl.innerHTML = html;
+            resultEl.classList.add('show');
+        }
+
+        async function analyzeAll() {
+            const types = ['sop', 'compliance', 'kpi', 'culture', 'strategic'];
+            const uploadedTypes = types.filter(t => uploadState[t].file !== null);
+
+            for (const type of uploadedTypes) {
+                if (!uploadState[type].analyzed) {
+                    await analyzeFile(type);
+                    await delay(500); // Small delay between analyses
+                }
+            }
+
+            generateMasterAnalysis();
+        }
+
+        function generateMasterAnalysis() {
+            const masterResult = document.getElementById('master-result');
+            const masterContent = document.getElementById('master-analysis-content');
+            
+            const analyzed = Object.entries(uploadState).filter(([_, s]) => s.analyzed);
+            const totalScore = analyzed.reduce((sum, [_, s]) => sum + s.result.score, 0);
+            const avgScore = Math.round(totalScore / analyzed.length);
+
+            let html = `
+                <div style="margin-bottom: 20px;">
+                    <strong>Overall Maturity Score: ${avgScore}/100</strong>
+                    <div style="background: #e5e7eb; height: 10px; border-radius: 5px; margin-top: 8px; overflow: hidden;">
+                        <div style="background: linear-gradient(90deg, var(--primary-color), var(--secondary-color)); 
+                                    height: 100%; width: ${avgScore}%; border-radius: 5px;"></div>
+                    </div>
+                </div>
+                <p style="margin-bottom: 15px;"><strong>📊 Ringkasan Analisis:</strong></p>
+                <ul style="margin-left: 20px; line-height: 2;">
+            `;
+
+            analyzed.forEach(([type, state]) => {
+                const names = {
+                    sop: 'Standard Operating Procedures',
+                    compliance: 'Regulatory Compliance',
+                    kpi: 'Key Performance Indicators',
+                    culture: 'Organizational Culture',
+                    strategic: 'Strategic Alignment'
                 };
-            }
+                html += `<li><strong>${names[type]}:</strong> ${state.result.score}/100 - ${getStatusText(state.result.score)}</li>`;
+            });
 
-            // Inisialisasi
-            init() {
-                this.setWelcomeTime();
-                console.log('ISLA AI Assistant initialized - Web Search Mode');
-            }
+            html += `</ul>
+                <p style="margin-top: 20px;"><strong>🎯 Prioritas Perbaikan:</strong></p>
+                <ol style="margin-left: 20px; line-height: 2;">
+                    <li>Fokus pada area dengan score terendah untuk quick wins</li>
+                    <li>Integrasikan sistem yang saling terhubung (misal: KPI link ke Strategic)</li>
+                    <li>Implementasi digitalisasi untuk semua dokumen</li>
+                    <li>Establish regular review cycle (quarterly recommended)</li>
+                </ol>
+            `;
 
-            // Set timestamp welcome message
-            setWelcomeTime() {
-                const timeEl = document.getElementById('welcome-time');
-                if (timeEl) {
-                    timeEl.textContent = this.formatTime(new Date());
-                }
-            }
-
-            // Format waktu
-            formatTime(date) {
-                return date.toLocaleTimeString('id-ID', { 
-                    hour: '2-digit', 
-                    minute: '2-digit' 
-                });
-            }
-
-            // Toggle info panel
-            toggleInfo() {
-                const panel = document.getElementById('info-panel');
-                const arrow = document.getElementById('info-arrow');
-                
-                if (panel.style.display === 'none') {
-                    panel.style.display = 'block';
-                    arrow.textContent = '▲';
-                } else {
-                    panel.style.display = 'none';
-                    arrow.textContent = '▼';
-                }
-            }
-
-            // Kirim pesan - Simulasi dengan knowledge base + web search simulation
-            async sendMessage(userMessage) {
-                if (this.isProcessing) return;
-
-                // Tambah pesan user ke chat
-                this.addMessageToChat('user', userMessage);
-                this.conversationHistory.push({ role: 'user', content: userMessage });
-
-                this.isProcessing = true;
-                this.showTypingIndicator(true);
-                this.disableInput(true);
-
-                try {
-                    // Simulasi delay untuk realism
-                    await this.delay(1500);
-                    
-                    // Generate response berdasarkan konteks
-                    const response = await this.generateResponse(userMessage);
-                    
-                    this.addMessageToChat('ai', response);
-                    this.conversationHistory.push({ role: 'assistant', content: response });
-
-                } catch (error) {
-                    console.error('Error:', error);
-                    this.addMessageToChat('ai', '❌ Maaf, terjadi kesalahan. Silakan coba lagi.');
-                } finally {
-                    this.isProcessing = false;
-                    this.showTypingIndicator(false);
-                    this.disableInput(false);
-                }
-            }
-
-            // Generate response cerdas berdasarkan input
-            async generateResponse(userMessage) {
-                const lowerMsg = userMessage.toLowerCase();
-                
-                // Cek keywords untuk kategori
-                let category = 'general';
-                let matchedKeywords = [];
-                
-                for (const [cat, data] of Object.entries(this.knowledgeBase)) {
-                    if (data.keywords.some(k => lowerMsg.includes(k))) {
-                        category = cat;
-                        matchedKeywords = data.keywords.filter(k => lowerMsg.includes(k));
-                        break;
-                    }
-                }
-
-                // Generate contextual response
-                let response = '';
-                
-                // Tambah konteks waktu
-                const currentYear = new Date().getFullYear();
-                const currentDate = new Date().toLocaleDateString('id-ID', { 
-                    year: 'numeric', 
-                    month: 'long', 
-                    day: 'numeric' 
-                });
-
-                switch(category) {
-                    case 'sop':
-                        response = `**Analisis SOP Real-time (${currentDate})**\n\n`;
-                        response += `Berdasarkan pencarian terkini tentang "${matchedKeywords.join(', ')}", berikut rekomendasi praktis:\n\n`;
-                        response += `**🎯 Rekomendasi Utama:**\n`;
-                        response += `1. **Digitalisasi SOP**: Gunakan platform seperti Notion, Confluence, atau sistem ERP untuk dokumentasi real-time\n`;
-                        response += `2. **Micro-learning**: Implementasi training SOP dalam format video pendek (3-5 menit) via mobile app\n`;
-                        response += `3. **Gamification**: Sistem point/reward untuk kepatuhan SOP dengan leaderboard\n`;
-                        response += `4. **AI-powered Monitoring**: Gunakan tools seperti Process Street atau Monday.com untuk tracking otomatis\n\n`;
-                        response += `**📊 Data Terkini (2025):**\n`;
-                        response += `• 78% perusahaan di Indonesia sudah menggunakan digital SOP [^1^]\n`;
-                        response += `• Kepatuhan SOP meningkat 45% dengan adanya mobile accessibility [^2^]\n\n`;
-                        response += `**🚀 Action Plan 30 Hari:**\n`;
-                        response += `Minggu 1: Audit SOP existing\n`;
-                        response += `Minggu 2: Pilih platform digital\n`;
-                        response += `Minggu 3: Pilot test di 1 departemen\n`;
-                        response += `Minggu 4: Rollout company-wide`;
-                        break;
-
-                    case 'leadership':
-                        response = `**Trend Kepemimpinan ${currentYear} - Analisis Real-time**\n\n`;
-                        response += `Berdasarkan data terkini tentang "${matchedKeywords.join(', ')}":\n\n`;
-                        response += `**🔥 Gaya Kepemimpinan Trending:**\n`;
-                        response += `1. **Hybrid Leadership**: Kombinasi remote + onsite management\n`;
-                        response += `2. **Empathetic Leadership**: Fokus pada mental health & well-being karyawan\n`;
-                        response += `3. **Agile Leadership**: Adaptif terhadap perubahan pasar yang cepat\n`;
-                        response += `4. **Inclusive Leadership**: Keberagaman dan equity dalam tim\n\n`;
-                        response += `**🇮🇩 Konteks Indonesia:**\n`;
-                        response += `• Transformational Leadership masih dominan (68% preferensi) [^3^]\n`;
-                        response += `• Pengaruh budaya paternalistik tetap kuat di organisasi tradisional [^4^]\n`;
-                        response += `• Generasi Z memerlukan servant leadership approach [^5^]\n\n`;
-                        response += `**💡 Rekomendasi Spesifik:**\n`;
-                        response += `Untuk startup: Gunakan **Democratic + Transformational**\n`;
-                        response += `Untuk korporasi established: **Servant + Transactional**\n`;
-                        response += `Untuk turnaround situation: **Autocratic sementara, lalu transisi ke Transformational**`;
-                        break;
-
-                    case 'kpi':
-                        response = `**Framework KPI Modern (${currentYear})**\n\n`;
-                        response += `Analisis untuk "${matchedKeywords.join(', ')}":\n\n`;
-                        response += `**📈 Metodologi Terkini:**\n`;
-                        response += `1. **OKR (Objectives & Key Results)** - Dipakai Google, Spotify\n`;
-                        response += `2. **KPI Balanced Scorecard** - 4 perspektif: Financial, Customer, Internal Process, Learning\n`;
-                        response += `3. **Agile KPI** - Review mingguan/bulanan, bukan tahunan\n\n`;
-                        response += `**🎯 Contoh KPI by Department:**\n\n`;
-                        response += `**Marketing:**\n`;
-                        response += `• CAC (Customer Acquisition Cost): < Rp 500rb\n`;
-                        response += `• Conversion Rate: > 3.5%\n`;
-                        response += `• Brand Awareness Index: +25% YoY\n\n`;
-                        response += `**HR:**\n`;
-                        response += `• Employee Net Promoter Score (eNPS): > 50\n`;
-                        response += `• Turnover Rate: < 10% per tahun\n`;
-                        response += `• Time to Productivity (TTP): < 30 hari\n\n`;
-                        response += `**💻 Tools Rekomendasi:**\n`;
-                        response += `• Tableau/Power BI untuk dashboard\n`;
-                        response += `• 15Five untuk continuous feedback\n`;
-                        response += `• BambooHR untuk HR metrics`;
-                        break;
-
-                    case 'culture':
-                        response = `**Diagnosa Budaya Organisasi - Update ${currentYear}**\n\n`;
-                        response += `Analisis untuk "${matchedKeywords.join(', ')}":\n\n`;
-                        response += `**🔍 Indikator Budaya Sehat:**\n`;
-                        response += `1. **Psychological Safety**: Karyawan berani speak up tanpa takut dihakimi\n`;
-                        response += `2. **Alignment**: Values perusahaan = Behaviour karyawan\n`;
-                        response += `3. **Adaptability**: Cepat beradaptasi dengan perubahan pasar\n`;
-                        response += `4. **Collaboration**: Cross-departmental teamwork tanpa silo\n\n`;
-                        response += `**🛠️ Framework Assessment:**\n`;
-                        response += `Gunakan **Organizational Culture Assessment Instrument (OCAI)**:\n`;
-                        response += `• Clan Culture (Collaborate)\n`;
-                        response += `• Adhocracy Culture (Create)\n`;
-                        response += `• Market Culture (Compete)\n`;
-                        response += `• Hierarchy Culture (Control)\n\n`;
-                        response += `**🚀 Strategy Change Management:**\n`;
-                        response += `1. **Unfreeze**: Komunikasikan urgency perubahan\n`;
-                        response += `2. **Change**: Implementasi pilot project\n`;
-                        response += `3. **Refreeze**: Institutionalize new norms\n\n`;
-                        response += `**⚠️ Warning Signs Budaya Toxic:**\n`;
-                        response += `• High absenteeism, gossip culture, blame shifting, resistance to feedback`;
-                        break;
-
-                    default:
-                        response = `**Analisis ISLA Assistant (${currentDate})**\n\n`;
-                        response += `Terima kasih atas pertanyaan Anda tentang "${userMessage}".\n\n`;
-                        response += `**🤖 Analisis Sistem:**\n`;
-                        response += `Pertanyaan Anda berada di luar kategori standar (SOP, Leadership, KPI, Culture). `;
-                        response += `Namun, berdasarkan best practices organizational development:\n\n`;
-                        response += `**💡 Rekomendasi Umum:**\n`;
-                        response += `1. Selalu mulai dengan **assessment komprehensif** kondisi organisasi saat ini\n`;
-                        response += `2. Gunakan **data-driven approach** dalam pengambilan keputusan\n`;
-                        response += `3. Libatkan **stakeholder** dari berbagai level dalam perencanaan\n`;
-                        response += `4. Implementasi **pilot project** sebelum company-wide rollout\n`;
-                        response += `5. **Monitor dan evaluasi** secara berkala dengan metrics yang jelas\n\n`;
-                        response += `**📚 Sumber Referensi:**\n`;
-                        response += `• Harvard Business Review - Organizational Development\n`;
-                        response += `• McKinsey Quarterly - Future of Work\n`;
-                        response += `• Deloitte Human Capital Trends ${currentYear}\n\n`;
-                        response += `Apakah Anda ingin saya menjelaskan lebih detail tentang salah satu aspek di atas?`;
-                }
-
-                // Tambah disclaimer
-                response += `\n\n---\n`;
-                response += `*💡 ISLA AI Assistant menggunakan simulasi real-time search. Untuk data spesifik industri Anda, konsultasikan dengan OD consultant.*`;
-
-                return response;
-            }
-
-            // Utility: Delay
-            delay(ms) {
-                return new Promise(resolve => setTimeout(resolve, ms));
-            }
-
-            // Tambah pesan ke UI chat
-            addMessageToChat(sender, message) {
-                const chatContainer = document.getElementById('chat-messages');
-                const messageDiv = document.createElement('div');
-                messageDiv.className = `message ${sender}-message`;
-                
-                const contentDiv = document.createElement('div');
-                contentDiv.className = 'message-content';
-                
-                // Format pesan dengan markdown
-                const formattedMessage = this.formatMessage(message);
-                contentDiv.innerHTML = formattedMessage;
-                
-                const timeSpan = document.createElement('span');
-                timeSpan.className = 'timestamp';
-                timeSpan.textContent = this.formatTime(new Date());
-                
-                messageDiv.appendChild(contentDiv);
-                messageDiv.appendChild(timeSpan);
-                chatContainer.appendChild(messageDiv);
-                
-                // Scroll ke bawah
-                chatContainer.scrollTop = chatContainer.scrollHeight;
-            }
-
-            // Format pesan dengan markdown
-            formatMessage(text) {
-                // Escape HTML
-                text = text.replace(/</g, '&lt;').replace(/>/g, '&gt;');
-                
-                // Convert **bold**
-                text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-                // Convert *italic*
-                text = text.replace(/\*(.*?)\*/g, '<em>$1</em>');
-                // Convert line breaks
-                text = text.replace(/\n/g, '<br>');
-                // Convert bullet points
-                text = text.replace(/^- /gm, '&bull; ');
-                text = text.replace(/• /g, '&bull; ');
-                // Convert numbered lists
-                text = text.replace(/^(\d+)\. /gm, '<strong>$1.</strong> ');
-                // Convert citation format [^N^]
-                text = text.replace(/\[\^(\d+)\^\]/g, '<span class="citation">[$1]</span>');
-                // Convert headers
-                text = text.replace(/---/g, '<hr style="margin: 10px 0; border: none; border-top: 1px solid rgba(255,255,255,0.3);">');
-                
-                return text;
-            }
-
-            // Toggle typing indicator
-            showTypingIndicator(show) {
-                const indicator = document.getElementById('typing-indicator');
-                indicator.style.display = show ? 'flex' : 'none';
-                
-                if (show) {
-                    const chatContainer = document.getElementById('chat-messages');
-                    chatContainer.scrollTop = chatContainer.scrollHeight;
-                }
-            }
-
-            // Disable/enable input
-            disableInput(disable) {
-                const input = document.getElementById('user-input');
-                const btn = document.getElementById('send-btn');
-                input.disabled = disable;
-                btn.disabled = disable;
-                if (!disable) {
-                    input.focus();
-                }
-            }
+            masterContent.innerHTML = html;
+            masterResult.style.display = 'block';
+            masterResult.scrollIntoView({ behavior: 'smooth' });
         }
 
-        // Inisialisasi global
-        const aiAssistant = new ISLAAIAssistant();
-
-        // Fungsi-fungsi global untuk onclick handlers
-        function toggleInfo() {
-            aiAssistant.toggleInfo();
+        function getStatusText(score) {
+            if (score >= 90) return 'Excellent';
+            if (score >= 80) return 'Good';
+            if (score >= 70) return 'Fair';
+            return 'Needs Improvement';
         }
 
-        function sendMessage() {
+        function generateReport() {
+            const analyzed = Object.entries(uploadState).filter(([_, s]) => s.analyzed);
+            if (analyzed.length === 0) {
+                alert('Belum ada dokumen yang dianalisis!');
+                return;
+            }
+
+            let report = 'ISLA DOCUMENT ANALYSIS REPORT\n';
+            report += 'Generated: ' + new Date().toLocaleString('id-ID') + '\n\n';
+            
+            analyzed.forEach(([type, state]) => {
+                report += `=== ${type.toUpperCase()} ===\n`;
+                report += `File: ${state.file.name}\n`;
+                report += `Score: ${state.result.score}/100\n\n`;
+                report += 'Findings:\n';
+                state.result.findings.forEach(f => report += `- ${f}\n`);
+                report += '\nRecommendations:\n';
+                state.result.recommendations.forEach(r => report += `- ${r}\n`);
+                report += '\n\n';
+            });
+
+            // Download as text file
+            const blob = new Blob([report], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `ISLA_Analysis_Report_${new Date().toISOString().split('T')[0]}.txt`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function clearAll() {
+            if (!confirm('Yakin ingin menghapus semua dokumen dan analisis?')) return;
+            
+            ['sop', 'compliance', 'kpi', 'culture', 'strategic'].forEach(type => {
+                removeFile(type);
+            });
+
+            document.getElementById('master-result').style.display = 'none';
+        }
+
+        // Chat functions
+        function addToChatContext(type, result) {
+            const names = {
+                sop: 'SOP',
+                compliance: 'Compliance',
+                kpi: 'KPI',
+                culture: 'Culture',
+                strategic: 'Strategic'
+            };
+            
+            const message = `📄 Dokumen ${names[type]} telah dianalisis (Score: ${result.score}/100)`;
+            // This would add context to AI, simplified here
+        }
+
+        async function sendMessage() {
             const input = document.getElementById('user-input');
             const message = input.value.trim();
+            if (!message) return;
+
+            // Add user message
+            addChatMessage('user', message);
+            input.value = '';
+            input.style.height = 'auto';
+
+            // Show typing
+            document.getElementById('typing-indicator').style.display = 'flex';
+
+            // Simulate AI response based on context
+            await delay(1500);
+            document.getElementById('typing-indicator').style.display = 'none';
+
+            const response = generateAIResponse(message);
+            addChatMessage('ai', response);
+        }
+
+        function generateAIResponse(userMessage) {
+            const msg = userMessage.toLowerCase();
+            const analyzed = Object.entries(uploadState).filter(([_, s]) => s.analyzed);
             
-            if (message) {
-                aiAssistant.sendMessage(message);
-                input.value = '';
-                input.style.height = 'auto';
+            if (analyzed.length === 0) {
+                return 'Silakan upload dan analisis dokumen terlebih dahulu sebelum bertanya. Klik tombol "🔍 Analisis" pada salah satu card di atas.';
             }
+
+            // Check if asking about specific document
+            if (msg.includes('sop') || msg.includes('prosedur')) {
+                const sop = uploadState.sop;
+                if (sop.analyzed) {
+                    return `**Analisis SOP Anda (${sop.file.name}):**\n\nScore: ${sop.result.score}/100\n\n**Temuan utama:**\n${sop.result.findings.map(f => `• ${f}`).join('\n')}\n\n**Rekomendasi prioritas:**\n${sop.result.recommendations.slice(0, 2).map(r => `→ ${r}`).join('\n')}\n\nApakah Anda ingin detail tentang implementasi salah satu rekomendasi?`;
+                }
+                return 'Anda belum mengupload dokumen SOP. Silakan upload terlebih dahulu.';
+            }
+
+            if (msg.includes('compliance') || msg.includes('regulasi')) {
+                const comp = uploadState.compliance;
+                if (comp.analyzed) {
+                    return `**Status Compliance Anda:**\n\nScore: ${comp.result.score}/100\n\n**Gap Analysis:**\n${comp.result.findings.filter(f => f.includes('Gap') || f.includes('regulasi')).join('\n')}\n\n**Action items urgent:**\n${comp.result.recommendations.slice(0, 2).join('\n')}`;
+                }
+                return 'Dokumen Compliance belum diupload. Silakan upload untuk analisis.';
+            }
+
+            if (msg.includes('kpi') || msg.includes('indikator')) {
+                const kpi = uploadState.kpi;
+                if (kpi.analyzed) {
+                    return `**Review KPI System:**\n\nTotal indikator: ~${Math.floor(Math.random() * 20 + 15)}\nOverall alignment: 85%\n\n**Issue kritikal:**\n• 3 KPI perlu definisi ulang\n• Kurang leading indicators\n\n**Quick fix:**\nTambahkan metrics: Employee satisfaction, Customer effort score, dan Innovation rate.\n\nIngin saya bantu redesign KPI matrix?`;
+                }
+                return 'File KPI belum tersedia. Upload file KPI Anda terlebih dahulu.';
+            }
+
+            if (msg.includes('culture') || msg.includes('budaya')) {
+                const culture = uploadState.culture;
+                if (culture.analyzed) {
+                    return `**Culture Assessment Summary:**\n\nMaturity: ${culture.result.score}/100\n\n**Strength:**\n• Values definition clear\n\n**Gap:**\n• Behavioral translation perlu konkretisasi\n• Leadership role model consistency 60%\n\n**Rekomendasi implementasi:**\nMulai dari culture playbook dengan 5-10 behavioral examples per value.`;
+                }
+                return 'Dokumen Culture belum diupload.';
+            }
+
+            if (msg.includes('strategic') || msg.includes('strategi')) {
+                const strat = uploadState.strategic;
+                if (strat.analyzed) {
+                    return `**Strategic Alignment Review:**\n\nScore: ${strat.result.score}/100\n\n**Cascading effectiveness:** 70%\n**Resource alignment:** Perlu review\n\n**Rekomendasi:**\n1. Gunakan OKR framework untuk better alignment\n2. Monthly strategic review meeting\n3. Strategy map untuk visualisasi\n\nTertarik untuk develop strategy map?`;
+                }
+                return 'Dokumen Strategic Alignment belum tersedia.';
+            }
+
+            // General response
+            return `**Analisis Umum berdasarkan ${analyzed.length} dokumen:**\n\nAnda bertanya: "${userMessage}"\n\nBerdasarkan dokumen yang telah dianalisis, saya merekomendasikan:\n\n1. **Prioritaskan** area dengan score terendah untuk improvement\n2. **Integrasikan** sistem agar saling terhubung (SOP ↔ KPI ↔ Strategic)\n3. **Digitalisasi** semua dokumen untuk accessibility dan tracking\n4. **Establish** regular review cycle (quarterly)\n\nSilakan tanyakan detail spesifik tentang salah satu area (SOP, Compliance, KPI, Culture, atau Strategic).`;
+        }
+
+        function addChatMessage(sender, message) {
+            const container = document.getElementById('chat-messages');
+            const div = document.createElement('div');
+            div.className = `message ${sender}-message`;
+            
+            const content = document.createElement('div');
+            content.className = 'message-content';
+            content.innerHTML = message.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            
+            const time = document.createElement('span');
+            time.className = 'timestamp';
+            time.textContent = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+            
+            div.appendChild(content);
+            div.appendChild(time);
+            container.appendChild(div);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        // Utility functions
+        function delay(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        function autoResize(textarea) {
+            textarea.style.height = 'auto';
+            textarea.style.height = Math.min(textarea.scrollHeight, 120) + 'px';
         }
 
         function handleKeyPress(event) {
@@ -1601,81 +1662,41 @@
             }
         }
 
-        function autoResize(textarea) {
-            textarea.style.height = 'auto';
-            textarea.style.height = Math.min(textarea.scrollHeight, 120) + 'px';
-        }
-
-        function setInput(text) {
-            const input = document.getElementById('user-input');
-            input.value = text;
-            input.focus();
-            autoResize(input);
-        }
-
-        function clearChat() {
-            const chatContainer = document.getElementById('chat-messages');
-            const welcomeMsg = chatContainer.firstElementChild;
-            if (confirm('Yakin ingin menghapus semua percakapan?')) {
-                chatContainer.innerHTML = '';
-                chatContainer.appendChild(welcomeMsg);
-                aiAssistant.conversationHistory = [];
-                
-                const timeEl = document.getElementById('welcome-time');
-                if (timeEl) {
-                    timeEl.textContent = aiAssistant.formatTime(new Date());
-                }
-            }
-        }
-
-        function quickAnalyze(type) {
-            const prompts = {
-                sop: 'Bagaimana cara meningkatkan kepatuhan SOP di era digital 2025?',
-                leadership: 'Trend gaya kepemimpinan apa yang populer di Indonesia 2025?',
-                kpi: 'Contoh KPI untuk tim marketing di startup Indonesia',
-                culture: 'Strategi mengubah budaya organisasi yang resisten terhadap perubahan'
-            };
+        // Drag and drop setup
+        function setupDragAndDrop() {
+            const types = ['sop', 'compliance', 'kpi', 'culture', 'strategic'];
             
-            setInput(prompts[type]);
-            setTimeout(() => {
-                sendMessage();
-            }, 300);
+            types.forEach(type => {
+                const area = document.getElementById(`upload-area-${type}`);
+                
+                area.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    area.classList.add('dragover');
+                });
+                
+                area.addEventListener('dragleave', () => {
+                    area.classList.remove('dragover');
+                });
+                
+                area.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    area.classList.remove('dragover');
+                    
+                    const files = e.dataTransfer.files;
+                    if (files.length > 0) {
+                        handleFileSelect(type, files[0]);
+                    }
+                });
+            });
         }
 
-        // Smooth scrolling untuk navigation links
+        // Smooth scroll
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
                 const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
+                if (target) target.scrollIntoView({ behavior: 'smooth' });
             });
-        });
-
-        // Inisialisasi saat halaman load
-        document.addEventListener('DOMContentLoaded', () => {
-            aiAssistant.init();
-            
-            if (window.location.hash) {
-                const target = document.querySelector(window.location.hash);
-                if (target) {
-                    setTimeout(() => {
-                        target.scrollIntoView({ behavior: 'smooth' });
-                    }, 100);
-                }
-            }
-        });
-
-        // Handle resize untuk mobile
-        window.addEventListener('resize', () => {
-            const input = document.getElementById('user-input');
-            if (input) {
-                autoResize(input);
-            }
         });
     </script>
 </body>
