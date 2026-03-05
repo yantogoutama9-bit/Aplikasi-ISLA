@@ -3,1699 +3,429 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ISLA - Integrated Strategic Leadership Architecture</title>
+    <title>ISLA AI Review</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --primary-color: #667eea;
-            --secondary-color: #764ba2;
-            --accent-color: #f093fb;
-            --text-dark: #1f2937;
-            --text-light: #6b7280;
-            --bg-light: #f9fafb;
-            --white: #ffffff;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --danger: #ef4444;
-            --info: #3b82f6;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            line-height: 1.6;
-            color: var(--text-dark);
-            background: var(--bg-light);
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        /* Navigation */
-        nav {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            padding: 1rem 0;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        }
-
-        nav .container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            color: var(--white);
-            font-size: 1.5rem;
-            font-weight: bold;
-            text-decoration: none;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-            list-style: none;
-        }
-
-        .nav-links a {
-            color: var(--white);
-            text-decoration: none;
-            font-weight: 500;
-            transition: opacity 0.3s;
-        }
-
-        .nav-links a:hover {
-            opacity: 0.8;
-        }
-
-        /* Hero Section */
-        .hero {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            color: var(--white);
-            padding: 120px 0 80px;
-            text-align: center;
-        }
-
-        .hero h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            font-weight: 700;
-        }
-
-        .hero p {
-            font-size: 1.25rem;
-            opacity: 0.9;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        /* Sections */
-        .section {
-            padding: 80px 0;
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 50px;
-        }
-
-        .section-header h2 {
-            font-size: 2.5rem;
-            color: var(--text-dark);
-            margin-bottom: 1rem;
-        }
-
-        .section-header p {
-            color: var(--text-light);
-            font-size: 1.1rem;
-        }
-
-        /* Upload Assessment Section */
-        .upload-section {
-            background: white;
-            padding: 60px 0;
-        }
-
-        .upload-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 30px;
-            margin-top: 40px;
-        }
-
-        .upload-card {
-            background: var(--white);
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s, box-shadow 0.3s;
-            border: 2px solid transparent;
-        }
-
-        .upload-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-        }
-
-        .upload-card.active {
-            border-color: var(--success);
-        }
-
-        .upload-card.processing {
-            border-color: var(--warning);
-        }
-
-        .upload-header {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            color: var(--white);
-            padding: 25px;
-            position: relative;
-        }
-
-        .upload-header h3 {
-            font-size: 1.3rem;
-            margin: 0;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .upload-icon {
-            font-size: 1.5rem;
-        }
-
-        .upload-status {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: rgba(255,255,255,0.2);
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-
-        .upload-status.uploaded {
-            background: var(--success);
-        }
-
-        .upload-status.analyzing {
-            background: var(--warning);
-            animation: pulse 2s infinite;
-        }
-
-        .upload-content {
-            padding: 30px;
-        }
-
-        .upload-area {
-            border: 3px dashed #e5e7eb;
-            border-radius: 15px;
-            padding: 40px 20px;
-            text-align: center;
-            transition: all 0.3s;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .upload-area:hover {
-            border-color: var(--primary-color);
-            background: #f0f4ff;
-        }
-
-        .upload-area.dragover {
-            border-color: var(--success);
-            background: #f0fdf4;
-            transform: scale(1.02);
-        }
-
-        .upload-area.has-file {
-            border-color: var(--success);
-            background: #f0fdf4;
-        }
-
-        .upload-placeholder {
-            pointer-events: none;
-        }
-
-        .upload-placeholder-icon {
-            font-size: 3rem;
-            margin-bottom: 15px;
-            opacity: 0.5;
-        }
-
-        .upload-placeholder h4 {
-            color: var(--text-dark);
-            margin-bottom: 8px;
-            font-size: 1.1rem;
-        }
-
-        .upload-placeholder p {
-            color: var(--text-light);
-            font-size: 0.9rem;
-        }
-
-        .file-input {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            cursor: pointer;
-        }
-
-        .file-info {
-            display: none;
-            text-align: center;
-        }
-
-        .file-info.show {
-            display: block;
-        }
-
-        .file-icon {
-            font-size: 3rem;
-            margin-bottom: 10px;
-        }
-
-        .file-name {
-            font-weight: 600;
-            color: var(--text-dark);
-            margin-bottom: 5px;
-            word-break: break-all;
-        }
-
-        .file-size {
-            color: var(--text-light);
-            font-size: 0.85rem;
-            margin-bottom: 15px;
-        }
-
-        .file-actions {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-        }
-
-        .btn {
-            padding: 8px 16px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            font-weight: 500;
-            transition: all 0.2s;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-        }
-
-        .btn-secondary {
-            background: #e5e7eb;
-            color: var(--text-dark);
-        }
-
-        .btn-secondary:hover {
-            background: #d1d5db;
-        }
-
-        .btn-danger {
-            background: var(--danger);
-            color: white;
-        }
-
-        .btn-danger:hover {
-            background: #dc2626;
-        }
-
-        .btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none !important;
-        }
-
-        .analysis-result {
-            margin-top: 25px;
-            padding: 20px;
-            background: #f9fafb;
-            border-radius: 12px;
-            border-left: 4px solid var(--primary-color);
-            display: none;
-        }
-
-        .analysis-result.show {
-            display: block;
-            animation: slideIn 0.3s ease;
-        }
-
-        .analysis-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-
-        .analysis-title {
-            font-weight: 600;
-            color: var(--text-dark);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .analysis-score {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            color: white;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-weight: bold;
-            font-size: 1.1rem;
-        }
-
-        .analysis-content {
-            color: var(--text-light);
-            font-size: 0.95rem;
-            line-height: 1.8;
-        }
-
-        .analysis-content ul {
-            margin: 10px 0;
-            padding-left: 20px;
-        }
-
-        .analysis-content li {
-            margin: 8px 0;
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 6px;
-            background: #e5e7eb;
-            border-radius: 3px;
-            overflow: hidden;
-            margin: 15px 0;
-            display: none;
-        }
-
-        .progress-bar.show {
-            display: block;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            width: 0%;
-            transition: width 0.3s ease;
-            border-radius: 3px;
-        }
-
-        .supported-formats {
-            margin-top: 15px;
-            padding: 15px;
-            background: #f3f4f6;
-            border-radius: 10px;
-            font-size: 0.85rem;
-            color: var(--text-light);
-        }
-
-        .supported-formats strong {
-            color: var(--text-dark);
-            display: block;
-            margin-bottom: 8px;
-        }
-
-        .format-tag {
-            display: inline-block;
-            background: white;
-            padding: 3px 8px;
-            border-radius: 4px;
-            margin: 2px;
-            font-size: 0.75rem;
-            border: 1px solid #e5e7eb;
-        }
-
-        /* Master Analysis Section */
-        .master-analysis {
-            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
-            padding: 60px 0;
-        }
-
-        .master-card {
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-        }
-
-        .master-header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .master-header h3 {
-            font-size: 1.8rem;
-            color: var(--text-dark);
-            margin-bottom: 10px;
-        }
-
-        .upload-counter {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            background: #f3f4f6;
-            padding: 10px 20px;
-            border-radius: 30px;
-            font-weight: 600;
-            color: var(--text-dark);
-        }
-
-        .counter-current {
-            color: var(--primary-color);
-            font-size: 1.2rem;
-        }
-
-        .master-actions {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            margin-top: 30px;
-            flex-wrap: wrap;
-        }
-
-        .btn-large {
-            padding: 15px 30px;
-            font-size: 1rem;
-            border-radius: 12px;
-        }
-
-        /* AI Chat Section */
-        .ai-section {
-            background: white;
-            padding: 60px 0;
-        }
-
-        .ai-chat-container {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            border-radius: 20px;
-            padding: 0;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            overflow: hidden;
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        .chat-header {
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
-            padding: 20px 30px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            border-bottom: 1px solid rgba(255,255,255,0.2);
-        }
-
-        .ai-avatar {
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, var(--accent-color) 0%, #f5576c 100%);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.5rem;
-        }
-
-        .ai-info h3 {
-            color: white;
-            margin: 0;
-            font-size: 1.2rem;
-        }
-
-        .ai-status {
-            color: #4ade80;
-            font-size: 0.85rem;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .ai-status::before {
-            content: '';
-            width: 8px;
-            height: 8px;
-            background: #4ade80;
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        .chat-messages {
-            height: 400px;
-            overflow-y: auto;
-            padding: 25px;
-            background: rgba(255,255,255,0.95);
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .message {
-            max-width: 80%;
-            animation: slideIn 0.3s ease;
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .ai-message {
-            align-self: flex-start;
-        }
-
-        .user-message {
-            align-self: flex-end;
-        }
-
-        .message-content {
-            background: white;
-            padding: 15px 20px;
-            border-radius: 18px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            line-height: 1.6;
-        }
-
-        .ai-message .message-content {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            color: white;
-            border-bottom-left-radius: 4px;
-        }
-
-        .user-message .message-content {
-            background: #f3f4f6;
-            color: var(--text-dark);
-            border-bottom-right-radius: 4px;
-        }
-
-        .timestamp {
-            font-size: 0.75rem;
-            color: #9ca3af;
-            margin-top: 5px;
-            display: block;
-        }
-
-        .typing-indicator {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 15px 25px;
-            background: rgba(255,255,255,0.95);
-        }
-
-        .typing-indicator span:not(:last-child) {
-            width: 8px;
-            height: 8px;
-            background: var(--primary-color);
-            border-radius: 50%;
-            animation: bounce 1.4s infinite ease-in-out both;
-        }
-
-        .typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
-        .typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
-        .typing-indicator span:nth-child(3) { animation-delay: 0s; }
-
-        @keyframes bounce {
-            0%, 80%, 100% { transform: scale(0); }
-            40% { transform: scale(1); }
-        }
-
-        .chat-input-container {
-            background: white;
-            padding: 20px 25px;
-            border-top: 1px solid #e5e7eb;
-        }
-
-        .input-wrapper {
-            display: flex;
-            gap: 10px;
-            background: #f3f4f6;
-            border-radius: 25px;
-            padding: 5px;
-            border: 2px solid transparent;
-            transition: border-color 0.3s;
-        }
-
-        .input-wrapper:focus-within {
-            border-color: var(--primary-color);
-            background: white;
-        }
-
-        #user-input {
-            flex: 1;
-            border: none;
-            background: transparent;
-            padding: 12px 20px;
-            font-size: 0.95rem;
-            resize: none;
-            outline: none;
-            max-height: 120px;
-            font-family: inherit;
-        }
-
-        .send-btn {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            color: white;
-            border: none;
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .send-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
-        }
-
-        .send-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2rem;
-            }
-
-            .nav-links {
-                display: none;
-            }
-
-            .upload-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .master-card {
-                padding: 25px;
-            }
-
-            .chat-messages {
-                height: 300px;
-            }
-        }
-
-        /* Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: var(--primary-color);
-            border-radius: 4px;
-        }
-
-        .alert {
-            padding: 15px 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            display: none;
-        }
-
-        .alert.show {
-            display: block;
-            animation: slideIn 0.3s ease;
-        }
-
-        .alert-warning {
-            background: #fef3c7;
-            border-left: 4px solid var(--warning);
-            color: #92400e;
-        }
-
-        .alert-success {
-            background: #d1fae5;
-            border-left: 4px solid var(--success);
-            color: #065f46;
-        }
-
-        .file-requirement {
-            background: #fee2e2;
-            border: 2px solid var(--danger);
-            color: #991b1b;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
+        *{margin:0;padding:0;box-sizing:border-box}
+        :root{--p:#667eea;--s:#764ba2;--d:#1f2937;--l:#6b7280;--g:#10b981;--r:#ef4444}
+        body{font-family:system-ui,sans-serif;background:#f9fafb;color:var(--d);line-height:1.6}
+        .c{max-width:1200px;margin:0 auto;padding:0 20px}
+        nav{background:linear-gradient(135deg,var(--p)0%,var(--s)100%);padding:1rem;position:fixed;width:100%;top:0;z-index:1000}
+        .logo{color:#fff;font-size:1.5rem;font-weight:bold;text-decoration:none}
+        .h{background:linear-gradient(135deg,var(--p)0%,var(--s)100%);color:#fff;padding:100px 0 60px;text-align:center;margin-top:60px}
+        .s{padding:60px 0}
+        .sh{text-align:center;margin-bottom:40px}
+        .sh h2{font-size:2rem;color:var(--d)}
+        .ug{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px}
+        .uc{background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 4px 15px rgba(0,0,0,0.1)}
+        .uh{background:linear-gradient(135deg,var(--p)0%,var(--s)100%);color:#fff;padding:20px;position:relative}
+        .uh h3{font-size:1.1rem}
+        .us{position:absolute;top:15px;right:15px;background:rgba(255,255,255,0.2);padding:4px 10px;border-radius:12px;font-size:0.7rem}
+        .us.u{background:var(--g)}
+        .ucn{padding:20px}
+        .ua{border:2px dashed #e5e7eb;border-radius:12px;padding:30px;text-align:center;cursor:pointer;position:relative}
+        .ua:hover{border-color:var(--p);background:#f0f4ff}
+        .uph{pointer-events:none}
+        .uph i{font-size:2.5rem;margin-bottom:10px;opacity:0.5}
+        .fi{display:none}
+        .fi.s{display:block}
+        .fn{font-weight:600;word-break:break-all;margin-bottom:5px}
+        .fs{color:var(--l);font-size:0.8rem;margin-bottom:10px}
+        .btn{background:linear-gradient(135deg,var(--p)0%,var(--s)100%);color:#fff;border:none;padding:8px 16px;border-radius:6px;cursor:pointer;font-size:0.85rem;margin:2px}
+        .btn.r{background:var(--r)}
+        .ar{margin-top:15px;padding:15px;background:#f9fafb;border-radius:8px;border-left:3px solid var(--p);display:none}
+        .ar.s{display:block}
+        .as{background:linear-gradient(135deg,var(--p)0%,var(--s)100%);color:#fff;padding:3px 10px;border-radius:12px;font-weight:bold}
+        .pb{height:4px;background:#e5e7eb;border-radius:2px;margin:10px 0;overflow:hidden;display:none}
+        .pb.s{display:block}
+        .pf{height:100%;background:linear-gradient(90deg,var(--p),var(--s));width:0%;transition:width 0.3s}
+        .ma{background:#f3f4f6;padding:40px 0}
+        .mc{background:#fff;border-radius:16px;padding:30px;box-shadow:0 4px 20px rgba(0,0,0,0.1)}
+        .al{padding:12px;border-radius:8px;margin-bottom:15px;display:none}
+        .al.s{display:block}
+        .al.w{background:#fef3c7;border-left:3px solid #f59e0b;color:#92400e}
+        .al.g{background:#d1fae5;border-left:3px solid var(--g);color:#065f46}
+        .aic{background:linear-gradient(135deg,var(--p)0%,var(--s)100%);border-radius:16px;overflow:hidden;max-width:800px;margin:0 auto}
+        .ch{background:rgba(255,255,255,0.1);padding:15px 20px;display:flex;align-items:center;gap:10px}
+        .cm{height:350px;overflow-y:auto;padding:20px;background:rgba(255,255,255,0.95);display:flex;flex-direction:column;gap:10px}
+        .msg{max-width:80%;padding:12px 16px;border-radius:12px;box-shadow:0 2px 5px rgba(0,0,0,0.1)}
+        .msg.a{align-self:flex-start;background:linear-gradient(135deg,var(--p)0%,var(--s)100%);color:#fff}
+        .msg.u{align-self:flex-end;background:#f3f4f6}
+        .ti{display:flex;align-items:center;gap:5px;padding:10px 20px;background:rgba(255,255,255,0.95)}
+        .ti span{width:8px;height:8px;background:var(--p);border-radius:50%;animation:b 1.4s infinite}
+        .ti span:nth-child(2){animation-delay:-0.16s}
+        .ti span:nth-child(3){animation-delay:0s}
+        @keyframes b{0%,80%,100%{transform:scale(0)}40%{transform:scale(1)}}
+        .ci{padding:15px 20px;background:#fff;border-top:1px solid #e5e7eb}
+        .iw{display:flex;gap:8px;background:#f3f4f6;border-radius:20px;padding:4px}
+        #ui{flex:1;border:none;background:transparent;padding:10px 15px;outline:none;resize:none;max-height:100px}
+        .sb{background:linear-gradient(135deg,var(--p)0%,var(--s)100%);color:#fff;border:none;width:36px;height:36px;border-radius:50%;cursor:pointer}
+        .cp{background:#f9fafb;border-top:1px solid #e5e7eb}
+        .ct{width:100%;padding:12px;border:none;background:transparent;cursor:pointer;color:var(--l)}
+        .cpn{padding:15px;background:#fff;display:none}
+        .cpn.s{display:block}
+        input,select{width:100%;padding:10px;border:1px solid #e5e7eb;border-radius:6px;margin-top:5px}
+        .ss{background:linear-gradient(135deg,var(--p)0%,var(--s)100%);color:#fff;border:none;padding:10px 20px;border-radius:6px;cursor:pointer;margin-top:10px}
+        .st{margin-top:8px;font-size:0.8rem;padding:6px;border-radius:4px}
+        .st.x{background:#d1fae5;color:#065f46}
+        .st.e{background:#fee2e2;color:#991b1b}
+        footer{background:var(--d);color:#fff;padding:30px 0;text-align:center;margin-top:40px}
     </style>
 </head>
 <body>
-    <!-- Navigation -->
-    <nav>
-        <div class="container">
-            <a href="#" class="logo">ISLA</a>
-            <ul class="nav-links">
-                <li><a href="#upload-section">Upload & Review</a></li>
-                <li><a href="#ai-assistant">AI Assistant</a></li>
-            </ul>
-        </div>
-    </nav>
-
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="container">
-            <h1>ISLA Document Review System</h1>
-            <p>Upload dokumen SOP, Compliance, KPI, Culture, dan Strategic Alignment untuk direview oleh AI Assistant</p>
-        </div>
-    </section>
-
-    <!-- File Upload Section -->
-    <section id="upload-section" class="upload-section">
-        <div class="container">
-            <div class="section-header">
-                <h2>📁 Upload Dokumen untuk Review</h2>
-                <p>Silakan upload 5 dokumen wajib berikut. AI akan menganalisis dan memberikan rekomendasi perbaikan.</p>
+    <nav><div class="c"><a href="#" class="logo">ISLA</a></div></nav>
+    
+    <div class="h"><div class="c"><h1>ISLA AI Document Review</h1><p>Upload 5 dokumen untuk analisis AI dengan Groq</p></div></div>
+    
+    <div class="s"><div class="c">
+        <div class="sh"><h2>📁 Upload 5 Dokumen</h2></div>
+        <div class="ug" id="ug"></div>
+    </div></div>
+    
+    <div class="ma"><div class="c">
+        <div class="mc">
+            <div class="sh"><h3>🚀 Analisis Komprehensif</h3><p>Dokumen: <b id="uc">0</b>/5</p></div>
+            <div class="al w" id="aw">⚠️ Upload minimal 1 dokumen & setup Groq API</div>
+            <div class="al g" id="ag" style="display:none">✅ Siap untuk analisis!</div>
+            <div style="text-align:center;margin-top:20px">
+                <button class="btn" id="ba" onclick="aa()" disabled>🔍 Analisis Semua</button>
+                <button class="btn" onclick="gr()">📄 Report</button>
+                <button class="btn r" onclick="ca()">🗑️ Clear</button>
             </div>
-
-            <div class="file-requirement">
-                ⚠️ <strong>WAJIB:</strong> Upload minimal 1 dokumen untuk mengaktifkan AI Review. Dokumen yang diupload akan dianalisis secara komprehensif.
+            <div id="mr" style="margin-top:20px;display:none"></div>
+        </div>
+    </div></div>
+    
+    <div class="s"><div class="c">
+        <div class="sh"><h2>💬 AI Assistant</h2></div>
+        <div class="aic">
+            <div class="ch">
+                <div style="width:40px;height:40px;background:#f093fb;border-radius:50%;display:flex;align-items:center;justify-content:center">🤖</div>
+                <div><h3 style="color:#fff;margin:0">ISLA AI</h3><span id="as">Online</span></div>
+                <span id="pb" style="display:none;background:#fbbf24;color:#92400e;padding:2px 8px;border-radius:8px;font-size:0.7rem">⚡ Groq</span>
+                <button onclick="cc()" style="margin-left:auto;background:rgba(255,255,255,0.2);border:none;color:#fff;padding:6px 10px;border-radius:6px;cursor:pointer">🗑️</button>
             </div>
-
-            <div class="upload-grid">
-                <!-- SOP Upload -->
-                <div class="upload-card" id="card-sop" data-type="sop">
-                    <div class="upload-header">
-                        <h3><span class="upload-icon">📋</span> SOP Documents</h3>
-                        <span class="upload-status" id="status-sop">Belum Upload</span>
-                    </div>
-                    <div class="upload-content">
-                        <div class="upload-area" id="upload-area-sop">
-                            <input type="file" class="file-input" id="file-sop" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt" onchange="handleFileSelect('sop', this.files[0])">
-                            <div class="upload-placeholder" id="placeholder-sop">
-                                <div class="upload-placeholder-icon">📤</div>
-                                <h4>Drop file SOP di sini</h4>
-                                <p>atau klik untuk browse</p>
-                            </div>
-                            <div class="file-info" id="file-info-sop">
-                                <div class="file-icon" id="icon-sop">📄</div>
-                                <div class="file-name" id="filename-sop"></div>
-                                <div class="file-size" id="filesize-sop"></div>
-                                <div class="file-actions">
-                                    <button class="btn btn-primary" onclick="analyzeFile('sop')">🔍 Analisis</button>
-                                    <button class="btn btn-secondary" onclick="removeFile('sop')">Hapus</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="progress-bar" id="progress-sop">
-                            <div class="progress-fill" id="progress-fill-sop"></div>
-                        </div>
-                        <div class="analysis-result" id="result-sop">
-                            <div class="analysis-header">
-                                <span class="analysis-title">📊 Hasil Analisis SOP</span>
-                                <span class="analysis-score" id="score-sop">0/100</span>
-                            </div>
-                            <div class="analysis-content" id="analysis-content-sop"></div>
-                        </div>
-                        <div class="supported-formats">
-                            <strong>Format yang didukung:</strong>
-                            <span class="format-tag">PDF</span>
-                            <span class="format-tag">DOC/DOCX</span>
-                            <span class="format-tag">XLS/XLSX</span>
-                            <span class="format-tag">PPT/PPTX</span>
-                            <span class="format-tag">TXT</span>
-                        </div>
-                    </div>
+            <div class="cm" id="cm">
+                <div class="msg a">Selamat datang! Upload dokumen dan setup Groq API Key (gratis di console.groq.com) untuk mulai analisis.</div>
+            </div>
+            <div class="ti" id="ti" style="display:none"><span></span><span></span><span></span> AI menganalisis...</div>
+            <div class="ci">
+                <div class="iw">
+                    <textarea id="ui" placeholder="Tanya tentang dokumen..." onkeypress="kp(event)" oninput="rs(this)"></textarea>
+                    <button class="sb" onclick="sm()">➤</button>
                 </div>
-
-                <!-- Regulatory Compliance Upload -->
-                <div class="upload-card" id="card-compliance" data-type="compliance">
-                    <div class="upload-header">
-                        <h3><span class="upload-icon">⚖️</span> Regulatory Compliance</h3>
-                        <span class="upload-status" id="status-compliance">Belum Upload</span>
+            </div>
+            <div class="cp">
+                <button class="ct" onclick="tc()">⚙️ Setup Groq API ▼</button>
+                <div class="cpn" id="cp">
+                    <div style="background:#fef3c7;padding:10px;border-radius:6px;margin-bottom:10px;font-size:0.85rem">
+                        1. Buka <a href="https://console.groq.com" target="_blank">console.groq.com</a><br>
+                        2. Sign up dengan Google/Email<br>
+                        3. Create API Key (format: gsk_...)<br>
+                        4. Paste di bawah & Simpan
                     </div>
-                    <div class="upload-content">
-                        <div class="upload-area" id="upload-area-compliance">
-                            <input type="file" class="file-input" id="file-compliance" accept=".pdf,.doc,.docx,.xls,.xlsx,.txt" onchange="handleFileSelect('compliance', this.files[0])">
-                            <div class="upload-placeholder" id="placeholder-compliance">
-                                <div class="upload-placeholder-icon">📤</div>
-                                <h4>Drop file Compliance di sini</h4>
-                                <p>atau klik untuk browse</p>
-                            </div>
-                            <div class="file-info" id="file-info-compliance">
-                                <div class="file-icon" id="icon-compliance">📄</div>
-                                <div class="file-name" id="filename-compliance"></div>
-                                <div class="file-size" id="filesize-compliance"></div>
-                                <div class="file-actions">
-                                    <button class="btn btn-primary" onclick="analyzeFile('compliance')">🔍 Analisis</button>
-                                    <button class="btn btn-secondary" onclick="removeFile('compliance')">Hapus</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="progress-bar" id="progress-compliance">
-                            <div class="progress-fill" id="progress-fill-compliance"></div>
-                        </div>
-                        <div class="analysis-result" id="result-compliance">
-                            <div class="analysis-header">
-                                <span class="analysis-title">📊 Hasil Analisis Compliance</span>
-                                <span class="analysis-score" id="score-compliance">0/100</span>
-                            </div>
-                            <div class="analysis-content" id="analysis-content-compliance"></div>
-                        </div>
-                        <div class="supported-formats">
-                            <strong>Format yang didukung:</strong>
-                            <span class="format-tag">PDF</span>
-                            <span class="format-tag">DOC/DOCX</span>
-                            <span class="format-tag">XLS/XLSX</span>
-                            <span class="format-tag">TXT</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- KPI Upload -->
-                <div class="upload-card" id="card-kpi" data-type="kpi">
-                    <div class="upload-header">
-                        <h3><span class="upload-icon">📊</span> Key Performance Indicators</h3>
-                        <span class="upload-status" id="status-kpi">Belum Upload</span>
-                    </div>
-                    <div class="upload-content">
-                        <div class="upload-area" id="upload-area-kpi">
-                            <input type="file" class="file-input" id="file-kpi" accept=".pdf,.doc,.docx,.xls,.xlsx,.txt" onchange="handleFileSelect('kpi', this.files[0])">
-                            <div class="upload-placeholder" id="placeholder-kpi">
-                                <div class="upload-placeholder-icon">📤</div>
-                                <h4>Drop file KPI di sini</h4>
-                                <p>atau klik untuk browse</p>
-                            </div>
-                            <div class="file-info" id="file-info-kpi">
-                                <div class="file-icon" id="icon-kpi">📄</div>
-                                <div class="file-name" id="filename-kpi"></div>
-                                <div class="file-size" id="filesize-kpi"></div>
-                                <div class="file-actions">
-                                    <button class="btn btn-primary" onclick="analyzeFile('kpi')">🔍 Analisis</button>
-                                    <button class="btn btn-secondary" onclick="removeFile('kpi')">Hapus</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="progress-bar" id="progress-kpi">
-                            <div class="progress-fill" id="progress-fill-kpi"></div>
-                        </div>
-                        <div class="analysis-result" id="result-kpi">
-                            <div class="analysis-header">
-                                <span class="analysis-title">📊 Hasil Analisis KPI</span>
-                                <span class="analysis-score" id="score-kpi">0/100</span>
-                            </div>
-                            <div class="analysis-content" id="analysis-content-kpi"></div>
-                        </div>
-                        <div class="supported-formats">
-                            <strong>Format yang didukung:</strong>
-                            <span class="format-tag">PDF</span>
-                            <span class="format-tag">DOC/DOCX</span>
-                            <span class="format-tag">XLS/XLSX (Recommended)</span>
-                            <span class="format-tag">TXT</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Culture Upload -->
-                <div class="upload-card" id="card-culture" data-type="culture">
-                    <div class="upload-header">
-                        <h3><span class="upload-icon">🏢</span> Organizational Culture</h3>
-                        <span class="upload-status" id="status-culture">Belum Upload</span>
-                    </div>
-                    <div class="upload-content">
-                        <div class="upload-area" id="upload-area-culture">
-                            <input type="file" class="file-input" id="file-culture" accept=".pdf,.doc,.docx,.ppt,.pptx,.txt" onchange="handleFileSelect('culture', this.files[0])">
-                            <div class="upload-placeholder" id="placeholder-culture">
-                                <div class="upload-placeholder-icon">📤</div>
-                                <h4>Drop file Culture di sini</h4>
-                                <p>atau klik untuk browse</p>
-                            </div>
-                            <div class="file-info" id="file-info-culture">
-                                <div class="file-icon" id="icon-culture">📄</div>
-                                <div class="file-name" id="filename-culture"></div>
-                                <div class="file-size" id="filesize-culture"></div>
-                                <div class="file-actions">
-                                    <button class="btn btn-primary" onclick="analyzeFile('culture')">🔍 Analisis</button>
-                                    <button class="btn btn-secondary" onclick="removeFile('culture')">Hapus</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="progress-bar" id="progress-culture">
-                            <div class="progress-fill" id="progress-fill-culture"></div>
-                        </div>
-                        <div class="analysis-result" id="result-culture">
-                            <div class="analysis-header">
-                                <span class="analysis-title">📊 Hasil Analisis Culture</span>
-                                <span class="analysis-score" id="score-culture">0/100</span>
-                            </div>
-                            <div class="analysis-content" id="analysis-content-culture"></div>
-                        </div>
-                        <div class="supported-formats">
-                            <strong>Format yang didukung:</strong>
-                            <span class="format-tag">PDF</span>
-                            <span class="format-tag">DOC/DOCX</span>
-                            <span class="format-tag">PPT/PPTX</span>
-                            <span class="format-tag">TXT</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Strategic Alignment Upload -->
-                <div class="upload-card" id="card-strategic" data-type="strategic">
-                    <div class="upload-header">
-                        <h3><span class="upload-icon">🎯</span> Strategic Alignment</h3>
-                        <span class="upload-status" id="status-strategic">Belum Upload</span>
-                    </div>
-                    <div class="upload-content">
-                        <div class="upload-area" id="upload-area-strategic">
-                            <input type="file" class="file-input" id="file-strategic" accept=".pdf,.doc,.docx,.ppt,.pptx,.txt" onchange="handleFileSelect('strategic', this.files[0])">
-                            <div class="upload-placeholder" id="placeholder-strategic">
-                                <div class="upload-placeholder-icon">📤</div>
-                                <h4>Drop file Strategic di sini</h4>
-                                <p>atau klik untuk browse</p>
-                            </div>
-                            <div class="file-info" id="file-info-strategic">
-                                <div class="file-icon" id="icon-strategic">📄</div>
-                                <div class="file-name" id="filename-strategic"></div>
-                                <div class="file-size" id="filesize-strategic"></div>
-                                <div class="file-actions">
-                                    <button class="btn btn-primary" onclick="analyzeFile('strategic')">🔍 Analisis</button>
-                                    <button class="btn btn-secondary" onclick="removeFile('strategic')">Hapus</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="progress-bar" id="progress-strategic">
-                            <div class="progress-fill" id="progress-fill-strategic"></div>
-                        </div>
-                        <div class="analysis-result" id="result-strategic">
-                            <div class="analysis-header">
-                                <span class="analysis-title">📊 Hasil Analisis Strategic</span>
-                                <span class="analysis-score" id="score-strategic">0/100</span>
-                            </div>
-                            <div class="analysis-content" id="analysis-content-strategic"></div>
-                        </div>
-                        <div class="supported-formats">
-                            <strong>Format yang didukung:</strong>
-                            <span class="format-tag">PDF</span>
-                            <span class="format-tag">DOC/DOCX</span>
-                            <span class="format-tag">PPT/PPTX</span>
-                            <span class="format-tag">TXT</span>
-                        </div>
-                    </div>
+                    <input type="password" id="ak" placeholder="gsk_...">
+                    <select id="sm" style="margin-top:10px">
+                        <option value="llama-3.3-70b-versatile">Llama 3.3 70B (Recommended)</option>
+                        <option value="llama-3.1-8b-instant">Llama 3.1 8B (Cepat)</option>
+                    </select>
+                    <button class="ss" onclick="sc()">💾 Simpan & Test</button>
+                    <div id="st"></div>
                 </div>
             </div>
         </div>
-    </section>
-
-    <!-- Master Analysis Section -->
-    <section class="master-analysis">
-        <div class="container">
-            <div class="master-card">
-                <div class="master-header">
-                    <h3>🚀 Analisis Komprehensif</h3>
-                    <p>Analisis semua dokumen yang telah diupload untuk mendapatkan rekomendasi strategis</p>
-                    <div class="upload-counter" style="margin-top: 20px;">
-                        <span>Dokumen diupload:</span>
-                        <span class="counter-current" id="upload-count">0</span>
-                        <span>/ 5</span>
-                    </div>
-                </div>
-
-                <div class="alert alert-warning" id="alert-incomplete">
-                    ⚠️ Upload minimal 1 dokumen untuk mengaktifkan analisis AI.
-                </div>
-
-                <div class="alert alert-success" id="alert-ready" style="display: none;">
-                    ✅ Semua dokumen siap! Klik tombol di bawah untuk analisis komprehensif.
-                </div>
-
-                <div class="master-actions">
-                    <button class="btn btn-primary btn-large" id="btn-analyze-all" onclick="analyzeAll()" disabled>
-                        🔍 Analisis Semua Dokumen
-                    </button>
-                    <button class="btn btn-secondary btn-large" onclick="generateReport()">
-                        📄 Generate Report
-                    </button>
-                    <button class="btn btn-danger btn-large" onclick="clearAll()">
-                        🗑️ Hapus Semua
-                    </button>
-                </div>
-
-                <div id="master-result" style="margin-top: 30px; display: none;">
-                    <div style="background: #f9fafb; padding: 30px; border-radius: 15px; border-left: 5px solid var(--primary-color);">
-                        <h4 style="margin-bottom: 20px; color: var(--text-dark);">📋 Executive Summary</h4>
-                        <div id="master-analysis-content"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- AI Assistant Section -->
-    <section id="ai-assistant" class="ai-section">
-        <div class="container">
-            <div class="section-header">
-                <h2>💬 ISLA AI Strategic Assistant</h2>
-                <p>Tanyakan detail tentang hasil analisis dokumen Anda</p>
-            </div>
-
-            <div class="ai-chat-container">
-                <div class="chat-header">
-                    <div class="ai-avatar">🤖</div>
-                    <div class="ai-info">
-                        <h3>ISLA AI Assistant</h3>
-                        <span class="ai-status">Online & Ready</span>
-                    </div>
-                </div>
-
-                <div class="chat-messages" id="chat-messages">
-                    <div class="message ai-message">
-                        <div class="message-content">
-                            <p>Selamat datang! Saya telah menganalisis dokumen-dokumen Anda.</p>
-                            <p>Silakan tanyakan:</p>
-                            <ul>
-                                <li>Detail hasil analisis SOP</li>
-                                <li>Rekomendasi perbaikan compliance</li>
-                                <li>Optimasi KPI yang ada</li>
-                                <li>Strategi culture transformation</li>
-                                <li>Alignment antar dokumen</li>
-                            </ul>
-                        </div>
-                        <span class="timestamp" id="welcome-time"></span>
-                    </div>
-                </div>
-
-                <div class="typing-indicator" id="typing-indicator" style="display: none;">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                    <span>AI sedang menganalisis...</span>
-                </div>
-
-                <div class="chat-input-container">
-                    <div class="input-wrapper">
-                        <textarea 
-                            id="user-input" 
-                            placeholder="Tanyakan tentang hasil analisis dokumen Anda..."
-                            rows="1"
-                            oninput="autoResize(this)"
-                            onkeypress="handleKeyPress(event)"
-                        ></textarea>
-                        <button class="send-btn" onclick="sendMessage()" id="send-btn">
-                            ➤
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer style="background: var(--text-dark); color: white; padding: 40px 0; text-align: center;">
-        <div class="container">
-            <p>&copy; 2026 ISLA - Integrated Strategic Leadership Architecture</p>
-            <p style="margin-top: 10px; font-size: 0.9rem;">Document Review & Analysis System</p>
-        </div>
-    </footer>
+    </div></div>
+    
+    <footer><div class="c"><p>&copy; 2026 ISLA - Powered by Groq AI</p></div></footer>
 
     <script>
-        // State management
-        const uploadState = {
-            sop: { file: null, analyzed: false, result: null },
-            compliance: { file: null, analyzed: false, result: null },
-            kpi: { file: null, analyzed: false, result: null },
-            culture: { file: null, analyzed: false, result: null },
-            strategic: { file: null, analyzed: false, result: null }
+        const T=['sop','compliance','kpi','culture','strategic'];
+        const N={sop:'SOP',compliance:'Compliance',kpi:'KPI',culture:'Culture',strategic:'Strategic'};
+        const I={sop:'📋',compliance:'⚖️',kpi:'📊',culture:'🏢',strategic:'🎯'};
+        
+        let S={};
+        T.forEach(t=>S[t]={f:null,a:false,r:null});
+        
+        let G={
+            k:localStorage.getItem('gk')||'',
+            m:localStorage.getItem('gm')||'llama-3.3-70b-versatile',
+            e:'https://api.groq.com/openai/v1/chat/completions'
         };
-
-        // Analysis templates for each type
-        const analysisTemplates = {
-            sop: {
-                criteria: ['Kelengkapan prosedur', 'Klarifikasi langkah', 'Dokumentasi risiko', 'Review periodik', 'Aksesibilitas'],
-                generateResult: (filename) => ({
-                    score: Math.floor(Math.random() * 30) + 70, // 70-100
-                    findings: [
-                        `Dokumen "${filename}" mencakup ${Math.floor(Math.random() * 50 + 50)}% dari prosedur operasional standar`,
-                        'Struktur dokumen: Bagus, dengan alur yang logis',
-                        'Identifikasi risiko: Perlu penambahan mitigasi risiko di 3 area',
-                        'Review mechanism: Belum ada jadwal review periodik yang jelas'
-                    ],
-                    recommendations: [
-                        'Tambahkan flowchart visual untuk prosedur kompleks',
-                        'Implementasikan versi digital dengan approval workflow',
-                        'Tetapkan jadwal review 6 bulanan',
-                        'Tambahkan contoh form/checklist pendukung'
-                    ]
-                })
-            },
-            compliance: {
-                criteria: ['Kelengkapan regulasi', 'Update terbaru', 'Evidence documentation', 'Audit trail', 'Risk assessment'],
-                generateResult: (filename) => ({
-                    score: Math.floor(Math.random() * 25) + 75,
-                    findings: [
-                        `Compliance rate: ${Math.floor(Math.random() * 20 + 80)}% terhadap regulasi yang berlaku`,
-                        'Dokumen hukum: Lengkap untuk sebagian besar area',
-                        'Gap analysis: Ditemukan 2 area yang perlu update regulasi 2024/2025',
-                        'Evidence: Dokumentasi evidence perlu diperkuat'
-                    ],
-                    recommendations: [
-                        'Update referensi regulasi ke peraturan terbaru (2024/2025)',
-                        'Buat compliance calendar untuk tracking deadline',
-                        'Tambahkan matrix responsibility untuk setiap requirement',
-                        'Implementasi digital compliance management system'
-                    ]
-                })
-            },
-            kpi: {
-                criteria: ['SMART criteria', 'Alignment strategis', 'Measurability', 'Target realistis', 'Review frequency'],
-                generateResult: (filename) => ({
-                    score: Math.floor(Math.random() * 35) + 65,
-                    findings: [
-                        `Total KPI: ${Math.floor(Math.random() * 20 + 15)} indikator teridentifikasi`,
-                        'SMART compliance: 70% KPI sudah memenuhi kriteria SMART',
-                        'Strategic alignment: 85% sejalan dengan company objectives',
-                        'Measurability: 3 KPI perlu definisi measurement yang lebih jelas'
-                    ],
-                    recommendations: [
-                        'Tambahkan leading indicators, tidak hanya lagging',
-                        'Implementasi balanced scorecard approach',
-                        'Tetapkan frequency review: Weekly untuk operational, Monthly untuk tactical',
-                        'Tambahkan KPI untuk employee development dan satisfaction'
-                    ]
-                })
-            },
-            culture: {
-                criteria: ['Values clarity', 'Behavioral indicators', 'Communication strategy', 'Leadership alignment', 'Measurement system'],
-                generateResult: (filename) => ({
-                    score: Math.floor(Math.random() * 30) + 70,
-                    findings: [
-                        'Values definition: Jelas dan well-articulated',
-                        'Behavioral translation: Perlu konkretisasi ke dalam perilaku spesifik',
-                        'Communication: Strategy ada tapi execution perlu diperkuat',
-                        'Leadership role: 60% leadership menunjukkan culture champion behavior'
-                    ],
-                    recommendations: [
-                        'Develop culture playbook dengan behavioral examples',
-                        'Implement culture onboarding program untuk new hires',
-                        'Tambahkan culture metrics dalam performance review',
-                        'Buat recognition system untuk culture champions'
-                    ]
-                })
-            },
-            strategic: {
-                criteria: ['Vision clarity', 'Goal cascading', 'Resource allocation', 'Timeline feasibility', 'Monitoring system'],
-                generateResult: (filename) => ({
-                    score: Math.floor(Math.random() * 25) + 75,
-                    findings: [
-                        'Strategic pillars: 4-5 pillars terdefinisi dengan baik',
-                        'Goal cascading: 70% goals sudah ter-breakdown ke level operational',
-                        'Resource alignment: Perlu review alokasi budget vs strategic priority',
-                        'Timeline: Major milestones clear, tapi intermediate steps perlu detail'
-                    ],
-                    recommendations: [
-                        'Tambahkan strategy map untuk visualisasi cause-effect relationship',
-                        'Implement OKR framework untuk better alignment',
-                        'Buat strategic initiative portfolio management',
-                        'Tetapkan monthly strategic review meeting dengan format baku'
-                    ]
-                })
-            }
-        };
-
-        // Initialize
-        document.addEventListener('DOMContentLoaded', () => {
-            setupDragAndDrop();
-            updateUploadCounter();
-            setWelcomeTime();
-        });
-
-        function setWelcomeTime() {
-            const timeEl = document.getElementById('welcome-time');
-            if (timeEl) {
-                timeEl.textContent = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
-            }
-        }
-
-        // File handling
-        function handleFileSelect(type, file) {
-            if (!file) return;
-
-            // Validate file size (max 10MB)
-            if (file.size > 10 * 1024 * 1024) {
-                alert('File terlalu besar! Maksimal 10MB.');
-                return;
-            }
-
-            // Update state
-            uploadState[type].file = file;
-            uploadState[type].analyzed = false;
-
-            // Update UI
-            updateFileUI(type, file);
-            updateUploadCounter();
-            updateCardStatus(type, 'uploaded');
-        }
-
-        function updateFileUI(type, file) {
-            const placeholder = document.getElementById(`placeholder-${type}`);
-            const fileInfo = document.getElementById(`file-info-${type}`);
-            const uploadArea = document.getElementById(`upload-area-${type}`);
-            
-            // Hide placeholder, show file info
-            placeholder.style.display = 'none';
-            fileInfo.classList.add('show');
-            uploadArea.classList.add('has-file');
-
-            // Update file details
-            document.getElementById(`filename-${type}`).textContent = file.name;
-            document.getElementById(`filesize-${type}`).textContent = formatFileSize(file.size);
-
-            // Set icon based on type
-            const iconMap = {
-                'pdf': '📕', 'doc': '📘', 'docx': '📘', 'xls': '📗', 
-                'xlsx': '📗', 'ppt': '📙', 'pptx': '📙', 'txt': '📄'
-            };
-            const ext = file.name.split('.').pop().toLowerCase();
-            document.getElementById(`icon-${type}`).textContent = iconMap[ext] || '📄';
-        }
-
-        function removeFile(type) {
-            // Reset state
-            uploadState[type].file = null;
-            uploadState[type].analyzed = false;
-            uploadState[type].result = null;
-
-            // Reset UI
-            const placeholder = document.getElementById(`placeholder-${type}`);
-            const fileInfo = document.getElementById(`file-info-${type}`);
-            const uploadArea = document.getElementById(`upload-area-${type}`);
-            const result = document.getElementById(`result-${type}`);
-            const progress = document.getElementById(`progress-${type}`);
-            const fileInput = document.getElementById(`file-${type}`);
-
-            placeholder.style.display = 'block';
-            fileInfo.classList.remove('show');
-            uploadArea.classList.remove('has-file');
-            result.classList.remove('show');
-            progress.classList.remove('show');
-            fileInput.value = '';
-
-            updateCardStatus(type, 'empty');
-            updateUploadCounter();
-        }
-
-        function formatFileSize(bytes) {
-            if (bytes === 0) return '0 Bytes';
-            const k = 1024;
-            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-            const i = Math.floor(Math.log(bytes) / Math.log(k));
-            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-        }
-
-        function updateCardStatus(type, status) {
-            const statusEl = document.getElementById(`status-${type}`);
-            const card = document.getElementById(`card-${type}`);
-
-            if (status === 'uploaded') {
-                statusEl.textContent = '✅ Uploaded';
-                statusEl.classList.add('uploaded');
-                card.classList.add('active');
-            } else if (status === 'analyzing') {
-                statusEl.textContent = '⏳ Analyzing...';
-                statusEl.classList.add('analyzing');
-                card.classList.add('processing');
-            } else if (status === 'analyzed') {
-                statusEl.textContent = '✅ Analyzed';
-                statusEl.classList.remove('analyzing');
-                card.classList.remove('processing');
-            } else {
-                statusEl.textContent = 'Belum Upload';
-                statusEl.classList.remove('uploaded', 'analyzing');
-                card.classList.remove('active', 'processing');
-            }
-        }
-
-        function updateUploadCounter() {
-            const count = Object.values(uploadState).filter(s => s.file !== null).length;
-            document.getElementById('upload-count').textContent = count;
-
-            const btnAnalyze = document.getElementById('btn-analyze-all');
-            const alertIncomplete = document.getElementById('alert-incomplete');
-            const alertReady = document.getElementById('alert-ready');
-
-            if (count > 0) {
-                btnAnalyze.disabled = false;
-                alertIncomplete.style.display = 'none';
-                alertReady.style.display = count === 5 ? 'block' : 'none';
-            } else {
-                btnAnalyze.disabled = true;
-                alertIncomplete.style.display = 'block';
-                alertReady.style.display = 'none';
-            }
-        }
-
-        // Analysis functions
-        async function analyzeFile(type) {
-            const state = uploadState[type];
-            if (!state.file) return;
-
-            updateCardStatus(type, 'analyzing');
-            
-            // Show progress
-            const progress = document.getElementById(`progress-${type}`);
-            const progressFill = document.getElementById(`progress-fill-${type}`);
-            progress.classList.add('show');
-
-            // Simulate progress
-            for (let i = 0; i <= 100; i += 10) {
-                progressFill.style.width = i + '%';
-                await delay(200);
-            }
-
-            // Generate analysis result
-            const template = analysisTemplates[type];
-            const result = template.generateResult(state.file.name);
-            state.result = result;
-            state.analyzed = true;
-
-            // Display result
-            displayResult(type, result);
-            updateCardStatus(type, 'analyzed');
-            progress.classList.remove('show');
-            progressFill.style.width = '0%';
-
-            // Add to chat context
-            addToChatContext(type, result);
-        }
-
-        function displayResult(type, result) {
-            const resultEl = document.getElementById(`result-${type}`);
-            const scoreEl = document.getElementById(`score-${type}`);
-            const contentEl = document.getElementById(`analysis-content-${type}`);
-
-            scoreEl.textContent = result.score + '/100';
-            
-            let html = '<strong>📝 Key Findings:</strong><ul>';
-            result.findings.forEach(f => html += `<li>${f}</li>`);
-            html += '</ul>';
-            
-            html += '<strong style="display: block; margin-top: 15px;">💡 Rekomendasi:</strong><ul>';
-            result.recommendations.forEach(r => html += `<li>${r}</li>`);
-            html += '</ul>';
-
-            contentEl.innerHTML = html;
-            resultEl.classList.add('show');
-        }
-
-        async function analyzeAll() {
-            const types = ['sop', 'compliance', 'kpi', 'culture', 'strategic'];
-            const uploadedTypes = types.filter(t => uploadState[t].file !== null);
-
-            for (const type of uploadedTypes) {
-                if (!uploadState[type].analyzed) {
-                    await analyzeFile(type);
-                    await delay(500); // Small delay between analyses
-                }
-            }
-
-            generateMasterAnalysis();
-        }
-
-        function generateMasterAnalysis() {
-            const masterResult = document.getElementById('master-result');
-            const masterContent = document.getElementById('master-analysis-content');
-            
-            const analyzed = Object.entries(uploadState).filter(([_, s]) => s.analyzed);
-            const totalScore = analyzed.reduce((sum, [_, s]) => sum + s.result.score, 0);
-            const avgScore = Math.round(totalScore / analyzed.length);
-
-            let html = `
-                <div style="margin-bottom: 20px;">
-                    <strong>Overall Maturity Score: ${avgScore}/100</strong>
-                    <div style="background: #e5e7eb; height: 10px; border-radius: 5px; margin-top: 8px; overflow: hidden;">
-                        <div style="background: linear-gradient(90deg, var(--primary-color), var(--secondary-color)); 
-                                    height: 100%; width: ${avgScore}%; border-radius: 5px;"></div>
+        
+        const Y=`Anda adalah ISLA AI Assistant. Analisis dokumen organisasi dengan profesional.`;
+        
+        function init(){
+            let h='';
+            T.forEach(t=>{
+                h+=`<div class="uc" id="c-${t}">
+                    <div class="uh"><h3>${I[t]} ${N[t]}</h3><span class="us" id="s-${t}>Belum Upload</span></div>
+                    <div class="ucn">
+                        <div class="ua" id="u-${t}" onclick="document.getElementById('f-${t}').click()">
+                            <input type="file" id="f-${t}" style="display:none" accept=".pdf,.doc,.docx,.xls,.xlsx,.txt" onchange="hf('${t}',this.files[0])">
+                            <div class="uph" id="p-${t}"><div style="font-size:2.5rem;margin-bottom:10px">📤</div><h4>Drop file di sini</h4><p>atau klik browse</p></div>
+                            <div class="fi" id="i-${t}"><div style="font-size:2rem">📄</div><div class="fn" id="n-${t}"></div><div class="fs" id="z-${t}"></div><button class="btn" onclick="ax('${t}');event.stopPropagation()">🔍 Analisis</button><button class="btn r" onclick="rf('${t}');event.stopPropagation()">Hapus</button></div>
+                        </div>
+                        <div class="pb" id="b-${t}"><div class="pf" id="bf-${t}"></div></div>
+                        <div class="ar" id="r-${t}"><div style="display:flex;justify-content:space-between;margin-bottom:10px"><b>📊 Hasil Analisis</b><span class="as" id="sc-${t}">0/100</span></div><div id="rc-${t}"></div></div>
                     </div>
-                </div>
-                <p style="margin-bottom: 15px;"><strong>📊 Ringkasan Analisis:</strong></p>
-                <ul style="margin-left: 20px; line-height: 2;">
-            `;
-
-            analyzed.forEach(([type, state]) => {
-                const names = {
-                    sop: 'Standard Operating Procedures',
-                    compliance: 'Regulatory Compliance',
-                    kpi: 'Key Performance Indicators',
-                    culture: 'Organizational Culture',
-                    strategic: 'Strategic Alignment'
-                };
-                html += `<li><strong>${names[type]}:</strong> ${state.result.score}/100 - ${getStatusText(state.result.score)}</li>`;
+                </div>`;
             });
-
-            html += `</ul>
-                <p style="margin-top: 20px;"><strong>🎯 Prioritas Perbaikan:</strong></p>
-                <ol style="margin-left: 20px; line-height: 2;">
-                    <li>Fokus pada area dengan score terendah untuk quick wins</li>
-                    <li>Integrasikan sistem yang saling terhubung (misal: KPI link ke Strategic)</li>
-                    <li>Implementasi digitalisasi untuk semua dokumen</li>
-                    <li>Establish regular review cycle (quarterly recommended)</li>
-                </ol>
-            `;
-
-            masterContent.innerHTML = html;
-            masterResult.style.display = 'block';
-            masterResult.scrollIntoView({ behavior: 'smooth' });
-        }
-
-        function getStatusText(score) {
-            if (score >= 90) return 'Excellent';
-            if (score >= 80) return 'Good';
-            if (score >= 70) return 'Fair';
-            return 'Needs Improvement';
-        }
-
-        function generateReport() {
-            const analyzed = Object.entries(uploadState).filter(([_, s]) => s.analyzed);
-            if (analyzed.length === 0) {
-                alert('Belum ada dokumen yang dianalisis!');
-                return;
-            }
-
-            let report = 'ISLA DOCUMENT ANALYSIS REPORT\n';
-            report += 'Generated: ' + new Date().toLocaleString('id-ID') + '\n\n';
+            document.getElementById('ug').innerHTML=h;
             
-            analyzed.forEach(([type, state]) => {
-                report += `=== ${type.toUpperCase()} ===\n`;
-                report += `File: ${state.file.name}\n`;
-                report += `Score: ${state.result.score}/100\n\n`;
-                report += 'Findings:\n';
-                state.result.findings.forEach(f => report += `- ${f}\n`);
-                report += '\nRecommendations:\n';
-                state.result.recommendations.forEach(r => report += `- ${r}\n`);
-                report += '\n\n';
-            });
-
-            // Download as text file
-            const blob = new Blob([report], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `ISLA_Analysis_Report_${new Date().toISOString().split('T')[0]}.txt`;
-            a.click();
-            URL.revokeObjectURL(url);
-        }
-
-        function clearAll() {
-            if (!confirm('Yakin ingin menghapus semua dokumen dan analisis?')) return;
-            
-            ['sop', 'compliance', 'kpi', 'culture', 'strategic'].forEach(type => {
-                removeFile(type);
-            });
-
-            document.getElementById('master-result').style.display = 'none';
-        }
-
-        // Chat functions
-        function addToChatContext(type, result) {
-            const names = {
-                sop: 'SOP',
-                compliance: 'Compliance',
-                kpi: 'KPI',
-                culture: 'Culture',
-                strategic: 'Strategic'
-            };
-            
-            const message = `📄 Dokumen ${names[type]} telah dianalisis (Score: ${result.score}/100)`;
-            // This would add context to AI, simplified here
-        }
-
-        async function sendMessage() {
-            const input = document.getElementById('user-input');
-            const message = input.value.trim();
-            if (!message) return;
-
-            // Add user message
-            addChatMessage('user', message);
-            input.value = '';
-            input.style.height = 'auto';
-
-            // Show typing
-            document.getElementById('typing-indicator').style.display = 'flex';
-
-            // Simulate AI response based on context
-            await delay(1500);
-            document.getElementById('typing-indicator').style.display = 'none';
-
-            const response = generateAIResponse(message);
-            addChatMessage('ai', response);
-        }
-
-        function generateAIResponse(userMessage) {
-            const msg = userMessage.toLowerCase();
-            const analyzed = Object.entries(uploadState).filter(([_, s]) => s.analyzed);
-            
-            if (analyzed.length === 0) {
-                return 'Silakan upload dan analisis dokumen terlebih dahulu sebelum bertanya. Klik tombol "🔍 Analisis" pada salah satu card di atas.';
+            if(G.k){
+                document.getElementById('ak').value=G.k;
+                document.getElementById('sm').value=G.m;
+                tc();
             }
-
-            // Check if asking about specific document
-            if (msg.includes('sop') || msg.includes('prosedur')) {
-                const sop = uploadState.sop;
-                if (sop.analyzed) {
-                    return `**Analisis SOP Anda (${sop.file.name}):**\n\nScore: ${sop.result.score}/100\n\n**Temuan utama:**\n${sop.result.findings.map(f => `• ${f}`).join('\n')}\n\n**Rekomendasi prioritas:**\n${sop.result.recommendations.slice(0, 2).map(r => `→ ${r}`).join('\n')}\n\nApakah Anda ingin detail tentang implementasi salah satu rekomendasi?`;
-                }
-                return 'Anda belum mengupload dokumen SOP. Silakan upload terlebih dahulu.';
-            }
-
-            if (msg.includes('compliance') || msg.includes('regulasi')) {
-                const comp = uploadState.compliance;
-                if (comp.analyzed) {
-                    return `**Status Compliance Anda:**\n\nScore: ${comp.result.score}/100\n\n**Gap Analysis:**\n${comp.result.findings.filter(f => f.includes('Gap') || f.includes('regulasi')).join('\n')}\n\n**Action items urgent:**\n${comp.result.recommendations.slice(0, 2).join('\n')}`;
-                }
-                return 'Dokumen Compliance belum diupload. Silakan upload untuk analisis.';
-            }
-
-            if (msg.includes('kpi') || msg.includes('indikator')) {
-                const kpi = uploadState.kpi;
-                if (kpi.analyzed) {
-                    return `**Review KPI System:**\n\nTotal indikator: ~${Math.floor(Math.random() * 20 + 15)}\nOverall alignment: 85%\n\n**Issue kritikal:**\n• 3 KPI perlu definisi ulang\n• Kurang leading indicators\n\n**Quick fix:**\nTambahkan metrics: Employee satisfaction, Customer effort score, dan Innovation rate.\n\nIngin saya bantu redesign KPI matrix?`;
-                }
-                return 'File KPI belum tersedia. Upload file KPI Anda terlebih dahulu.';
-            }
-
-            if (msg.includes('culture') || msg.includes('budaya')) {
-                const culture = uploadState.culture;
-                if (culture.analyzed) {
-                    return `**Culture Assessment Summary:**\n\nMaturity: ${culture.result.score}/100\n\n**Strength:**\n• Values definition clear\n\n**Gap:**\n• Behavioral translation perlu konkretisasi\n• Leadership role model consistency 60%\n\n**Rekomendasi implementasi:**\nMulai dari culture playbook dengan 5-10 behavioral examples per value.`;
-                }
-                return 'Dokumen Culture belum diupload.';
-            }
-
-            if (msg.includes('strategic') || msg.includes('strategi')) {
-                const strat = uploadState.strategic;
-                if (strat.analyzed) {
-                    return `**Strategic Alignment Review:**\n\nScore: ${strat.result.score}/100\n\n**Cascading effectiveness:** 70%\n**Resource alignment:** Perlu review\n\n**Rekomendasi:**\n1. Gunakan OKR framework untuk better alignment\n2. Monthly strategic review meeting\n3. Strategy map untuk visualisasi\n\nTertarik untuk develop strategy map?`;
-                }
-                return 'Dokumen Strategic Alignment belum tersedia.';
-            }
-
-            // General response
-            return `**Analisis Umum berdasarkan ${analyzed.length} dokumen:**\n\nAnda bertanya: "${userMessage}"\n\nBerdasarkan dokumen yang telah dianalisis, saya merekomendasikan:\n\n1. **Prioritaskan** area dengan score terendah untuk improvement\n2. **Integrasikan** sistem agar saling terhubung (SOP ↔ KPI ↔ Strategic)\n3. **Digitalisasi** semua dokumen untuk accessibility dan tracking\n4. **Establish** regular review cycle (quarterly)\n\nSilakan tanyakan detail spesifik tentang salah satu area (SOP, Compliance, KPI, Culture, atau Strategic).`;
+            uc();
         }
-
-        function addChatMessage(sender, message) {
-            const container = document.getElementById('chat-messages');
-            const div = document.createElement('div');
-            div.className = `message ${sender}-message`;
+        
+        function hf(t,f){
+            if(!f||f.size>10*1024*1024)return alert('Max 10MB');
+            S[t].f=f;
+            document.getElementById(`p-${t}`).style.display='none';
+            document.getElementById(`i-${t}`).classList.add('s');
+            document.getElementById(`n-${t}`).textContent=f.name;
+            document.getElementById(`z-${t}`).textContent=(f.size/1024).toFixed(1)+' KB';
+            document.getElementById(`s-${t}`).textContent='✅ Uploaded';
+            document.getElementById(`s-${t}`).classList.add('u');
+            uc();
+        }
+        
+        function rf(t){
+            S[t]={f:null,a:false,r:null};
+            document.getElementById(`p-${t}`).style.display='block';
+            document.getElementById(`i-${t}`).classList.remove('s');
+            document.getElementById(`f-${t}`).value='';
+            document.getElementById(`r-${t}`).classList.remove('s');
+            document.getElementById(`s-${t}`).textContent='Belum Upload';
+            document.getElementById(`s-${t}`).classList.remove('u');
+            uc();
+        }
+        
+        function uc(){
+            const c=T.filter(t=>S[t].f).length;
+            document.getElementById('uc').textContent=c;
+            document.getElementById('ba').disabled=!(c>0&&G.k);
+            document.getElementById('aw').style.display=(c>0&&G.k)?'none':'block';
+            document.getElementById('ag').style.display=(c>0&&G.k)?'block':'none';
+            if(c>0&&!G.k)document.getElementById('aw').textContent='⚠️ Upload selesai! Setup Groq API Key sekarang.';
+        }
+        
+        async function ax(t){
+            if(!G.k)return alert('Setup API Key dulu!'),tc();
+            if(!S[t].f)return;
             
-            const content = document.createElement('div');
-            content.className = 'message-content';
-            content.innerHTML = message.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            document.getElementById(`s-${t}`).textContent='⏳ Analyzing...';
+            document.getElementById(`b-${t}`).classList.add('s');
             
-            const time = document.createElement('span');
-            time.className = 'timestamp';
-            time.textContent = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
-            
-            div.appendChild(content);
-            div.appendChild(time);
-            container.appendChild(div);
-            container.scrollTop = container.scrollHeight;
-        }
-
-        // Utility functions
-        function delay(ms) {
-            return new Promise(resolve => setTimeout(resolve, ms));
-        }
-
-        function autoResize(textarea) {
-            textarea.style.height = 'auto';
-            textarea.style.height = Math.min(textarea.scrollHeight, 120) + 'px';
-        }
-
-        function handleKeyPress(event) {
-            if (event.key === 'Enter' && !event.shiftKey) {
-                event.preventDefault();
-                sendMessage();
+            for(let i=0;i<=100;i+=25){
+                document.getElementById(`bf-${t}`).style.width=i+'%';
+                await new Promise(r=>setTimeout(r,300));
             }
-        }
-
-        // Drag and drop setup
-        function setupDragAndDrop() {
-            const types = ['sop', 'compliance', 'kpi', 'culture', 'strategic'];
             
-            types.forEach(type => {
-                const area = document.getElementById(`upload-area-${type}`);
+            try{
+                const q=`Analisis dokumen ${N[t]} berikut. Berikan: 1) Score 0-100, 2) 3 temuan utama, 3) 3 rekomendasi. Format: Score: [X]/100\n\nTemuan:\n- ...\n\nRekomendasi:\n- ...`;
                 
-                area.addEventListener('dragover', (e) => {
-                    e.preventDefault();
-                    area.classList.add('dragover');
+                const x=await fetch(G.e,{
+                    method:'POST',
+                    headers:{'Authorization':`Bearer ${G.k}`,'Content-Type':'application/json'},
+                    body:JSON.stringify({model:G.m,messages:[{role:'system',content:Y},{role:'user',content:q}],max_tokens:1500})
                 });
                 
-                area.addEventListener('dragleave', () => {
-                    area.classList.remove('dragover');
+                if(!x.ok)throw new Error('API Error');
+                
+                const d=await x.json();
+                const r=d.choices[0].message.content;
+                
+                // Extract score
+                let sc=75;
+                const m=r.match(/(\d{2,3})\s*\/\s*100/);
+                if(m)sc=parseInt(m[1]);
+                
+                S[t].r={s:sc,c:r};
+                S[t].a=true;
+                
+                document.getElementById(`sc-${t}`).textContent=sc+'/100';
+                document.getElementById(`rc-${t}`).innerHTML=r.replace(/\n/g,'<br>').replace(/\*\*(.*?)\*\*/g,'<b>$1</b>');
+                document.getElementById(`r-${t}`).classList.add('s');
+                document.getElementById(`s-${t}`).textContent='✅ Analyzed';
+                document.getElementById(`b-${t}`).classList.remove('s');
+                
+            }catch(e){
+                alert('Error: '+e.message);
+                document.getElementById(`s-${t}`).textContent='❌ Error';
+                document.getElementById(`b-${t}`).classList.remove('s');
+            }
+        }
+        
+        async function aa(){
+            for(const t of T){
+                if(S[t].f&&!S[t].a){
+                    await ax(t);
+                    await new Promise(r=>setTimeout(r,1000));
+                }
+            }
+            gm();
+        }
+        
+        function gm(){
+            const a=T.filter(t=>S[t].a);
+            if(!a.length)return;
+            
+            const ts=a.reduce((s,t)=>s+S[t].r.s,0);
+            const avg=Math.round(ts/a.length);
+            
+            let h=`<div style="margin-bottom:15px"><b>Overall Score: ${avg}/100</b><div style="background:#e5e7eb;height:8px;border-radius:4px;margin-top:5px"><div style="background:linear-gradient(90deg,var(--p),var(--s));height:100%;width:${avg}%;border-radius:4px"></div></div></div>`;
+            h+=`<p><b>📊 Detail:</b></p><ul style="margin-left:20px;line-height:2">`;
+            a.forEach(t=>h+=`<li><b>${N[t]}:</b> ${S[t].r.s}/100</li>`);
+            h+=`</ul><p style="margin-top:15px"><b>🎯 Rekomendasi:</b></p><ol style="margin-left:20px;line-height:1.8"><li>Fokus pada area score terendah</li><li>Integrasikan sistem yang terhubung</li><li>Digitalisasi semua dokumen</li></ol>`;
+            
+            document.getElementById('mr').innerHTML=h;
+            document.getElementById('mr').style.display='block';
+        }
+        
+        function gr(){
+            const a=T.filter(t=>S[t].a);
+            if(!a.length)return alert('Belum ada analisis!');
+            
+            let r='ISLA ANALYSIS REPORT\n'+'='.repeat(30)+'\n\n';
+            a.forEach(t=>{
+                r+=`[${N[t]}]\nFile: ${S[t].f.name}\nScore: ${S[t].r.s}/100\n\n${S[t].r.c}\n\n${'='.repeat(30)}\n\n`;
+            });
+            
+            const b=new Blob([r],{type:'text/plain'});
+            const u=URL.createObjectURL(b);
+            const e=document.createElement('a');
+            e.href=u;
+            e.download=`ISLA_Report_${new Date().toISOString().split('T')[0]}.txt`;
+            e.click();
+            URL.revokeObjectURL(u);
+        }
+        
+        function ca(){
+            if(!confirm('Hapus semua?'))return;
+            T.forEach(t=>rf(t));
+            document.getElementById('mr').style.display='none';
+        }
+        
+        async function sm(){
+            const i=document.getElementById('ui');
+            const m=i.value.trim();
+            if(!m)return;
+            if(!G.k)return alert('Setup API Key dulu!');
+            
+            i.value='';
+            ad('u',m);
+            
+            document.getElementById('ti').style.display='flex';
+            
+            const a=T.filter(t=>S[t].a);
+            let ctx=m;
+            if(a.length){
+                ctx='Dokumen yang dianalisis:\n';
+                a.forEach(t=>ctx+=`- ${N[t]}: ${S[t].r.s}/100\n`);
+                ctx+='\nPertanyaan: '+m;
+            }
+            
+            try{
+                const x=await fetch(G.e,{
+                    method:'POST',
+                    headers:{'Authorization':`Bearer ${G.k}`,'Content-Type':'application/json'},
+                    body:JSON.stringify({model:G.m,messages:[{role:'system',content:Y},{role:'user',content:ctx}]})
                 });
                 
-                area.addEventListener('drop', (e) => {
-                    e.preventDefault();
-                    area.classList.remove('dragover');
-                    
-                    const files = e.dataTransfer.files;
-                    if (files.length > 0) {
-                        handleFileSelect(type, files[0]);
-                    }
-                });
-            });
+                const d=await x.json();
+                ad('a',d.choices[0].message.content);
+            }catch(e){
+                ad('a','❌ Error: '+e.message);
+            }
+            
+            document.getElementById('ti').style.display='none';
         }
-
-        // Smooth scroll
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
+        
+        function ad(s,t){
+            const d=document.createElement('div');
+            d.className='msg '+(s=='a'?'a':'u');
+            d.innerHTML=t.replace(/\n/g,'<br>').replace(/\*\*(.*?)\*\*/g,'<b>$1</b>');
+            document.getElementById('cm').appendChild(d);
+            document.getElementById('cm').scrollTop=document.getElementById('cm').scrollHeight;
+        }
+        
+        function tc(){
+            const p=document.getElementById('cp');
+            p.classList.toggle('s');
+        }
+        
+        async function sc(){
+            const k=document.getElementById('ak').value.trim();
+            if(!k.startsWith('gsk_'))return alert('Key harus dimulai gsk_!');
+            
+            G.k=k;
+            G.m=document.getElementById('sm').value;
+            localStorage.setItem('gk',k);
+            localStorage.setItem('gm',G.m);
+            
+            document.getElementById('st').className='st';
+            document.getElementById('st').textContent='Testing...';
+            
+            try{
+                const x=await fetch(G.e,{
+                    method:'POST',
+                    headers:{'Authorization':`Bearer ${k}`,'Content-Type':'application/json'},
+                    body:JSON.stringify({model:G.m,messages:[{role:'user',content:'Hi'}],max_tokens:5})
+                });
+                
+                if(x.ok){
+                    document.getElementById('st').className='st x';
+                    document.getElementById('st').textContent='✅ Terhubung ke Groq!';
+                    document.getElementById('as').textContent='● Online';
+                    document.getElementById('pb').style.display='inline';
+                    uc();
+                }else{
+                    throw new Error('Invalid key');
+                }
+            }catch(e){
+                document.getElementById('st').className='st e';
+                document.getElementById('st').textContent='❌ '+e.message;
+            }
+        }
+        
+        function cc(){
+            if(confirm('Hapus chat?'))document.getElementById('cm').innerHTML='<div class="msg a">Chat dibersihkan.</div>';
+        }
+        
+        function kp(e){
+            if(e.key==='Enter'&&!e.shiftKey){
                 e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) target.scrollIntoView({ behavior: 'smooth' });
+                sm();
+            }
+        }
+        
+        function rs(t){
+            t.style.height='auto';
+            t.style.height=Math.min(t.scrollHeight,120)+'px';
+        }
+        
+        // Drag drop
+        document.addEventListener('DOMContentLoaded',()=>{
+            init();
+            T.forEach(t=>{
+                const a=document.getElementById(`u-${t}`);
+                a.addEventListener('dragover',e=>{
+                    e.preventDefault();
+                    a.style.borderColor='var(--g)';
+                    a.style.background='#f0fdf4';
+                });
+                a.addEventListener('dragleave',()=>{
+                    a.style.borderColor='#e5e7eb';
+                    a.style.background='transparent';
+                });
+                a.addEventListener('drop',e=>{
+                    e.preventDefault();
+                    a.style.borderColor='#e5e7eb';
+                    a.style.background='transparent';
+                    if(e.dataTransfer.files.length)hf(t,e.dataTransfer.files[0]);
+                });
             });
         });
     </script>
