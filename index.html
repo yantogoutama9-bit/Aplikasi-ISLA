@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ISLA AI Review</title>
+    <title>ISLA - AI Document Review</title>
     <style>
         *{margin:0;padding:0;box-sizing:border-box}
-        :root{--p:#667eea;--s:#764ba2;--d:#1f2937;--l:#6b7280;--g:#10b981;--r:#ef4444}
+        :root{--p:#667eea;--s:#764ba2;--d:#1f2937;--l:#6b7280;--g:#10b981;--r:#ef4444;--w:#f59e0b}
         body{font-family:system-ui,sans-serif;background:#f9fafb;color:var(--d);line-height:1.6}
         .c{max-width:1200px;margin:0 auto;padding:0 20px}
         nav{background:linear-gradient(135deg,var(--p)0%,var(--s)100%);padding:1rem;position:fixed;width:100%;top:0;z-index:1000}
@@ -19,37 +19,45 @@
         .uc{background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 4px 15px rgba(0,0,0,0.1)}
         .uh{background:linear-gradient(135deg,var(--p)0%,var(--s)100%);color:#fff;padding:20px;position:relative}
         .uh h3{font-size:1.1rem}
-        .us{position:absolute;top:15px;right:15px;background:rgba(255,255,255,0.2);padding:4px 10px;border-radius:12px;font-size:0.7rem}
-        .us.u{background:var(--g)}
+        .us{position:absolute;top:15px;right:15px;background:rgba(255,255,255,0.2);padding:4px 10px;border-radius:12px;font-size:0.7rem;font-weight:600}
+        .us.u{background:var(--g);color:#fff}
+        .us.a{background:var(--w);color:#fff;animation:pulse 2s infinite}
+        @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
         .ucn{padding:20px}
-        .ua{border:2px dashed #e5e7eb;border-radius:12px;padding:30px;text-align:center;cursor:pointer;position:relative}
-        .ua:hover{border-color:var(--p);background:#f0f4ff}
-        .uph{pointer-events:none}
-        .uph i{font-size:2.5rem;margin-bottom:10px;opacity:0.5}
-        .fi{display:none}
+        .ua{border:2px dashed #e5e7eb;border-radius:12px;padding:30px;text-align:center;transition:all 0.3s;position:relative;min-height:150px}
+        .ua.drag{border-color:var(--g);background:#f0fdf4;transform:scale(1.02)}
+        .ua.has{border-color:var(--g);background:#f0fdf4}
+        .uph{display:block}
+        .uph i{font-size:2.5rem;margin-bottom:10px;opacity:0.5;display:block}
+        .fi{display:none;text-align:center}
         .fi.s{display:block}
-        .fn{font-weight:600;word-break:break-all;margin-bottom:5px}
-        .fs{color:var(--l);font-size:0.8rem;margin-bottom:10px}
-        .btn{background:linear-gradient(135deg,var(--p)0%,var(--s)100%);color:#fff;border:none;padding:8px 16px;border-radius:6px;cursor:pointer;font-size:0.85rem;margin:2px}
+        .fn{font-weight:600;word-break:break-all;margin-bottom:5px;color:var(--d)}
+        .fs{color:var(--l);font-size:0.8rem;margin-bottom:15px}
+        .fb{display:flex;gap:8px;justify-content:center}
+        .btn{background:linear-gradient(135deg,var(--p)0%,var(--s)100%);color:#fff;border:none;padding:8px 16px;border-radius:6px;cursor:pointer;font-size:0.85rem;font-weight:500;transition:transform 0.2s}
+        .btn:hover{transform:translateY(-2px)}
         .btn.r{background:var(--r)}
-        .ar{margin-top:15px;padding:15px;background:#f9fafb;border-radius:8px;border-left:3px solid var(--p);display:none}
+        .btn:disabled{opacity:0.6;cursor:not-allowed;transform:none}
+        .ar{margin-top:15px;padding:15px;background:#f9fafb;border-radius:8px;border-left:3px solid var(--p);display:none;text-align:left}
         .ar.s{display:block}
-        .as{background:linear-gradient(135deg,var(--p)0%,var(--s)100%);color:#fff;padding:3px 10px;border-radius:12px;font-weight:bold}
+        .ash{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+        .as{background:linear-gradient(135deg,var(--p)0%,var(--s)100%);color:#fff;padding:3px 12px;border-radius:12px;font-weight:bold}
         .pb{height:4px;background:#e5e7eb;border-radius:2px;margin:10px 0;overflow:hidden;display:none}
         .pb.s{display:block}
         .pf{height:100%;background:linear-gradient(90deg,var(--p),var(--s));width:0%;transition:width 0.3s}
         .ma{background:#f3f4f6;padding:40px 0}
         .mc{background:#fff;border-radius:16px;padding:30px;box-shadow:0 4px 20px rgba(0,0,0,0.1)}
-        .al{padding:12px;border-radius:8px;margin-bottom:15px;display:none}
+        .al{padding:12px 15px;border-radius:8px;margin-bottom:15px;display:none;font-size:0.9rem}
         .al.s{display:block}
-        .al.w{background:#fef3c7;border-left:3px solid #f59e0b;color:#92400e}
+        .al.w{background:#fef3c7;border-left:3px solid var(--w);color:#92400e}
         .al.g{background:#d1fae5;border-left:3px solid var(--g);color:#065f46}
         .aic{background:linear-gradient(135deg,var(--p)0%,var(--s)100%);border-radius:16px;overflow:hidden;max-width:800px;margin:0 auto}
         .ch{background:rgba(255,255,255,0.1);padding:15px 20px;display:flex;align-items:center;gap:10px}
         .cm{height:350px;overflow-y:auto;padding:20px;background:rgba(255,255,255,0.95);display:flex;flex-direction:column;gap:10px}
-        .msg{max-width:80%;padding:12px 16px;border-radius:12px;box-shadow:0 2px 5px rgba(0,0,0,0.1)}
+        .msg{max-width:80%;padding:12px 16px;border-radius:12px;box-shadow:0 2px 5px rgba(0,0,0,0.1);line-height:1.5}
         .msg.a{align-self:flex-start;background:linear-gradient(135deg,var(--p)0%,var(--s)100%);color:#fff}
         .msg.u{align-self:flex-end;background:#f3f4f6}
+        .ts{font-size:0.75rem;color:#9ca3af;margin-top:4px;display:block}
         .ti{display:flex;align-items:center;gap:5px;padding:10px 20px;background:rgba(255,255,255,0.95)}
         .ti span{width:8px;height:8px;background:var(--p);border-radius:50%;animation:b 1.4s infinite}
         .ti span:nth-child(2){animation-delay:-0.16s}
@@ -57,18 +65,31 @@
         @keyframes b{0%,80%,100%{transform:scale(0)}40%{transform:scale(1)}}
         .ci{padding:15px 20px;background:#fff;border-top:1px solid #e5e7eb}
         .iw{display:flex;gap:8px;background:#f3f4f6;border-radius:20px;padding:4px}
-        #ui{flex:1;border:none;background:transparent;padding:10px 15px;outline:none;resize:none;max-height:100px}
-        .sb{background:linear-gradient(135deg,var(--p)0%,var(--s)100%);color:#fff;border:none;width:36px;height:36px;border-radius:50%;cursor:pointer}
+        .iw:focus-within{background:#fff;box-shadow:0 0 0 2px var(--p)}
+        #ui{flex:1;border:none;background:transparent;padding:10px 15px;outline:none;resize:none;max-height:100px;font-family:inherit}
+        .sb{background:linear-gradient(135deg,var(--p)0%,var(--s)100%);color:#fff;border:none;width:36px;height:36px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform 0.2s}
+        .sb:hover{transform:scale(1.05)}
         .cp{background:#f9fafb;border-top:1px solid #e5e7eb}
-        .ct{width:100%;padding:12px;border:none;background:transparent;cursor:pointer;color:var(--l)}
-        .cpn{padding:15px;background:#fff;display:none}
+        .ct{width:100%;padding:12px;border:none;background:transparent;cursor:pointer;color:var(--l);display:flex;align-items:center;justify-content:center;gap:8px}
+        .ct:hover{background:#f3f4f6}
+        .cpn{padding:20px;background:#fff;display:none}
         .cpn.s{display:block}
-        input,select{width:100%;padding:10px;border:1px solid #e5e7eb;border-radius:6px;margin-top:5px}
-        .ss{background:linear-gradient(135deg,var(--p)0%,var(--s)100%);color:#fff;border:none;padding:10px 20px;border-radius:6px;cursor:pointer;margin-top:10px}
-        .st{margin-top:8px;font-size:0.8rem;padding:6px;border-radius:4px}
+        .f{margin-bottom:15px}
+        .f label{display:block;font-size:0.9rem;font-weight:500;margin-bottom:5px;color:var(--d)}
+        .f input,.f select{width:100%;padding:10px;border:2px solid #e5e7eb;border-radius:8px;font-size:0.9rem;transition:border-color 0.2s}
+        .f input:focus,.f select:focus{outline:none;border-color:var(--p)}
+        .ss{background:linear-gradient(135deg,var(--p)0%,var(--s)100%);color:#fff;border:none;padding:12px 25px;border-radius:8px;cursor:pointer;font-size:0.95rem;font-weight:500;width:100%}
+        .ss:hover{transform:translateY(-2px)}
+        .st{margin-top:10px;font-size:0.85rem;padding:8px;border-radius:6px;display:none}
+        .st.s{display:block}
         .st.x{background:#d1fae5;color:#065f46}
         .st.e{background:#fee2e2;color:#991b1b}
+        .info{background:#fef3c7;padding:12px;border-radius:8px;margin-bottom:15px;font-size:0.85rem;line-height:1.6}
+        .info a{color:#b45309;font-weight:600}
         footer{background:var(--d);color:#fff;padding:30px 0;text-align:center;margin-top:40px}
+        .hint{display:inline-flex;background:#e0e7ff;color:#4338ca;padding:6px 12px;border-radius:15px;font-size:0.8rem;cursor:pointer;margin:2px;transition:all 0.2s}
+        .hint:hover{background:#c7d2fe;transform:translateY(-1px)}
+        .hints{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;justify-content:center}
     </style>
 </head>
 <body>
@@ -77,70 +98,96 @@
     <div class="h"><div class="c"><h1>ISLA AI Document Review</h1><p>Upload 5 dokumen untuk analisis AI dengan Groq</p></div></div>
     
     <div class="s"><div class="c">
-        <div class="sh"><h2>📁 Upload 5 Dokumen</h2></div>
+        <div class="sh"><h2>📁 Upload 5 Dokumen Organisasi</h2></div>
         <div class="ug" id="ug"></div>
     </div></div>
     
     <div class="ma"><div class="c">
         <div class="mc">
-            <div class="sh"><h3>🚀 Analisis Komprehensif</h3><p>Dokumen: <b id="uc">0</b>/5</p></div>
+            <div class="sh"><h3>🚀 Analisis Komprehensif</h3><p>Dokumen diupload: <b id="uc">0</b>/5</p></div>
             <div class="al w" id="aw">⚠️ Upload minimal 1 dokumen & setup Groq API</div>
-            <div class="al g" id="ag" style="display:none">✅ Siap untuk analisis!</div>
+            <div class="al g" id="ag">✅ Siap untuk analisis AI!</div>
             <div style="text-align:center;margin-top:20px">
-                <button class="btn" id="ba" onclick="aa()" disabled>🔍 Analisis Semua</button>
-                <button class="btn" onclick="gr()">📄 Report</button>
-                <button class="btn r" onclick="ca()">🗑️ Clear</button>
+                <button class="btn" id="ba" onclick="aa()" disabled>🔍 Analisis Semua dengan AI</button>
+                <button class="btn" onclick="gr()" style="background:#6b7280">📄 Generate Report</button>
+                <button class="btn r" onclick="ca()">🗑️ Hapus Semua</button>
             </div>
             <div id="mr" style="margin-top:20px;display:none"></div>
         </div>
     </div></div>
     
     <div class="s"><div class="c">
-        <div class="sh"><h2>💬 AI Assistant</h2></div>
+        <div class="sh"><h2>💬 ISLA AI Assistant</h2></div>
         <div class="aic">
             <div class="ch">
-                <div style="width:40px;height:40px;background:#f093fb;border-radius:50%;display:flex;align-items:center;justify-content:center">🤖</div>
-                <div><h3 style="color:#fff;margin:0">ISLA AI</h3><span id="as">Online</span></div>
-                <span id="pb" style="display:none;background:#fbbf24;color:#92400e;padding:2px 8px;border-radius:8px;font-size:0.7rem">⚡ Groq</span>
-                <button onclick="cc()" style="margin-left:auto;background:rgba(255,255,255,0.2);border:none;color:#fff;padding:6px 10px;border-radius:6px;cursor:pointer">🗑️</button>
+                <div style="width:40px;height:40px;background:#f093fb;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.2rem">🤖</div>
+                <div>
+                    <h3 style="color:#fff;margin:0;font-size:1.1rem">ISLA AI Assistant</h3>
+                    <span id="as" style="color:#4ade80;font-size:0.8rem">● Online</span>
+                </div>
+                <span id="pb" style="display:none;background:#fbbf24;color:#92400e;padding:2px 8px;border-radius:8px;font-size:0.7rem;font-weight:600">⚡ Groq AI</span>
+                <button onclick="cc()" style="margin-left:auto;background:rgba(255,255,255,0.2);border:none;color:#fff;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:0.8rem">🗑️ Clear</button>
             </div>
             <div class="cm" id="cm">
-                <div class="msg a">Selamat datang! Upload dokumen dan setup Groq API Key (gratis di console.groq.com) untuk mulai analisis.</div>
+                <div class="msg a">
+                    <div>Selamat datang! Saya adalah ISLA AI Assistant. 🎯</div>
+                    <div style="margin-top:8px;font-size:0.9rem;opacity:0.9">Upload 5 dokumen (SOP, Compliance, KPI, Culture, Strategic) dan setup Groq API Key untuk analisis lengkap.</div>
+                    <span class="ts" id="wt"></span>
+                </div>
             </div>
-            <div class="ti" id="ti" style="display:none"><span></span><span></span><span></span> AI menganalisis...</div>
+            <div class="ti" id="ti" style="display:none"><span></span><span></span><span></span><span style="margin-left:5px;font-size:0.9rem;color:var(--l)">AI menganalisis...</span></div>
             <div class="ci">
                 <div class="iw">
-                    <textarea id="ui" placeholder="Tanya tentang dokumen..." onkeypress="kp(event)" oninput="rs(this)"></textarea>
+                    <textarea id="ui" placeholder="Tanyakan tentang hasil analisis dokumen Anda..." rows="1" onkeypress="kp(event)" oninput="rs(this)"></textarea>
                     <button class="sb" onclick="sm()">➤</button>
+                </div>
+                <div class="hints">
+                    <span class="hint" onclick="sh('Detail hasil analisis SOP saya')">💡 Detail SOP</span>
+                    <span class="hint" onclick="sh('Cara meningkatkan compliance score')">💡 Improve</span>
+                    <span class="hint" onclick="sh('Buatkan action plan lengkap')">💡 Action Plan</span>
+                    <span class="hint" onclick="sh('Analisis gap antar dokumen')">💡 Gap Analysis</span>
                 </div>
             </div>
             <div class="cp">
-                <button class="ct" onclick="tc()">⚙️ Setup Groq API ▼</button>
+                <button class="ct" onclick="tc()">⚙️ Konfigurasi Groq API (Gratis) <span id="ca">▼</span></button>
                 <div class="cpn" id="cp">
-                    <div style="background:#fef3c7;padding:10px;border-radius:6px;margin-bottom:10px;font-size:0.85rem">
+                    <div class="info">
+                        <b>🚀 Cara mendapatkan API Key (Gratis):</b><br>
                         1. Buka <a href="https://console.groq.com" target="_blank">console.groq.com</a><br>
-                        2. Sign up dengan Google/Email<br>
-                        3. Create API Key (format: gsk_...)<br>
-                        4. Paste di bawah & Simpan
+                        2. Sign up dengan Google/Email (1 menit)<br>
+                        3. Klik "API Keys" → "Create API Key"<br>
+                        4. Copy key (format: <b>gsk_...</b>)<br>
+                        5. Paste di bawah & klik Simpan
                     </div>
-                    <input type="password" id="ak" placeholder="gsk_...">
-                    <select id="sm" style="margin-top:10px">
-                        <option value="llama-3.3-70b-versatile">Llama 3.3 70B (Recommended)</option>
-                        <option value="llama-3.1-8b-instant">Llama 3.1 8B (Cepat)</option>
-                    </select>
-                    <button class="ss" onclick="sc()">💾 Simpan & Test</button>
-                    <div id="st"></div>
+                    <div class="f">
+                        <label>Groq API Key:</label>
+                        <input type="password" id="ak" placeholder="gsk_... (contoh: gsk_aBc123XyZ...)">
+                    </div>
+                    <div class="f">
+                        <label>Model AI:</label>
+                        <select id="sm">
+                            <option value="llama-3.3-70b-versatile">Llama 3.3 70B (Recommended - Cerdas)</option>
+                            <option value="llama-3.1-8b-instant">Llama 3.1 8B (Super Cepat)</option>
+                            <option value="mixtral-8x7b-32768">Mixtral 8x7B (Multilingual)</option>
+                            <option value="gemma-2-9b-it">Gemma 2 9B (Ringan)</option>
+                        </select>
+                    </div>
+                    <button class="ss" onclick="sc()">💾 Simpan & Hubungkan ke Groq</button>
+                    <div class="st" id="st"></div>
+                    <div style="margin-top:12px;padding:10px;background:#f0fdf4;border-radius:6px;font-size:0.8rem;color:#065f46">
+                        ✅ Gratis tier • Response &lt;1 detik • Tanpa credit card
+                    </div>
                 </div>
             </div>
         </div>
     </div></div>
     
-    <footer><div class="c"><p>&copy; 2026 ISLA - Powered by Groq AI</p></div></footer>
+    <footer><div class="c"><p>&copy; 2026 ISLA - Integrated Strategic Leadership Architecture</p><p style="font-size:0.8rem;margin-top:5px">Powered by Groq AI</p></div></footer>
 
     <script>
+        // Data
         const T=['sop','compliance','kpi','culture','strategic'];
-        const N={sop:'SOP',compliance:'Compliance',kpi:'KPI',culture:'Culture',strategic:'Strategic'};
-        const I={sop:'📋',compliance:'⚖️',kpi:'📊',culture:'🏢',strategic:'🎯'};
+        const N={sop:'📋 SOP',compliance:'⚖️ Compliance',kpi:'📊 KPI',culture:'🏢 Culture',strategic:'🎯 Strategic'};
         
         let S={};
         T.forEach(t=>S[t]={f:null,a:false,r:null});
@@ -151,88 +198,227 @@
             e:'https://api.groq.com/openai/v1/chat/completions'
         };
         
-        const Y=`Anda adalah ISLA AI Assistant. Analisis dokumen organisasi dengan profesional.`;
+        const Y=`Anda adalah ISLA AI Strategic Assistant. Analisis dokumen organisasi dengan profesional dan berikan rekomendasi actionable.`;
         
+        // Init
         function init(){
+            const c=document.getElementById('ug');
             let h='';
             T.forEach(t=>{
                 h+=`<div class="uc" id="c-${t}">
-                    <div class="uh"><h3>${I[t]} ${N[t]}</h3><span class="us" id="s-${t}>Belum Upload</span></div>
+                    <div class="uh">
+                        <h3>${N[t]}</h3>
+                        <span class="us" id="s-${t}">Belum Upload</span>
+                    </div>
                     <div class="ucn">
-                        <div class="ua" id="u-${t}" onclick="document.getElementById('f-${t}').click()">
-                            <input type="file" id="f-${t}" style="display:none" accept=".pdf,.doc,.docx,.xls,.xlsx,.txt" onchange="hf('${t}',this.files[0])">
-                            <div class="uph" id="p-${t}"><div style="font-size:2.5rem;margin-bottom:10px">📤</div><h4>Drop file di sini</h4><p>atau klik browse</p></div>
-                            <div class="fi" id="i-${t}"><div style="font-size:2rem">📄</div><div class="fn" id="n-${t}"></div><div class="fs" id="z-${t}"></div><button class="btn" onclick="ax('${t}');event.stopPropagation()">🔍 Analisis</button><button class="btn r" onclick="rf('${t}');event.stopPropagation()">Hapus</button></div>
+                        <div class="ua" id="u-${t}">
+                            <input type="file" id="f-${t}" style="display:none" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt" onchange="hf('${t}',this.files[0])">
+                            <div class="uph" id="p-${t}">
+                                <span style="font-size:3rem;display:block;margin-bottom:10px">📤</span>
+                                <h4>Drop file ${t} di sini</h4>
+                                <p style="color:var(--l);font-size:0.9rem;margin-top:5px">atau klik untuk browse</p>
+                            </div>
+                            <div class="fi" id="i-${t}">
+                                <div style="font-size:2.5rem;margin-bottom:8px">📄</div>
+                                <div class="fn" id="n-${t}"></div>
+                                <div class="fs" id="z-${t}"></div>
+                                <div class="fb">
+                                    <button class="btn" onclick="event.stopPropagation();ax('${t}')">🔍 Analisis AI</button>
+                                    <button class="btn r" onclick="event.stopPropagation();rf('${t}')">Hapus</button>
+                                </div>
+                            </div>
                         </div>
                         <div class="pb" id="b-${t}"><div class="pf" id="bf-${t}"></div></div>
-                        <div class="ar" id="r-${t}"><div style="display:flex;justify-content:space-between;margin-bottom:10px"><b>📊 Hasil Analisis</b><span class="as" id="sc-${t}">0/100</span></div><div id="rc-${t}"></div></div>
+                        <div class="ar" id="r-${t}">
+                            <div class="ash">
+                                <span>📊 Hasil Analisis</span>
+                                <span class="as" id="sc-${t}">0/100</span>
+                            </div>
+                            <div id="rc-${t}" style="font-size:0.9rem;color:var(--l);line-height:1.6"></div>
+                        </div>
                     </div>
                 </div>`;
             });
-            document.getElementById('ug').innerHTML=h;
+            c.innerHTML=h;
             
+            // Setup events
+            T.forEach(t=>{
+                const u=document.getElementById(`u-${t}`);
+                const f=document.getElementById(`f-${t}`);
+                
+                // Click area to open file dialog
+                u.addEventListener('click',(e)=>{
+                    if(e.target===u||e.target.closest('.uph'))f.click();
+                });
+                
+                // Drag & drop
+                u.addEventListener('dragenter',(e)=>{
+                    e.preventDefault();
+                    e.stopPropagation();
+                    u.classList.add('drag');
+                });
+                u.addEventListener('dragover',(e)=>{
+                    e.preventDefault();
+                    e.stopPropagation();
+                    u.classList.add('drag');
+                });
+                u.addEventListener('dragleave',(e)=>{
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if(e.relatedTarget&&!u.contains(e.relatedTarget))u.classList.remove('drag');
+                });
+                u.addEventListener('drop',(e)=>{
+                    e.preventDefault();
+                    e.stopPropagation();
+                    u.classList.remove('drag');
+                    const files=e.dataTransfer.files;
+                    if(files&&files.length>0){
+                        hf(t,files[0]);
+                    }
+                });
+            });
+            
+            // Load saved config
             if(G.k){
                 document.getElementById('ak').value=G.k;
                 document.getElementById('sm').value=G.m;
-                tc();
+                document.getElementById('pb').style.display='inline';
+                document.getElementById('as').textContent='● Online (Groq)';
+                document.getElementById('as').style.color='#fbbf24';
             }
+            
+            document.getElementById('wt').textContent=new Date().toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});
             uc();
         }
         
+        // Handle file
         function hf(t,f){
-            if(!f||f.size>10*1024*1024)return alert('Max 10MB');
+            if(!f)return;
+            if(f.size>10*1024*1024){
+                alert('File terlalu besar! Maksimal 10MB.');
+                return;
+            }
+            
             S[t].f=f;
+            
+            // Update UI
             document.getElementById(`p-${t}`).style.display='none';
             document.getElementById(`i-${t}`).classList.add('s');
             document.getElementById(`n-${t}`).textContent=f.name;
-            document.getElementById(`z-${t}`).textContent=(f.size/1024).toFixed(1)+' KB';
-            document.getElementById(`s-${t}`).textContent='✅ Uploaded';
-            document.getElementById(`s-${t}`).classList.add('u');
+            document.getElementById(`z-${t}`).textContent=formatSize(f.size);
+            document.getElementById(`u-${t}`).classList.add('has');
+            
+            const s=document.getElementById(`s-${t}`);
+            s.textContent='✅ Uploaded';
+            s.classList.add('u');
+            
             uc();
         }
         
+        // Remove file
         function rf(t){
             S[t]={f:null,a:false,r:null};
+            
             document.getElementById(`p-${t}`).style.display='block';
             document.getElementById(`i-${t}`).classList.remove('s');
             document.getElementById(`f-${t}`).value='';
+            document.getElementById(`u-${t}`).classList.remove('has');
             document.getElementById(`r-${t}`).classList.remove('s');
-            document.getElementById(`s-${t}`).textContent='Belum Upload';
-            document.getElementById(`s-${t}`).classList.remove('u');
+            
+            const s=document.getElementById(`s-${t}`);
+            s.textContent='Belum Upload';
+            s.classList.remove('u','a');
+            
             uc();
         }
         
+        // Format size
+        function formatSize(b){
+            if(b===0)return'0 Bytes';
+            const k=1024;
+            const sizes=['Bytes','KB','MB'];
+            const i=Math.floor(Math.log(b)/Math.log(k));
+            return parseFloat((b/Math.pow(k,i)).toFixed(1))+' '+sizes[i];
+        }
+        
+        // Update counter
         function uc(){
             const c=T.filter(t=>S[t].f).length;
             document.getElementById('uc').textContent=c;
-            document.getElementById('ba').disabled=!(c>0&&G.k);
-            document.getElementById('aw').style.display=(c>0&&G.k)?'none':'block';
-            document.getElementById('ag').style.display=(c>0&&G.k)?'block':'none';
-            if(c>0&&!G.k)document.getElementById('aw').textContent='⚠️ Upload selesai! Setup Groq API Key sekarang.';
+            
+            const ready=c>0&&G.k;
+            document.getElementById('ba').disabled=!ready;
+            document.getElementById('aw').style.display=ready?'none':'block';
+            document.getElementById('ag').style.display=ready?'block':'none';
+            
+            if(c>0&&!G.k){
+                document.getElementById('aw').innerHTML='⚠️ <b>Upload selesai!</b> Sekarang setup Groq API Key untuk mengaktifkan analisis AI.';
+            }else if(c===0){
+                document.getElementById('aw').innerHTML='⚠️ Upload minimal 1 dokumen dan konfigurasi Groq API Key untuk mengaktifkan analisis AI.';
+            }
         }
         
+        // Analyze single
         async function ax(t){
-            if(!G.k)return alert('Setup API Key dulu!'),tc();
+            if(!G.k){
+                alert('Silakan konfigurasi Groq API Key terlebih dahulu!');
+                tc();
+                document.getElementById('ak').focus();
+                return;
+            }
             if(!S[t].f)return;
             
-            document.getElementById(`s-${t}`).textContent='⏳ Analyzing...';
+            const s=document.getElementById(`s-${t}`);
+            s.textContent='⏳ Analyzing...';
+            s.classList.add('a');
             document.getElementById(`b-${t}`).classList.add('s');
             
-            for(let i=0;i<=100;i+=25){
+            // Progress animation
+            for(let i=0;i<=90;i+=10){
                 document.getElementById(`bf-${t}`).style.width=i+'%';
-                await new Promise(r=>setTimeout(r,300));
+                await new Promise(r=>setTimeout(r,200));
             }
             
             try{
-                const q=`Analisis dokumen ${N[t]} berikut. Berikan: 1) Score 0-100, 2) 3 temuan utama, 3) 3 rekomendasi. Format: Score: [X]/100\n\nTemuan:\n- ...\n\nRekomendasi:\n- ...`;
+                // Call Groq API
+                const prompt=`Analisis dokumen ${N[t]} untuk organisasi. Berikan:
+1. Score kelengkapan (0-100)
+2. 3-4 temuan utama (kelebihan & kekurangan)
+3. 3-4 rekomendasi perbaikan spesifik
+4. Prioritas action items
+
+Format jawaban:
+**Score: [X]/100**
+
+**Temuan Utama:**
+• ...
+• ...
+
+**Rekomendasi:**
+• ...
+• ...`;
                 
                 const x=await fetch(G.e,{
                     method:'POST',
-                    headers:{'Authorization':`Bearer ${G.k}`,'Content-Type':'application/json'},
-                    body:JSON.stringify({model:G.m,messages:[{role:'system',content:Y},{role:'user',content:q}],max_tokens:1500})
+                    headers:{
+                        'Authorization':`Bearer ${G.k}`,
+                        'Content-Type':'application/json'
+                    },
+                    body:JSON.stringify({
+                        model:G.m,
+                        messages:[
+                            {role:'system',content:Y},
+                            {role:'user',content:prompt}
+                        ],
+                        temperature:0.7,
+                        max_tokens:2000
+                    })
                 });
                 
-                if(!x.ok)throw new Error('API Error');
+                if(!x.ok){
+                    const err=await x.json();
+                    throw new Error(err.error?.message||'API Error');
+                }
                 
                 const d=await x.json();
                 const r=d.choices[0].message.content;
@@ -245,29 +431,44 @@
                 S[t].r={s:sc,c:r};
                 S[t].a=true;
                 
+                // Complete progress
+                document.getElementById(`bf-${t}`).style.width='100%';
+                await new Promise(r=>setTimeout(r,300));
+                
+                // Show result
                 document.getElementById(`sc-${t}`).textContent=sc+'/100';
-                document.getElementById(`rc-${t}`).innerHTML=r.replace(/\n/g,'<br>').replace(/\*\*(.*?)\*\*/g,'<b>$1</b>');
+                document.getElementById(`rc-${t}`).innerHTML=r
+                    .replace(/\*\*(.*?)\*\*/g,'<b>$1</b>')
+                    .replace(/\n/g,'<br>')
+                    .replace(/•/g,'&bull;');
                 document.getElementById(`r-${t}`).classList.add('s');
-                document.getElementById(`s-${t}`).textContent='✅ Analyzed';
+                
+                s.textContent='✅ Analyzed';
+                s.classList.remove('a');
                 document.getElementById(`b-${t}`).classList.remove('s');
+                document.getElementById(`bf-${t}`).style.width='0%';
                 
             }catch(e){
-                alert('Error: '+e.message);
-                document.getElementById(`s-${t}`).textContent='❌ Error';
+                console.error(e);
+                s.textContent='❌ Error';
+                s.classList.remove('a');
                 document.getElementById(`b-${t}`).classList.remove('s');
+                alert('Error analisis: '+e.message+'\n\nPastikan API Key valid dan terhubung internet.');
             }
         }
         
+        // Analyze all
         async function aa(){
             for(const t of T){
                 if(S[t].f&&!S[t].a){
                     await ax(t);
-                    await new Promise(r=>setTimeout(r,1000));
+                    await new Promise(r=>setTimeout(r,1500));
                 }
             }
             gm();
         }
         
+        // Generate master analysis
         function gm(){
             const a=T.filter(t=>S[t].a);
             if(!a.length)return;
@@ -275,22 +476,70 @@
             const ts=a.reduce((s,t)=>s+S[t].r.s,0);
             const avg=Math.round(ts/a.length);
             
-            let h=`<div style="margin-bottom:15px"><b>Overall Score: ${avg}/100</b><div style="background:#e5e7eb;height:8px;border-radius:4px;margin-top:5px"><div style="background:linear-gradient(90deg,var(--p),var(--s));height:100%;width:${avg}%;border-radius:4px"></div></div></div>`;
-            h+=`<p><b>📊 Detail:</b></p><ul style="margin-left:20px;line-height:2">`;
-            a.forEach(t=>h+=`<li><b>${N[t]}:</b> ${S[t].r.s}/100</li>`);
-            h+=`</ul><p style="margin-top:15px"><b>🎯 Rekomendasi:</b></p><ol style="margin-left:20px;line-height:1.8"><li>Fokus pada area score terendah</li><li>Integrasikan sistem yang terhubung</li><li>Digitalisasi semua dokumen</li></ol>`;
+            const names={sop:'SOP',compliance:'Compliance',kpi:'KPI',culture:'Culture',strategic:'Strategic'};
+            
+            let h=`<div style="background:#fff;padding:20px;border-radius:12px">
+                <div style="margin-bottom:20px">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+                        <b style="font-size:1.1rem">Overall Maturity Score</b>
+                        <span style="font-size:1.5rem;font-weight:bold;color:var(--p)">${avg}/100</span>
+                    </div>
+                    <div style="background:#e5e7eb;height:12px;border-radius:6px;overflow:hidden">
+                        <div style="background:linear-gradient(90deg,var(--p),var(--s));height:100%;width:${avg}%;border-radius:6px;transition:width 1s"></div>
+                    </div>
+                </div>
+                
+                <p style="font-weight:600;margin-bottom:12px;color:var(--d)">📊 Detail per Dokumen:</p>
+                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-bottom:20px">`;
+            
+            a.forEach(t=>{
+                const sc=S[t].r.s;
+                const color=sc>=80?'var(--g)':sc>=60?'var(--w)':'var(--r)';
+                h+=`<div style="background:#f9fafb;padding:12px;border-radius:8px;border-left:4px solid ${color}">
+                    <div style="font-size:0.85rem;color:var(--l)">${names[t]}</div>
+                    <div style="font-size:1.3rem;font-weight:bold;color:${color}">${sc}/100</div>
+                </div>`;
+            });
+            
+            h+=`</div>
+                <p style="font-weight:600;margin-bottom:12px;color:var(--d)">🎯 Prioritas Action:</p>
+                <ol style="margin-left:20px;line-height:1.8;color:var(--l)">
+                    <li>Fokus perbaikan pada area dengan score terendah</li>
+                    <li>Integrasikan sistem (SOP ↔ KPI ↔ Strategic)</li>
+                    <li>Digitalisasi dokumen untuk accessibility</li>
+                    <li>Establish quarterly review cycle</li>
+                </ol>
+                <p style="margin-top:15px;font-size:0.85rem;color:var(--l);text-align:center">
+                    💡 Tanyakan detail lebih lanjut ke AI Assistant di bawah
+                </p>
+            </div>`;
             
             document.getElementById('mr').innerHTML=h;
             document.getElementById('mr').style.display='block';
+            document.getElementById('mr').scrollIntoView({behavior:'smooth'});
         }
         
+        // Generate report
         function gr(){
             const a=T.filter(t=>S[t].a);
-            if(!a.length)return alert('Belum ada analisis!');
+            if(!a.length)return alert('Belum ada dokumen yang dianalisis!');
             
-            let r='ISLA ANALYSIS REPORT\n'+'='.repeat(30)+'\n\n';
+            const names={sop:'SOP',compliance:'COMPLIANCE',kpi:'KPI',culture:'CULTURE',strategic:'STRATEGIC'};
+            
+            let r=`╔══════════════════════════════════════════════════════════════╗
+║         ISLA DOCUMENT ANALYSIS REPORT                          ║
+║         Generated: ${new Date().toLocaleString('id-ID')}                    ║
+║         Powered by Groq AI                                     ║
+╚══════════════════════════════════════════════════════════════╝\n\n`;
+            
             a.forEach(t=>{
-                r+=`[${N[t]}]\nFile: ${S[t].f.name}\nScore: ${S[t].r.s}/100\n\n${S[t].r.c}\n\n${'='.repeat(30)}\n\n`;
+                r+=`┌─────────────────────────────────────────────────────────────┐\n`;
+                r+=`│  [${names[t]}]                                               │\n`;
+                r+=`├─────────────────────────────────────────────────────────────┤\n`;
+                r+=`  File: ${S[t].f.name}\n`;
+                r+=`  Score: ${S[t].r.s}/100\n\n`;
+                r+=`  ANALYSIS:\n${S[t].r.c}\n\n`;
+                r+=`└─────────────────────────────────────────────────────────────┘\n\n`;
             });
             
             const b=new Blob([r],{type:'text/plain'});
@@ -298,102 +547,172 @@
             const e=document.createElement('a');
             e.href=u;
             e.download=`ISLA_Report_${new Date().toISOString().split('T')[0]}.txt`;
+            document.body.appendChild(e);
             e.click();
+            document.body.removeChild(e);
             URL.revokeObjectURL(u);
         }
         
+        // Clear all
         function ca(){
-            if(!confirm('Hapus semua?'))return;
+            if(!confirm('Yakin ingin menghapus semua dokumen dan analisis?'))return;
             T.forEach(t=>rf(t));
             document.getElementById('mr').style.display='none';
+        }
+        
+        // Chat functions
+        function sh(t){
+            document.getElementById('ui').value=t;
+            document.getElementById('ui').focus();
         }
         
         async function sm(){
             const i=document.getElementById('ui');
             const m=i.value.trim();
             if(!m)return;
-            if(!G.k)return alert('Setup API Key dulu!');
+            
+            if(!G.k){
+                ad('a','⚠️ Silakan konfigurasi Groq API Key terlebih dahulu! Klik "Konfigurasi Groq API" di atas.');
+                tc();
+                return;
+            }
             
             i.value='';
+            rs(i);
             ad('u',m);
             
             document.getElementById('ti').style.display='flex';
+            document.getElementById('cm').scrollTop=document.getElementById('cm').scrollHeight;
             
+            // Build context
             const a=T.filter(t=>S[t].a);
             let ctx=m;
             if(a.length){
-                ctx='Dokumen yang dianalisis:\n';
-                a.forEach(t=>ctx+=`- ${N[t]}: ${S[t].r.s}/100\n`);
-                ctx+='\nPertanyaan: '+m;
+                ctx=`Berdasarkan hasil analisis dokumen saya:\n\n`;
+                a.forEach(t=>{
+                    ctx+=`[${N[t]}] Score: ${S[t].r.s}/100\n`;
+                });
+                ctx+=`\nPertanyaan saya: ${m}\n\nMohon jawaban spesifik berdasarkan data di atas.`;
             }
             
             try{
                 const x=await fetch(G.e,{
                     method:'POST',
-                    headers:{'Authorization':`Bearer ${G.k}`,'Content-Type':'application/json'},
-                    body:JSON.stringify({model:G.m,messages:[{role:'system',content:Y},{role:'user',content:ctx}]})
+                    headers:{
+                        'Authorization':`Bearer ${G.k}`,
+                        'Content-Type':'application/json'
+                    },
+                    body:JSON.stringify({
+                        model:G.m,
+                        messages:[
+                            {role:'system',content:Y},
+                            {role:'user',content:ctx}
+                        ],
+                        temperature:0.7,
+                        max_tokens:2000
+                    })
                 });
+                
+                if(!x.ok)throw new Error('API Error');
                 
                 const d=await x.json();
                 ad('a',d.choices[0].message.content);
+                
             }catch(e){
-                ad('a','❌ Error: '+e.message);
+                ad('a','❌ Error: '+e.message+'\n\nPastikan API Key valid dan terhubung internet.');
             }
             
             document.getElementById('ti').style.display='none';
+            document.getElementById('cm').scrollTop=document.getElementById('cm').scrollHeight;
         }
         
         function ad(s,t){
             const d=document.createElement('div');
             d.className='msg '+(s=='a'?'a':'u');
-            d.innerHTML=t.replace(/\n/g,'<br>').replace(/\*\*(.*?)\*\*/g,'<b>$1</b>');
+            
+            // Format message
+            let fm=t
+                .replace(/\*\*(.*?)\*\*/g,'<b>$1</b>')
+                .replace(/\n/g,'<br>')
+                .replace(/•/g,'&bull;');
+            
+            d.innerHTML=`<div>${fm}</div><span class="ts">${new Date().toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'})}</span>`;
             document.getElementById('cm').appendChild(d);
-            document.getElementById('cm').scrollTop=document.getElementById('cm').scrollHeight;
         }
         
+        // Config
         function tc(){
             const p=document.getElementById('cp');
-            p.classList.toggle('s');
+            const a=document.getElementById('ca');
+            if(p.classList.contains('s')){
+                p.classList.remove('s');
+                a.textContent='▼';
+            }else{
+                p.classList.add('s');
+                a.textContent='▲';
+            }
         }
         
         async function sc(){
             const k=document.getElementById('ak').value.trim();
-            if(!k.startsWith('gsk_'))return alert('Key harus dimulai gsk_!');
+            const st=document.getElementById('st');
+            
+            if(!k){
+                st.textContent='❌ Masukkan API Key!';
+                st.className='st e s';
+                return;
+            }
+            
+            if(!k.startsWith('gsk_')){
+                st.textContent='❌ Key harus dimulai dengan gsk_';
+                st.className='st e s';
+                return;
+            }
             
             G.k=k;
             G.m=document.getElementById('sm').value;
             localStorage.setItem('gk',k);
             localStorage.setItem('gm',G.m);
             
-            document.getElementById('st').className='st';
-            document.getElementById('st').textContent='Testing...';
+            st.textContent='⏳ Menghubungkan...';
+            st.className='st s';
             
             try{
                 const x=await fetch(G.e,{
                     method:'POST',
-                    headers:{'Authorization':`Bearer ${k}`,'Content-Type':'application/json'},
-                    body:JSON.stringify({model:G.m,messages:[{role:'user',content:'Hi'}],max_tokens:5})
+                    headers:{
+                        'Authorization':`Bearer ${k}`,
+                        'Content-Type':'application/json'
+                    },
+                    body:JSON.stringify({
+                        model:G.m,
+                        messages:[{role:'user',content:'Hi'}],
+                        max_tokens:5
+                    })
                 });
                 
                 if(x.ok){
-                    document.getElementById('st').className='st x';
-                    document.getElementById('st').textContent='✅ Terhubung ke Groq!';
-                    document.getElementById('as').textContent='● Online';
+                    st.textContent='✅ Terhubung ke Groq AI!';
+                    st.className='st x s';
                     document.getElementById('pb').style.display='inline';
+                    document.getElementById('as').textContent='● Online (Groq)';
+                    document.getElementById('as').style.color='#fbbf24';
                     uc();
+                    
+                    // Add success message to chat
+                    ad('a','🎉 Berhasil terhubung ke Groq AI! Silakan upload dokumen untuk analisis.');
                 }else{
-                    throw new Error('Invalid key');
+                    const err=await x.json();
+                    throw new Error(err.error?.message||'Invalid key');
                 }
             }catch(e){
-                document.getElementById('st').className='st e';
-                document.getElementById('st').textContent='❌ '+e.message;
+                st.textContent='❌ Error: '+e.message;
+                st.className='st e s';
+                G.k='';
             }
         }
         
-        function cc(){
-            if(confirm('Hapus chat?'))document.getElementById('cm').innerHTML='<div class="msg a">Chat dibersihkan.</div>';
-        }
-        
+        // Utils
         function kp(e){
             if(e.key==='Enter'&&!e.shiftKey){
                 e.preventDefault();
@@ -406,28 +725,18 @@
             t.style.height=Math.min(t.scrollHeight,120)+'px';
         }
         
-        // Drag drop
-        document.addEventListener('DOMContentLoaded',()=>{
-            init();
-            T.forEach(t=>{
-                const a=document.getElementById(`u-${t}`);
-                a.addEventListener('dragover',e=>{
-                    e.preventDefault();
-                    a.style.borderColor='var(--g)';
-                    a.style.background='#f0fdf4';
-                });
-                a.addEventListener('dragleave',()=>{
-                    a.style.borderColor='#e5e7eb';
-                    a.style.background='transparent';
-                });
-                a.addEventListener('drop',e=>{
-                    e.preventDefault();
-                    a.style.borderColor='#e5e7eb';
-                    a.style.background='transparent';
-                    if(e.dataTransfer.files.length)hf(t,e.dataTransfer.files[0]);
-                });
-            });
-        });
+        function cc(){
+            if(confirm('Hapus semua percakapan?')){
+                document.getElementById('cm').innerHTML=`
+                    <div class="msg a">
+                        <div>Chat dibersihkan. Silakan tanya lagi! 👋</div>
+                        <span class="ts">${new Date().toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'})}</span>
+                    </div>`;
+            }
+        }
+        
+        // Start
+        document.addEventListener('DOMContentLoaded',init);
     </script>
 </body>
 </html>
